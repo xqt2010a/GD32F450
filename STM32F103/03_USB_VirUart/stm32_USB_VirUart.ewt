@@ -2120,6 +2120,15 @@
     </file>
   </group>
   <group>
+    <name>rtt</name>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT_printf.c</name>
+    </file>
+  </group>
+  <group>
     <name>startup</name>
   </group>
   <group>

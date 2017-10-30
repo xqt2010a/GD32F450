@@ -305,6 +305,7 @@
           <state>$PROJ_DIR$\User</state>
           <state>$PROJ_DIR$\User\led</state>
           <state>$PROJ_DIR$\User\usart</state>
+          <state>$PROJ_DIR$\RTT</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1912,6 +1913,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_usart.c</name>
+    </file>
+  </group>
+  <group>
+    <name>rtt</name>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT_printf.c</name>
     </file>
   </group>
   <group>

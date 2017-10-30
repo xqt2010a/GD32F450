@@ -21,6 +21,10 @@
 #include "hw_config.h"
 #include "bsp_usart1.h"
 #include "bsp_led.h"
+#include "SEGGER_RTT.h"
+
+
+#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 
 extern u32 count_out;
 extern u8 buffer_out[VIRTUAL_COM_PORT_DATA_SIZE];
@@ -37,8 +41,10 @@ int main(void)
 	
 	USB_Interrupts_Config(); //配置USB中断
 	
-	USB_Init();//初始化USB   
+	//USB_Init();//初始化USB   
 	
+        SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
+        PRT("hello world!\r\n");
 	while (1)
 	{	 
 		//判断有无数据接收到
