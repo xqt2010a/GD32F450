@@ -30,7 +30,7 @@
         <option>
           <name>Variant</name>
           <version>21</version>
-          <state>38</state>
+          <state>0</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -65,7 +65,7 @@
         </option>
         <option>
           <name>OGCoreOrChip</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>GRuntimeLibSelect</name>
@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F103xB	ST STM32F103xB</state>
+          <state>default	None</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -107,7 +107,7 @@
         </option>
         <option>
           <name>GEndianModeBE</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
@@ -138,16 +138,16 @@
         <option>
           <name>GFPUCoreSlave</name>
           <version>21</version>
-          <state>38</state>
+          <state>0</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
           <version>21</version>
-          <state>38</state>
+          <state>0</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>OGUseCmsisDspLib</name>
@@ -301,10 +301,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\DAP</state>
-          <state>$PROJ_DIR$\CMSIS</state>
-          <state>$PROJ_DIR$\USB</state>
-          <state>$PROJ_DIR$\Device</state>
+          <state></state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -316,7 +313,7 @@
         </option>
         <option>
           <name>IInterwork2</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IProcessorMode2</name>
@@ -588,15 +585,15 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>CMSIS_DAP.bin</state>
+          <state>c.srec</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -604,7 +601,7 @@
         </option>
         <option>
           <name>OOCObjCopyEnable</name>
-          <state>1</state>
+          <state>0</state>
         </option>
       </data>
     </settings>
@@ -715,7 +712,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103xB.icf</state>
+          <state>$TOOLKIT_DIR$\CONFIG\generic.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -763,8 +760,7 @@
         </option>
         <option>
           <name>IlinkAdditionalLibs</name>
-          <state>$PROJ_DIR$\CMSIS\RTX_CM3.a</state>
-          <state>$PROJ_DIR$\USB\USB_CM3_L.lib</state>
+          <state></state>
         </option>
         <option>
           <name>IlinkOverrideProgramEntryLabel</name>
@@ -776,7 +772,7 @@
         </option>
         <option>
           <name>IlinkProgramEntryLabel</name>
-          <state>__iar_program_start</state>
+          <state></state>
         </option>
         <option>
           <name>DoFill</name>
@@ -1890,42 +1886,6 @@
       <data/>
     </settings>
   </configuration>
-  <group>
-    <name>CMSIS</name>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\OTG_STM32F10x_cl.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\RTX_Conf_CM.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\USBD_STM32F10x.c</name>
-    </file>
-  </group>
-  <group>
-    <name>DAP</name>
-    <file>
-      <name>$PROJ_DIR$\DAP\DAP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\JTAG_DP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\SW_DP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\SWO.c</name>
-    </file>
-  </group>
-  <group>
-    <name>Device</name>
-  </group>
-  <group>
-    <name>USB</name>
-    <file>
-      <name>$PROJ_DIR$\USB\USBD_Config_0.c</name>
-    </file>
-  </group>
   <file>
     <name>$PROJ_DIR$\main.c</name>
   </file>

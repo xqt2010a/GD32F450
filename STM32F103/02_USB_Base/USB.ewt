@@ -2098,42 +2098,6 @@
       </data>
     </settings>
   </configuration>
-  <group>
-    <name>CMSIS</name>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\OTG_STM32F10x_cl.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\RTX_Conf_CM.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\CMSIS\USBD_STM32F10x.c</name>
-    </file>
-  </group>
-  <group>
-    <name>DAP</name>
-    <file>
-      <name>$PROJ_DIR$\DAP\DAP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\JTAG_DP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\SW_DP.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\DAP\SWO.c</name>
-    </file>
-  </group>
-  <group>
-    <name>Device</name>
-  </group>
-  <group>
-    <name>USB</name>
-    <file>
-      <name>$PROJ_DIR$\USB\USBD_Config_0.c</name>
-    </file>
-  </group>
   <file>
     <name>$PROJ_DIR$\main.c</name>
   </file>

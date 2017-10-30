@@ -39,20 +39,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Full formatting.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Full formatting.</state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -70,20 +70,20 @@
         <option>
           <name>GRuntimeLibSelect</name>
           <version>0</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>GRuntimeLibSelectSlave</name>
           <version>0</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+          <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
         </option>
         <option>
           <name>OGProductVersion</name>
-          <state>5.10.0.159</state>
+          <state>7.40.1.8463</state>
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
@@ -133,7 +133,7 @@
         </option>
         <option>
           <name>RTConfigPath2</name>
-          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Full.h</state>
         </option>
         <option>
           <name>GFPUCoreSlave</name>
@@ -166,10 +166,6 @@
         <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
-        <option>
-          <name>CCOptimizationNoSizeConstraints</name>
-          <state>0</state>
-        </option>
         <option>
           <name>CCDefines</name>
           <state></state>
@@ -301,10 +297,14 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\DAP</state>
-          <state>$PROJ_DIR$\CMSIS</state>
-          <state>$PROJ_DIR$\USB</state>
-          <state>$PROJ_DIR$\Device</state>
+          <state>$PROJ_DIR$\</state>
+          <state>$PROJ_DIR$\Libraries\FWLib\inc</state>
+          <state>$PROJ_DIR$\Libraries\CMSIS</state>
+          <state>$PROJ_DIR$\STM32_USB-FS-Device_Driver</state>
+          <state>$PROJ_DIR$\USB\include</state>
+          <state>$PROJ_DIR$\User</state>
+          <state>$PROJ_DIR$\User\led</state>
+          <state>$PROJ_DIR$\User\usart</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -324,7 +324,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -333,7 +333,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -395,6 +395,10 @@
         </option>
         <option>
           <name>IccFloatSemantics</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimizationNoSizeConstraints</name>
           <state>0</state>
         </option>
         <option>
@@ -588,15 +592,15 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>2</state>
-        </option>
-        <option>
-          <name>OCOutputOverride</name>
           <state>1</state>
         </option>
         <option>
+          <name>OCOutputOverride</name>
+          <state>0</state>
+        </option>
+        <option>
           <name>OOCOutputFile</name>
-          <state>CMSIS_DAP.bin</state>
+          <state>stm32_USB_VirUart.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -638,10 +642,6 @@
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
-          <name>IlinkOutputFile</name>
-          <state>c.out</state>
-        </option>
-        <option>
           <name>IlinkLibIOConfig</name>
           <state>1</state>
         </option>
@@ -652,6 +652,10 @@
         <option>
           <name>IlinkInputFileSlave</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkOutputFile</name>
+          <state>stm32_USB_VirUart.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -763,8 +767,7 @@
         </option>
         <option>
           <name>IlinkAdditionalLibs</name>
-          <state>$PROJ_DIR$\CMSIS\RTX_CM3.a</state>
-          <state>$PROJ_DIR$\USB\USB_CM3_L.lib</state>
+          <state></state>
         </option>
         <option>
           <name>IlinkOverrideProgramEntryLabel</name>
@@ -985,20 +988,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Full formatting.</state>
+          <state></state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Full formatting.</state>
+          <state></state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -1025,15 +1028,15 @@
         </option>
         <option>
           <name>RTDescription</name>
-          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+          <state></state>
         </option>
         <option>
           <name>OGProductVersion</name>
-          <state>5.10.0.159</state>
+          <state>7.40.1.8463</state>
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.30.1.53141</state>
+          <state></state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1045,7 +1048,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>default	None</state>
+          <state></state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -1079,17 +1082,17 @@
         </option>
         <option>
           <name>RTConfigPath2</name>
-          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+          <state></state>
         </option>
         <option>
           <name>GFPUCoreSlave</name>
           <version>21</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
           <version>21</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -1112,10 +1115,6 @@
         <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
-        <option>
-          <name>CCOptimizationNoSizeConstraints</name>
-          <state>0</state>
-        </option>
         <option>
           <name>CCDefines</name>
           <state>NDEBUG</state>
@@ -1231,7 +1230,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>$FILE_BNAME$.o</state>
+          <state></state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
@@ -1259,7 +1258,7 @@
         </option>
         <option>
           <name>IInterwork2</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IProcessorMode2</name>
@@ -1276,7 +1275,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>3</state>
+          <state>1</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1338,6 +1337,10 @@
         </option>
         <option>
           <name>IccFloatSemantics</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimizationNoSizeConstraints</name>
           <state>0</state>
         </option>
         <option>
@@ -1485,7 +1488,7 @@
         </option>
         <option>
           <name>AOutputFile</name>
-          <state>$FILE_BNAME$.o</state>
+          <state></state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -1539,7 +1542,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>c.srec</state>
+          <state></state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1581,10 +1584,6 @@
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
-          <name>IlinkOutputFile</name>
-          <state>c.out</state>
-        </option>
-        <option>
           <name>IlinkLibIOConfig</name>
           <state>1</state>
         </option>
@@ -1595,6 +1594,10 @@
         <option>
           <name>IlinkInputFileSlave</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkOutputFile</name>
+          <state>###Unitialized###</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -1658,7 +1661,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\CONFIG\generic.icf</state>
+          <state>lnk0t.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1891,43 +1894,85 @@
     </settings>
   </configuration>
   <group>
-    <name>CMSIS</name>
+    <name>fwlib</name>
     <file>
-      <name>$PROJ_DIR$\CMSIS\OTG_STM32F10x_cl.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_flash.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\CMSIS\RTX_Conf_CM.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_gpio.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\CMSIS\USBD_STM32F10x.c</name>
-    </file>
-  </group>
-  <group>
-    <name>DAP</name>
-    <file>
-      <name>$PROJ_DIR$\DAP\DAP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_lib.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\JTAG_DP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_nvic.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\SW_DP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_rcc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\SWO.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_usart.c</name>
     </file>
   </group>
   <group>
-    <name>Device</name>
+    <name>startup</name>
   </group>
   <group>
-    <name>USB</name>
+    <name>stm32_usb_driver</name>
     <file>
-      <name>$PROJ_DIR$\USB\USBD_Config_0.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_core.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_init.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_int.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_mem.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_regs.c</name>
+    </file>
+  </group>
+  <group>
+    <name>usb&amp;usart</name>
+    <file>
+      <name>$PROJ_DIR$\USB\source\hw_config.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_desc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_endp.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_istr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_prop.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_pwr.c</name>
+    </file>
+  </group>
+  <group>
+    <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\User\led\bsp_led.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\usart\bsp_usart1.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\stm32f10x_it.c</name>
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\main.c</name>
+    <name>$PROJ_DIR$\startup_stm32f10x_md.s</name>
   </file>
 </project>
 

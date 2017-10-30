@@ -2099,43 +2099,85 @@
     </settings>
   </configuration>
   <group>
-    <name>CMSIS</name>
+    <name>fwlib</name>
     <file>
-      <name>$PROJ_DIR$\CMSIS\OTG_STM32F10x_cl.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_flash.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\CMSIS\RTX_Conf_CM.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_gpio.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\CMSIS\USBD_STM32F10x.c</name>
-    </file>
-  </group>
-  <group>
-    <name>DAP</name>
-    <file>
-      <name>$PROJ_DIR$\DAP\DAP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_lib.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\JTAG_DP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_nvic.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\SW_DP.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_rcc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\DAP\SWO.c</name>
+      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_usart.c</name>
     </file>
   </group>
   <group>
-    <name>Device</name>
+    <name>startup</name>
   </group>
   <group>
-    <name>USB</name>
+    <name>stm32_usb_driver</name>
     <file>
-      <name>$PROJ_DIR$\USB\USBD_Config_0.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_core.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_init.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_int.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_mem.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_regs.c</name>
+    </file>
+  </group>
+  <group>
+    <name>usb&amp;usart</name>
+    <file>
+      <name>$PROJ_DIR$\USB\source\hw_config.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_desc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_endp.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_istr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_prop.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USB\source\usb_pwr.c</name>
+    </file>
+  </group>
+  <group>
+    <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\User\led\bsp_led.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\usart\bsp_usart1.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\stm32f10x_it.c</name>
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\main.c</name>
+    <name>$PROJ_DIR$\startup_stm32f10x_md.s</name>
   </file>
 </project>
 

@@ -38,7 +38,7 @@ This information includes:
  - Optional information about a connected Target Device (for Evaluation Boards).
 */
 
-#include "device.h"                             // Debug Unit Cortex-M Processor Header File
+#include "stm32f10x.h"                             // Debug Unit Cortex-M Processor Header File
 
 /// Processor Clock of the Cortex-M MCU used in the Debug Unit.
 /// This value is used to calculate the SWD/JTAG clock speed.
