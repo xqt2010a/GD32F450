@@ -2099,28 +2099,40 @@
     </settings>
   </configuration>
   <group>
-    <name>fwlib</name>
+    <name>STM32F10x</name>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_flash.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\misc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_gpio.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_lib.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_nvic.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_rcc.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\Libraries\FWLib\src\stm32f10x_usart.c</name>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c</name>
     </file>
   </group>
   <group>
-    <name>rtt</name>
+    <name>RTT</name>
     <file>
       <name>$PROJ_DIR$\RTT\SEGGER_RTT.c</name>
     </file>
@@ -2129,63 +2141,63 @@
     </file>
   </group>
   <group>
-    <name>startup</name>
-  </group>
-  <group>
-    <name>stm32_usb_driver</name>
+    <name>STM32_USB</name>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_core.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_core.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_init.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_init.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_int.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_int.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_mem.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_mem.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_regs.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_regs.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\usb_sil.c</name>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_sil.c</name>
     </file>
   </group>
   <group>
-    <name>usb&amp;usart</name>
+    <name>USER_USB</name>
     <file>
-      <name>$PROJ_DIR$\USB\source\hw_config.c</name>
+      <name>$PROJ_DIR$\User_USB\usb_desc.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\USB\source\usb_desc.c</name>
+      <name>$PROJ_DIR$\User_USB\usb_endp.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\USB\source\usb_endp.c</name>
+      <name>$PROJ_DIR$\User_USB\usb_istr.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\USB\source\usb_istr.c</name>
+      <name>$PROJ_DIR$\User_USB\usb_prop.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\USB\source\usb_prop.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\USB\source\usb_pwr.c</name>
+      <name>$PROJ_DIR$\User_USB\usb_pwr.c</name>
     </file>
   </group>
   <group>
     <name>user</name>
     <file>
-      <name>$PROJ_DIR$\User\led\bsp_led.c</name>
+      <name>$PROJ_DIR$\User\hw_config.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\User\usart\bsp_usart1.c</name>
+      <name>$PROJ_DIR$\User\led.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\User\main.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\User\stm32f10x_it.c</name>
+      <name>$PROJ_DIR$\User\stm3210e_eval.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\stm32_it.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\system_stm32f10x.c</name>
     </file>
   </group>
   <file>

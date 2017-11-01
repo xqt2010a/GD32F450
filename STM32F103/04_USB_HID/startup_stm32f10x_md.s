@@ -53,8 +53,8 @@
         SECTION .intvec:CODE:NOROOT(2)
 
         EXTERN  __iar_program_start
-        ;;EXTERN  SystemInit        
-        EXTERN  Init_System
+        EXTERN  SystemInit        
+        ;;EXTERN  Init_System
         PUBLIC  __vector_table
 
         DATA
@@ -130,8 +130,8 @@ __vector_table
         PUBWEAK Reset_Handler
         SECTION .text:CODE:REORDER:ROOT(2)
 Reset_Handler
-        ;;LDR     R0, =SystemInit
-        LDR     R0, =Init_System
+        LDR     R0, =SystemInit
+        ;;LDR     R0, =Init_System
         BLX     R0
         LDR     R0, =__iar_program_start
         BX      R0
