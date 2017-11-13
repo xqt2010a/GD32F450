@@ -70,12 +70,14 @@ int main(void)
     Led_On();
     
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
-    PRT("hello world!\r\n");
+    PRT("hello world!\r\ntoday is :%s,%s\r\n",__DATE__, __TIME__);
     while (1)
     {
         Led_Blink();
         PRT("count:%10d\r\n",count);
         count++;
+        //USB_Send_Data("LED1a µ„¡¡,labc\r\n",18);
+        USB_Send_Data("LE",2);
     }
 }
 

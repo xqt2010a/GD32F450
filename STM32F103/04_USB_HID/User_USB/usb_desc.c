@@ -111,7 +111,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 
     0x81,          /* bEndpointAddress: Endpoint Address (IN) */
     0x03,          /* bmAttributes: Interrupt endpoint */
-    0x02,          /* wMaxPacketSize: 2 Bytes max */
+    0x40,//0x02,          /* wMaxPacketSize: 2 Bytes max */
     0x00,
     0x20,          /* bInterval: Polling Interval (32 ms) */
     /* 34 */
@@ -122,7 +122,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     0x01,	/* bEndpointAddress: */
 			/*	Endpoint Address (OUT) */
     0x03,	/* bmAttributes: Interrupt endpoint */
-    0x02,	/* wMaxPacketSize: 2 Bytes max  */
+    0x40,//0x02,	/* wMaxPacketSize: 2 Bytes max  */
     0x00,
     0x20,	/* bInterval: Polling Interval (20 ms) */
     /* 41 */
@@ -261,9 +261,9 @@ const uint8_t CustomHID_StringVendor[CUSTOMHID_SIZ_STRING_VENDOR] =
     CUSTOMHID_SIZ_STRING_VENDOR, /* Size of Vendor string */
     USB_STRING_DESCRIPTOR_TYPE,  /* bDescriptorType*/
     /* Manufacturer: "STMicroelectronics" */
-    'S', 0, 'T', 0, 'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'e', 0,
-    'l', 0, 'e', 0, 'c', 0, 't', 0, 'r', 0, 'o', 0, 'n', 0, 'i', 0,
-    'c', 0, 's', 0
+    'w', 0, 'w', 0, 'w', 0, '.', 0, 'a', 0, 'b', 0, 'w', 0, 'b', 0,
+    'a', 0, '.', 0, 'c', 0, 'o', 0, 'm', 0, '-', 0, 'l', 0, 'a', 0,
+    'b', 0, 'c', 0
   };
 
 const uint8_t CustomHID_StringProduct[CUSTOMHID_SIZ_STRING_PRODUCT] =
@@ -278,7 +278,7 @@ uint8_t CustomHID_StringSerial[CUSTOMHID_SIZ_STRING_SERIAL] =
   {
     CUSTOMHID_SIZ_STRING_SERIAL,           /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
-    'S', 0, 'T', 0, 'M', 0,'3', 0,'2', 0
+    'L', 0, 'a', 0, 'b', 0,'c', 0,'!', 0
   };
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
