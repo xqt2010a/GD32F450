@@ -1894,6 +1894,36 @@
     </settings>
   </configuration>
   <group>
+    <name>RTT</name>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\RTT\SEGGER_RTT_printf.c</name>
+    </file>
+  </group>
+  <group>
+    <name>STM32_USB</name>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_core.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_init.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_int.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_mem.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_regs.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_sil.c</name>
+    </file>
+  </group>
+  <group>
     <name>STM32F10x</name>
     <file>
       <name>$PROJ_DIR$\STM32F10x_StdPeriph_Driver\src\misc.c</name>
@@ -1927,54 +1957,6 @@
     </file>
   </group>
   <group>
-    <name>RTT</name>
-    <file>
-      <name>$PROJ_DIR$\RTT\SEGGER_RTT.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\RTT\SEGGER_RTT_printf.c</name>
-    </file>
-  </group>
-  <group>
-    <name>STM32_USB</name>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_core.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_init.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_int.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_mem.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_regs.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\STM32_USB-FS-Device_Driver\src\usb_sil.c</name>
-    </file>
-  </group>
-  <group>
-    <name>USER_USB</name>
-    <file>
-      <name>$PROJ_DIR$\User_USB\usb_desc.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\User_USB\usb_endp.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\User_USB\usb_istr.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\User_USB\usb_prop.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\User_USB\usb_pwr.c</name>
-    </file>
-  </group>
-  <group>
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\User\hw_config.c</name>
@@ -1993,6 +1975,30 @@
     </file>
     <file>
       <name>$PROJ_DIR$\User\system_stm32f10x.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User\user_hid.c</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
+    </file>
+  </group>
+  <group>
+    <name>USER_USB</name>
+    <file>
+      <name>$PROJ_DIR$\User_USB\usb_desc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User_USB\usb_endp.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User_USB\usb_istr.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User_USB\usb_prop.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\User_USB\usb_pwr.c</name>
     </file>
   </group>
   <file>

@@ -56,13 +56,13 @@
 
 /* EP1  */
 /* rx/tx buffer base address */
-#define ENDP1_TXADDR        (0x100)
-#define ENDP1_RXADDR        (0x104)
+#define ENDP1_TXADDR        (0x98)
+#define ENDP1_RXADDR        (0xD4)
 
 /* EP2  */
 /* rx/tx buffer base address */
-#define ENDP2_TXADDR        (0x120)
-#define ENDP2_RXADDR        (0x144)
+#define ENDP2_TXADDR        (0x118)
+#define ENDP2_RXADDR        (0x158)
 /*-------------------------------------------------------------*/
 /* -------------------   ISTR events  -------------------------*/
 /*-------------------------------------------------------------*/
