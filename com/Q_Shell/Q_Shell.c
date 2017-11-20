@@ -2,13 +2,17 @@
 #include "string.h"
 #include "stdio.h"
 
-#if USE_Q_SHELL_FUNCTION      
+#if USE_Q_SHELL_FUNCTION 
+
+#ifdef __CC_ARM                 /* ARM C Compiler */
 //环境变量不占用内存
 extern int qShellFunTab$$Base;	//函数记录段段首
 extern int qShellFunTab$$Limit;	//函数记录段段尾
 extern int qShellVarTab$$Base;	//变量记录段段首
 extern int qShellVarTab$$Limit;	//变量记录段段尾
+#elif defined (__ICCARM__)      /* for IAR Compiler */
 
+#endif
 #define QSH_FUN_PARA_MAX_NUM 4//函数最多支持四个参数
 
 typedef unsigned int (*QSH_FUNC_TYPE)();//统一的shell函数类型支持不同个数的参数
@@ -47,7 +51,11 @@ typedef struct{
 static QSH_RECORD* Q_Sh_SearchFun(char* Name)
 {
 	QSH_RECORD* Index;
+#ifdef __CC_ARM                 /* ARM C Compiler */
 	for (Index = (QSH_RECORD*) &qShellFunTab$$Base; Index < (QSH_RECORD*) &qShellFunTab$$Limit; Index ++)
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+        for (Index = (QSH_RECORD*) __section_begin("qShellFunTab"); Index < (QSH_RECORD*) __section_end("qShellFunTab"); Index ++)
+#endif
 	{
 		if (strcmp(Index->name, Name) == 0)
 			return Index;
@@ -62,7 +70,11 @@ static QSH_RECORD* Q_Sh_SearchFun(char* Name)
 static QSH_RECORD* Q_Sh_SearchVar(char* Name)
 {
 	QSH_RECORD* Index;
+#ifdef __CC_ARM                 /* ARM C Compiler */
 	for (Index = (QSH_RECORD*) &qShellVarTab$$Base; Index < (QSH_RECORD*) &qShellVarTab$$Limit; Index ++)
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+        for (Index = (QSH_RECORD*) __section_begin("qShellVarTab"); Index < (QSH_RECORD*) __section_end("qShellVarTab"); Index ++)
+#endif
 	{
 		if (strcmp(Index->name, Name) == 0)
 			return Index;
@@ -77,7 +89,12 @@ static QSH_RECORD* Q_Sh_SearchVar(char* Name)
 static void Q_Sh_ListFuns(void)
 {
 	QSH_RECORD* Index;
+#ifdef __CC_ARM                 /* ARM C Compiler */
 	for (Index = (QSH_RECORD*) &qShellFunTab$$Base; Index < (QSH_RECORD*) &qShellFunTab$$Limit; Index++)
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+        for (Index = (QSH_RECORD*) __section_begin("qShellFunTab"); Index < (QSH_RECORD*) __section_end("qShellFunTab"); Index ++)
+#endif
+
 	{	
 		printf("%s\r\n",Index->desc);
 	}
@@ -90,7 +107,11 @@ static void Q_Sh_ListFuns(void)
 static void Q_Sh_ListVars(void)
 {
 	QSH_RECORD* Index;
+#ifdef __CC_ARM                 /* ARM C Compiler */
 	for (Index = (QSH_RECORD*) &qShellVarTab$$Base; Index < (QSH_RECORD*) &qShellVarTab$$Limit; Index++)
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+        for (Index = (QSH_RECORD*) __section_begin("qShellVarTab"); Index < (QSH_RECORD*) __section_end("qShellVarTab"); Index ++)
+#endif
 	{
 		printf("%s\r\n",Index->desc);
 	}
@@ -203,7 +224,7 @@ static unsigned int Q_Sh_LexicalAnalysis(char *CmdStr,Q_SH_LEX_RESU_DEF *pQShLex
 	
 	while(1)
 	{
-		if( CmdStr[Index]<33||CmdStr[Index]>126 )
+		if( CmdStr[Index]<32||CmdStr[Index]>126 )
 		{
 			pQShLexResu->CallType=QSCT_ERROR;
 			printf("Lexical Analysis Error: parameter include illegal character!!!\r\n");
@@ -556,7 +577,7 @@ unsigned int Q_Sh_CmdHandler(unsigned int IfCtrl,char *CmdStr)
 	static unsigned char IfPass=0,IfWaitInput=0;
 	if(IfPass)
 	{
-		if(IfCtrl==0)
+		if(IfCtrl==1)
 		{
 			if(((unsigned short *)CmdStr)[0]==0x445b)
 			{}
@@ -576,7 +597,7 @@ unsigned int Q_Sh_CmdHandler(unsigned int IfCtrl,char *CmdStr)
 	{
 		if(IfWaitInput==0)
 		{
-			printf("Please input q_shell password:");
+			printf("Q_Shell Password:");
 			IfWaitInput=1;
 		}
 		else
@@ -584,12 +605,12 @@ unsigned int Q_Sh_CmdHandler(unsigned int IfCtrl,char *CmdStr)
 			if(strcmp(CmdStr,Q_ShellPassWord)==0)
 			{
 				IfPass=1;
-				printf("password right!\r\n");
+				printf("Password Right!\r\n");
 			}
 			else
 			{
-				printf("password wrong!\r\n");
-				printf("Please input q_shell password again:");
+				printf("Password Wrong!\r\n");
+				printf("Q_Shell Password:");
 			}
 		}
 		return 0;

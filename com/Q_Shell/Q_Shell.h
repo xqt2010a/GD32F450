@@ -1,6 +1,6 @@
 #ifndef QSYS_Q_SHELL_H  
 #define QSYS_Q_SHELL_H
-
+#include "stdio.h"
 #define USE_Q_SHELL_FUNCTION 1
 
 #if USE_Q_SHELL_FUNCTION
@@ -21,6 +21,7 @@ unsigned char Var;
 QSH_VAR_REG（Var,"unsigned char Var","u8");
 ...
  */
+#ifdef __CC_ARM                 /* ARM C Compiler */
 #define QSH_FUN_REG(name, desc)					                                \
 static const   char  qsh_fun_##name##_name[]  = #name;				            \
 static const   char  qsh_fun_##name##_desc[]  = desc;						    \
@@ -55,6 +56,31 @@ QSH_RECORD qsh_var_##name##_record  __attribute__((section("qShellVarTab"))) = \
 	(void *)&name,		                                                       \
 	qsh_var_##name##_typedesc											       \
 }
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+#pragma section="qShellVarTab"
+#pragma section="qShellFunTab"
+#define QSH_FUN_REG(name, desc)                              \
+static const   char  qsh_fun_##name##_name[]  = #name;				            \
+static const   char  qsh_fun_##name##_desc[]  = desc;						    \
+QSH_RECORD qsh_fun_##name##_record @"qShellFunTab"  =  \
+{							                                                    \
+	qsh_fun_##name##_name,	                                                    \
+	qsh_fun_##name##_desc,	                                                    \
+	(void *)&name,		                                                        \
+	0                                                                           \
+}
+#define QSH_VAR_REG(name, desc,typedesc) \
+static const   char  qsh_var_##name##_name[] = #name;				           \
+static const   char  qsh_var_##name##_desc[] = desc;				           \
+static const   char  qsh_var_##name##_typedesc[] = typedesc;				   \
+QSH_RECORD qsh_var_##name##_record  @"qShellVarTab" = \
+{							                                                   \
+	qsh_var_##name##_name,	                                                   \
+	qsh_var_##name##_desc,	                                                   \
+	(void *)&name,		                                                       \
+	qsh_var_##name##_typedesc											       \
+}
+#endif
 /* 
 功能：shell对外的接口，执行命令
 入参：IfCtrl 指示是否接收到一个控制字符 CmdStr 从串口得到的命令字符串
