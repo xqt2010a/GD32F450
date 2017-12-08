@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_menu.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1906,6 +1906,9 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\menu.c</name>
     </file>
   </group>
   <file>
