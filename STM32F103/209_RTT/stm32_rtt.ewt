@@ -2106,6 +2106,9 @@
     <file>
       <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT_printf.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT_Syscalls_IAR.c</name>
+    </file>
   </group>
   <group>
     <name>stm32</name>

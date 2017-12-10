@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_rtt.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1894,6 +1894,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT_printf.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT_Syscalls_IAR.c</name>
     </file>
   </group>
   <group>
