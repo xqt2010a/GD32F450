@@ -11,31 +11,16 @@ const Item_S MainItem[] = {
     0x00, 0x07, "状态", NULL,
 };
 
-const Item_S HomeItem[] = {
-    0x01, 0x00, "00.设0", NULL,
-    0x01, 0x01, "01.设1", NULL,
-    0x01, 0x02, "02.设2", NULL,
-    0x01, 0x03, "03.设3", NULL,
-    0x01, 0x04, "04.设4", NULL,
-    0x01, 0x05, "05.设5", NULL,
-    0x01, 0x06, "06.设6", NULL,
-    0x01, 0x07, "07.设7", NULL,
-    0x01, 0x08, "08.设8", NULL,
-};
+const Page_S HomePage[] = {
+    {0, "设置", Setting_Page, NULL, &SettingPage},
+    {0, "版本", Version_Page, NULL, NULL},
+    {0, "时间", Time_Page,    NULL, NULL}};
 
-const Item_S SettingItem[] = {
-    0x01, 0x00, "00.", &HomeTextPage,
-    0x01, 0x01, "01.", &HomeTextPage,
-    0x01, 0x02, "02.", &HomeTextPage,
-    0x01, 0x03, "03.", &HomeTextPage,
-    0x01, 0x04, "04.", &HomeTextPage,
-    0x01, 0x05, "05.", &HomeTextPage,
-    0x01, 0x06, "06.", &HomeTextPage,
-    0x01, 0x07, "07.", &HomeTextPage,
-    0x01, 0x08, "08.", &HomeTextPage,
-    0x01, 0x09, "09.", &HomeTextPage,
-    0x01, 0x0A, "10.", &HomeTextPage,
-};
+const Page_S SettingPage[] = {
+    {0, "set0", Set_Page0, HomePage, &NULL},
+    {0, "set1", Set_Page1, HomePage, &NULL},
+    {0, "set2", Set_Page2, HomePage, &NULL}};
+
 
 const Page_S MainPage[] =       { NULL,     MainPage_CallBack, MainItem, sizeof(Main_Item)/sizeof(Item_S) };
 const Page_S HomePage[] =       {&MainPage, HomePage_CallBack, HomeItem, sizeof(Home_Item)/sizeof(Item_S) };
@@ -43,6 +28,17 @@ const Page_S SettingPage[] =    {&MainPage, SettingPage_CallBack, SettingItem, s
 const Page_S VersionPage[] =    {&MainPage, VersionPage_CallBack, NULL, 0 };
 const Page_S TimePage[] =       {&MainPage, TimePage_CallBack, NULL, 0 };
 const Page_S HomeTextPage[] =    {&SettingPage, HomeTextPage_CallBack, NULL, 0 };
+
+void ShowPage(const Page_S *pPage)
+{
+
+}
+
+void ShowParentPage(const Page_S *pPage)
+{
+    pPage = pPage->pParent;
+    ShowPage(pPage);
+}
 
 void MainPage_CallBack(uint8_t KeyItem)
 {
