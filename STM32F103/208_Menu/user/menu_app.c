@@ -1,5 +1,8 @@
 #include "menu_app.h"
 
+#define HomePage_NUM    3
+#define SettingPage_NUM 3
+
 const Item_S MainItem[] = {
     0x00, 0x00, "信息", &HomePage,
     0x00, 0x01, "设置", &SettingPage,
@@ -12,14 +15,14 @@ const Item_S MainItem[] = {
 };
 
 const Page_S HomePage[] = {
-    {0, "设置", Setting_Page, NULL, &SettingPage},
-    {0, "版本", Version_Page, NULL, NULL},
-    {0, "时间", Time_Page,    NULL, NULL}};
+    {HomePage_NUM, "设置", Setting_Page, NULL, &SettingPage},
+    {HomePage_NUM, "版本", Version_Page, NULL, NULL},
+    {HomePage_NUM, "时间", Time_Page,    NULL, NULL}};
 
 const Page_S SettingPage[] = {
-    {0, "set0", Set_Page0, HomePage, &NULL},
-    {0, "set1", Set_Page1, HomePage, &NULL},
-    {0, "set2", Set_Page2, HomePage, &NULL}};
+    {SettingPage_NUM, "set0", Set_Page0, HomePage, &NULL},
+    {SettingPage_NUM, "set1", Set_Page1, HomePage, &NULL},
+    {SettingPage_NUM, "set2", Set_Page2, HomePage, &NULL}};
 
 
 const Page_S MainPage[] =       { NULL,     MainPage_CallBack, MainItem, sizeof(Main_Item)/sizeof(Item_S) };
@@ -29,16 +32,7 @@ const Page_S VersionPage[] =    {&MainPage, VersionPage_CallBack, NULL, 0 };
 const Page_S TimePage[] =       {&MainPage, TimePage_CallBack, NULL, 0 };
 const Page_S HomeTextPage[] =    {&SettingPage, HomeTextPage_CallBack, NULL, 0 };
 
-void ShowPage(const Page_S *pPage)
-{
 
-}
-
-void ShowParentPage(const Page_S *pPage)
-{
-    pPage = pPage->pParent;
-    ShowPage(pPage);
-}
 
 void MainPage_CallBack(uint8_t KeyItem)
 {
