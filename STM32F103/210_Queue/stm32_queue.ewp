@@ -303,6 +303,7 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\com\cmsis</state>
           <state>$PROJ_DIR$\..\..\com\rtt</state>
+          <state>$PROJ_DIR$\user</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -594,7 +595,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_queue.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1906,6 +1907,9 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\queue.c</name>
     </file>
   </group>
   <file>
