@@ -5,6 +5,7 @@
 #define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 #define Queue_Len   6
 
+uint8_t Buf[10]="hello";
 
 void main(void)
 {
