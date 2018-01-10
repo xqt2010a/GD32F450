@@ -2099,6 +2099,18 @@
     </settings>
   </configuration>
   <group>
+    <name>los</name>
+    <file>
+      <name>$PROJ_DIR$\los\los.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\los\los_arch.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\los\los_task.c</name>
+    </file>
+  </group>
+  <group>
     <name>rtt</name>
     <file>
       <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT.c</name>

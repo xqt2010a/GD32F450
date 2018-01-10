@@ -303,6 +303,7 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\com\cmsis</state>
           <state>$PROJ_DIR$\..\..\com\rtt</state>
+          <state>$PROJ_DIR$\los</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -594,7 +595,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_los.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1887,6 +1888,18 @@
       <data/>
     </settings>
   </configuration>
+  <group>
+    <name>los</name>
+    <file>
+      <name>$PROJ_DIR$\los\los.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\los\los_arch.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\los\los_task.c</name>
+    </file>
+  </group>
   <group>
     <name>rtt</name>
     <file>
