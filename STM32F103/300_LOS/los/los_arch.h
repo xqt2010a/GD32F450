@@ -3,18 +3,19 @@
 
 #include "los_config.h"
 
-#define c8 char
-#define c16 short
-#define c32 int
+#define int8_t char
+#define int16_t short
+#define int32_t int
 
-#define u8 unsigned char
-#define u16 unsigned short
-#define u32 unsigned int
+#define uint8_t unsigned char
+#define uint16_t unsigned short
+#define uint32_t unsigned int
 
-#define vTrue   1
-#define vFalse  0
+#define true   1
+#define false  0
+#define NULL   0
 
-typedef u32 BaseType;
+typedef uint32_t BaseType;
 
 
 

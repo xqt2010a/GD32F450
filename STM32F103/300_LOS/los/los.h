@@ -12,6 +12,7 @@ Add:
 
 #include "los_arch.h"
 
+
 typedef void (*osFunction)(void *);
 
 
