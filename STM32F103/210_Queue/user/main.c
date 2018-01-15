@@ -7,6 +7,7 @@
 
 uint8_t Buf[20]="Labc New Date!\r\n";
 uint8_t Buf_T;
+
 void main(void)
 {
     uint8_t i;
