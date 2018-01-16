@@ -8,7 +8,7 @@ BaseType xTask_Creat(osFunction task, uint16_t task_depth, uint8_t task_priority
     uint8_t i, new_task_index;
     TaskTCB * new_tcb;
     
-    Basetype *task_top = (Basetype *)os_Malloc(sizeof(BaseType)*task_depth);
+    BaseType *task_top = (BaseType *)os_Malloc(sizeof(BaseType)*task_depth);
     if(NULL == task_top){
         return false;
     }
