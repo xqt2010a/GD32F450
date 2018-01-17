@@ -36,6 +36,5 @@ BaseType xTask_Creat(osFunction task, uint16_t task_depth, uint8_t task_priority
     }
     new_tcb->priority = task_priority;
     
-    
     return true;
 }
