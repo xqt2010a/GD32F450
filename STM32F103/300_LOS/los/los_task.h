@@ -4,13 +4,16 @@
 #include "los.h"
 
 typedef struct{
-    BaseType *stack_top;
-    BaseType *stack_task;
-    uint32_t id;
-    uint8_t priority;
-    
+    uint32_t run_flag;
+    osFunction task;
+    uint32_t run_time;
+    uint32_t interval_time;
 }TaskTCB;
 
-BaseType xTask_Creat(osFunction task, uint16_t task_depth, uint8_t task_priority, void * task_parameter);
+typedef struct{
+    TaskTCB TcbList[config_MAX_TASK];
+    uint32_t current_time;
+}LOS;
+
 
 #endif  /* __LOS_TASK_H__ */

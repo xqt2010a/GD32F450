@@ -16,7 +16,7 @@
 #define NULL   0
 
 typedef uint32_t BaseType;
-
+typedef uint8_t  TaskID;
 
 
 
