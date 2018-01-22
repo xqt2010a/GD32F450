@@ -13,5 +13,7 @@
 #define config_MAX_TASK         10      /* max task num < 256 */
 #define config_SYS_CLK          72000000
 
+#define Task_Sys_Clk            SysTick_Handler
+
 
 #endif  /* __LOS_CONFIG_H__ */
