@@ -1,17 +1,38 @@
-#include "los_task.h"
-#include "los_mem.h"
+#include "los.h"
 
-LOS Los;
-
-TaskID CreatTask(osFunction task_init, osFunction task, BaseType interval)
-{
-
-}
-
-void Task_Init(void)
+TaskID CreatTask(taskFunction task_init, taskFunction task, BaseType interval)
 {
     uint8_t i;
     for(i=0; i<config_MAX_TASK; i++){
-    
+        if(NULL == Los.TcbList[i].task){
+            Los.TcbList[i].task = task;
+            Los.TcbList[i].task_init = task_init;
+            Los.TcbList[i].interval_time = interval;
+            Los.TcbList[i].run_time = Los.current_time;
+            Los.TcbList[i].task_init();
+            return i;
+        }
+    }
+    return 0xFF;
+}
+
+void Task_Scheduler(void)
+{
+    uint8_t i;
+    for(i=0; i<config_MAX_TASK; i++){
+        if((Los.current_time - Los.TcbList[i].run_time) > Los.TcbList[i].run_time){
+            Los.TcbList[i].task();
+            Los.TcbList[i].run_time = Los.current_time;
+        }
+    }
+}
+
+void Task_Sys_Clk(void)
+{
+    uint8_t i;
+    for(i=0; i<config_MAX_TASK; i++){
+        if(Los.TcbList[i].task){
+            Los.TcbList[i].run_time = Los.current_time;
+        }
     }
 }

@@ -11,9 +11,16 @@ Add:
 #define __LOS_H__
 
 #include "los_arch.h"
+#include "los_task.h"
+#include "los_mem.h"
 
+typedef struct{
+    TaskTCB TcbList[config_MAX_TASK];
+    uint32_t current_time;
+}LOS;
 
-typedef void (*osFunction)(void *);
+extern LOS Los;
 
+void Os_Init(void);
 
 #endif /* __LOS_H__ */

@@ -11,5 +11,7 @@
 
 #define config_USE_STDLIB       1       /* 1:use stdlib 0:use custom */
 #define config_MAX_TASK         10      /* max task num < 256 */
+#define config_SYS_CLK          72000000
+
 
 #endif  /* __LOS_CONFIG_H__ */
