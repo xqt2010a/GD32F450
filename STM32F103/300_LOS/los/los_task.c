@@ -30,6 +30,7 @@ void Task_Scheduler(void)
 void Task_Sys_Clk(void)
 {
     uint8_t i;
+    Los.current_time++;
     for(i=0; i<config_MAX_TASK; i++){
         if(Los.TcbList[i].task){
             Los.TcbList[i].run_time = Los.current_time;

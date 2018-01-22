@@ -13,6 +13,7 @@ Add:
 #include "los_arch.h"
 #include "los_task.h"
 #include "los_mem.h"
+#include "os_printf.h"
 
 typedef struct{
     TaskTCB TcbList[config_MAX_TASK];
