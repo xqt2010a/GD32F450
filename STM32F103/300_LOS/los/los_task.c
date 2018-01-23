@@ -1,6 +1,6 @@
 #include "los.h"
 
-TaskID CreatTask(taskFunction task_init, taskFunction task, BaseType interval)
+TaskID CreatTask(void (*task_init)(void), void (*task)(void), BaseType interval)
 {
     uint8_t i;
     for(i=0; i<config_MAX_TASK; i++){

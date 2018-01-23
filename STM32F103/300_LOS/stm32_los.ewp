@@ -1920,6 +1920,9 @@
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\user\task_app.c</name>
+    </file>
   </group>
   <file>
     <name>$PROJ_DIR$\..\bsp\startup\startup_stm32f10x_md.s</name>

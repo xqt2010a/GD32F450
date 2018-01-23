@@ -1,16 +1,16 @@
 #include "task_app.h"
 
-taskFunction Task_Init1
+void Task_Init1(void)
 {
     PRT("Task_Init1 is init finished.");
 }
 
-taskFunction Task1
+void Task1(void)
 {
     PRT("Task1 is init finished.");
 }
 
-taskFunction Task2
+void Task2(void)
 {
     PRT("Task2 is init finished.");
 }

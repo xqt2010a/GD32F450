@@ -3,16 +3,16 @@
 
 #include "los_arch.h"
 
-typedef void (*taskFunction)(void);
+//typedef void (*taskFunction)(void);
 
 typedef struct{
-    taskFunction task;
-    taskFunction task_init;
+    void (*task)(void);
+    void (*task_init)(void);
     uint32_t run_time;
     uint32_t interval_time;
 }TaskTCB;
 
-TaskID CreatTask(taskFunction task_init, taskFunction task, BaseType interval);
+TaskID CreatTask(void (*task_init)(void), void (*task)(void), BaseType interval);
 void Task_Init(void);
 void Task_Scheduler(void);
 void Task_Sys_Clk(void);
