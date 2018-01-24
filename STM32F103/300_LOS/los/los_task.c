@@ -9,7 +9,9 @@ TaskID CreatTask(void (*task_init)(void), void (*task)(void), BaseType interval)
             Los.TcbList[i].task_init = task_init;
             Los.TcbList[i].interval_time = interval;
             Los.TcbList[i].run_time = Los.current_time;
-            Los.TcbList[i].task_init();
+            if(Los.TcbList[i].task_init){
+                Los.TcbList[i].task_init();
+            }
             return i;
         }
     }
