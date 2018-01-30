@@ -14,6 +14,7 @@ void Delay(void)
     for(i=0; i<0xFFFF; i++);
 }
 
+
 void main(void)
 {
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
