@@ -2099,6 +2099,27 @@
     </settings>
   </configuration>
   <group>
+    <name>freertos</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\MemMang\heap_3.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\list.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3\port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3\portasm.s</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\queue.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\tasks.c</name>
+    </file>
+  </group>
+  <group>
     <name>rtt</name>
     <file>
       <name>$PROJ_DIR$\..\..\com\rtt\SEGGER_RTT.c</name>

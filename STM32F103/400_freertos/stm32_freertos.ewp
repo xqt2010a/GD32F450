@@ -303,6 +303,9 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\com\cmsis</state>
           <state>$PROJ_DIR$\..\..\com\rtt</state>
+          <state>$PROJ_DIR$\..\..\com\freertos\include</state>
+          <state>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3</state>
+          <state>$PROJ_DIR$\user</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -560,7 +563,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
-          <state></state>
+          <state>$PROJ_DIR$\user</state>
         </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
@@ -594,7 +597,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_freertos.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1887,6 +1890,27 @@
       <data/>
     </settings>
   </configuration>
+  <group>
+    <name>freertos</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\MemMang\heap_3.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\list.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3\port.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3\portasm.s</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\queue.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\freertos\tasks.c</name>
+    </file>
+  </group>
   <group>
     <name>rtt</name>
     <file>
