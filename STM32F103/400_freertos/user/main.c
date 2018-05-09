@@ -10,7 +10,7 @@ void vTask(void *pvParameters)
     int i=0;
      while(1)  
      {  
-         PRT("hello world!%4d\r\n",i++);
+         PRT("hello world!%6d\r\n",i++);
          vTaskDelay(1000/portTICK_RATE_MS);  
      }  
 }
