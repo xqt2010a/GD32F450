@@ -42,7 +42,7 @@ void TIM3_Channel_Init(void)
 void PWM_Init(void)
 {
     GPIOB_Init();
-    TIM3_Set_Frq(9999,143);    //频率为：72*10^6/(9999+1)/(143+1)=50Hz
+    TIM3_Set_Frq(9999,71);    //频率为：72*10^6/(9999+1)/(71+1)=100Hz
     TIM3_Channel_Init();
     TIM_SetCompare3(TIM3,2499); //CH1得到占空比为50%的pwm波形
     TIM_SetCompare2(TIM3,2499); //CH2得到占空比为50%的pwm波形

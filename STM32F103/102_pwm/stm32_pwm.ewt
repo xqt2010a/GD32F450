@@ -2110,6 +2110,9 @@
   <group>
     <name>stm32</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\misc.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_gpio.c</name>
     </file>
     <file>

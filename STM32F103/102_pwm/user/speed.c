@@ -1,6 +1,6 @@
 #include "speed.h"
-#include "stm32f10x_gpio.h"
-#include "stdio.h"
+
+
 
 //定义左轮捕捉通道与捕获值  TIM1通道1  
 #define  LEFTCAPTURECHANNEL TIM1, TIM_IT_CC1  
@@ -9,7 +9,7 @@
 #define  RIGHTCAPTURECHANNEL TIM1, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM1)  
 
-#define PERIOD_BUFSIZE 30
+#define PERIOD_BUFSIZE 20
 
 uint16_t speed_contiue;
 uint16_t RightWheelPulsePeriod;
@@ -47,14 +47,14 @@ void Speed_Init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);  
       
       //速度捕获通道时基和通道配置 时钟 10000  
-    TIM_TimeBaseStructure.TIM_Period = 65535;   
-    TIM_TimeBaseStructure.TIM_Prescaler = 7200-1;  
-    TIM_TimeBaseStructure.TIM_ClockDivision = 0;  
+    TIM_TimeBaseStructure.TIM_Period = 60000;   //65535
+    TIM_TimeBaseStructure.TIM_Prescaler = 7200-1;  //采样=72000000/(psc+1)，mix=0.1ms
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;  
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
     
       /**************左轮配置******************/  
     TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;  
-    TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;  
+    TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;  //上升沿
     TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;  
     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;  
     TIM_ICInitStructure.TIM_ICFilter = 0x0f;  
@@ -117,9 +117,9 @@ void WheelCaptureIRQ(void)
             }  
             else  
             {  
-                LeftWheelPulsePeriod = ((0xFFFF - LeftWheel1stCapture) + LeftWheel2ndCapture);   
+                LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
             }  
-                LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
+            LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
                 LeftPeriodIndex = 0;  
             LeftWheelCaptureTime= 0;  
@@ -222,7 +222,7 @@ unsigned int GetLeftSpeed(void)
       
     if(LeftValueAvg == 0) return 0;  
     LeftValueAvg = 10445/LeftValueAvg;  
-    printf("\t%d\r\n",LeftValueAvg);  
+    //PRT("\t%d\r\n",LeftValueAvg);  
     return LeftValueAvg;  
 }  
   
@@ -277,6 +277,7 @@ unsigned int GetRightSpeed(void)
     }  
     RightValueAvg = RightValueAvg/index_total;//取平均值  
     if(RightValueAvg == 0) return 0;  
-    RightValueAvg = 10445/RightValueAvg;  
+    RightValueAvg = 10445/RightValueAvg; 
+    //PRT("\t%d\r\n",RightValueAvg);
     return RightValueAvg;  
 }  
