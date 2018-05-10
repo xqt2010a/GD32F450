@@ -36,7 +36,7 @@ uint16_t RightWheelCaptureTime = 0;
 uint16_t RightPeriodBuf[PERIOD_BUFSIZE];
 uint16_t LeftPeriodBuf[PERIOD_BUFSIZE];
 
-void MeaSpeedInit(void)
+void Speed_Init(void)
 {
       //²ÎÊýÉùÃ÷  
     GPIO_InitTypeDef WheelGPIO_InitStructure;  
