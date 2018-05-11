@@ -168,117 +168,24 @@ void TIM1_CC_IRQHandler(void)
 
 unsigned int GetLeftSpeed(void)  
 {  
-    int index,intex_temp=0;  
-    uint16_t LeftPeriodBufTemp[PERIOD_BUFSIZE];  
-    u8 max_index=0,min_index=0;  
-    uint16_t LeftValueTemp=0;  
-    unsigned int LeftValueAvg=0;//平均值  
-    u8 index_total=0;  
-    //将存储的数据按顺序读取到本地缓存  
-    for(index = LeftPeriodIndex;index < PERIOD_BUFSIZE ;index++)  
-    {  
-        LeftPeriodBufTemp[intex_temp++] = LeftPeriodBuf[index];  
-    }  
-    for(index = 0;index < LeftPeriodIndex ;index++)  
-    {  
-        LeftPeriodBufTemp[intex_temp++] = LeftPeriodBuf[index];  
-    }     
-      
-    //取得最大值及其编号  
-    LeftValueTemp = LeftPeriodBufTemp[0];  
-    for(index = 0;index < PERIOD_BUFSIZE-1; index++)  
-    {  
-        if(LeftValueTemp < LeftPeriodBufTemp[index+1])  
-        {  
-            max_index = index+1;  
-            LeftValueTemp = LeftPeriodBufTemp[index+1];  
-        }  
-    }  
-    //取得最小值及其编号  
-    LeftValueTemp = LeftPeriodBufTemp[0];  
-    for(index = 0;index < PERIOD_BUFSIZE-1; index++)  
-    {  
-        if(LeftValueTemp > LeftPeriodBufTemp[index+1])  
-        {  
-            min_index = index+1;  
-            LeftValueTemp = LeftPeriodBufTemp[index+1];  
-        }  
-    }  
-      
-    //去掉最大值和最小值 求加权平均值  
-    for(index = 0;index < PERIOD_BUFSIZE;index++)  
-    {  
-        if((index != min_index) && (index != max_index))  
-        {  
-            LeftValueAvg += LeftPeriodBufTemp[index]*(index+1);  
-            index_total += index+1;  
-        }  
-    }  
-    LeftValueAvg = LeftValueAvg/index_total;//取平均值  
-      
-    for(index = 0;index < PERIOD_BUFSIZE;index++)  
-    {  
-        printf("%d\t",LeftPeriodBufTemp[index]);  
-    }     
-      
-    if(LeftValueAvg == 0) return 0;  
-    LeftValueAvg = 10445/LeftValueAvg;  
+    uint16_t i;
+    uint32_t sum=0, LeftValueAvg = 0;
+    for(i=0; i<PERIOD_BUFSIZE; i++){
+        sum += LeftPeriodBuf[i];
+    }
+    LeftValueAvg = sum/PERIOD_BUFSIZE;
     //PRT("\t%d\r\n",LeftValueAvg);  
     return LeftValueAvg;  
 }  
   
 unsigned int GetRightSpeed(void)  
 {  
-    int index,intex_temp=0;  
-    uint16_t RightPeriodBufTemp[PERIOD_BUFSIZE];  
-    u8 max_index=0,min_index=0;  
-    uint16_t RightValueTemp=0;  
-    unsigned int RightValueAvg=0;//平均值  
-    u8 index_total=0;  
-      
-    //将存储的数据按顺序读取到本地缓存  
-    for(index = RightPeriodIndex;index < PERIOD_BUFSIZE ;index++)  
-    {  
-        RightPeriodBufTemp[intex_temp++] = RightPeriodBuf[index];  
-    }  
-    for(index = 0;index < RightPeriodIndex ;index++)  
-    {  
-        RightPeriodBufTemp[intex_temp++] = RightPeriodBuf[index];  
-    }     
-      
-    //取得最大值及其编号  
-    RightValueTemp = RightPeriodBufTemp[0];  
-    for(index = 0;index < PERIOD_BUFSIZE-1; index++)  
-    {  
-        if(RightValueTemp < RightPeriodBufTemp[index+1])  
-        {  
-            max_index = index+1;  
-            RightValueTemp = RightPeriodBufTemp[index+1];  
-        }  
-    }  
-    //取得最小值及其编号  
-    RightValueTemp = RightPeriodBufTemp[0];  
-    for(index = 0;index < PERIOD_BUFSIZE-1; index++)  
-    {  
-        if(RightValueTemp > RightPeriodBufTemp[index+1])  
-        {  
-            min_index = index+1;  
-            RightValueTemp = RightPeriodBufTemp[index+1];  
-        }  
-    }  
-      
-    //去掉最大值和最小值 求加权平均值  
-    for(index = 0;index < PERIOD_BUFSIZE;index++)  
-    {  
-        if((index != min_index) && (index != max_index))  
-        {  
-            RightValueAvg += RightPeriodBufTemp[index]*(index+1);  
-            index_total += index+1;  
-        }  
-    }  
-    RightValueAvg = RightValueAvg/index_total;//取平均值  
-    if(RightValueAvg == 0) return 0;  
-    RightValueAvg = 10445/RightValueAvg; 
+    uint16_t i;
+    uint32_t sum = 0, RightValueAvg = 0;
+    for(i=0; i<PERIOD_BUFSIZE; i++){
+        sum += RightPeriodBuf[i];
+    }
+    RightValueAvg = sum/PERIOD_BUFSIZE;
     //PRT("\t%d\r\n",RightValueAvg);
     return RightValueAvg;  
 }  
@@ -294,9 +201,9 @@ void vTask_Speed(void *p)
     uint16_t RightSpeedValue;
     uint16_t LeftSpeedValue; 
     while(1){
-        //RightSpeedValue = GetRightSpeed();
-        //LeftSpeedValue = GetLeftSpeed();
-        //PRT("R:\t %d\r\nL:\t %d\r\n", RightSpeedValue, LeftSpeedValue);
-        //vTaskDelay(1000/portTICK_RATE_MS); 
+        RightSpeedValue = GetRightSpeed();
+        LeftSpeedValue = GetLeftSpeed();
+        PRT("R:\t %4d   L:\t %4d\r\n", RightSpeedValue, LeftSpeedValue);
+        vTaskDelay(1000/portTICK_RATE_MS); 
     }
 }
