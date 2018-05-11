@@ -173,6 +173,7 @@
         <option>
           <name>CCDefines</name>
           <state>STM32F10X_MD</state>
+          <state>USE_STDPERIPH_DRIVER</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
