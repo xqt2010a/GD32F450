@@ -173,6 +173,7 @@
         <option>
           <name>CCDefines</name>
           <state>STM32F10X_MD</state>
+          <state>USE_STDPERIPH_DRIVER</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -301,11 +302,12 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\user</state>
+          <state>$PROJ_DIR$\..\bsp\ip_driver</state>
           <state>$PROJ_DIR$\..\..\com\cmsis</state>
           <state>$PROJ_DIR$\..\..\com\rtt</state>
           <state>$PROJ_DIR$\..\..\com\freertos\include</state>
           <state>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3</state>
-          <state>$PROJ_DIR$\user</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -597,7 +599,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_freertos.bin</state>
+          <state>stm32_freertos_pwm.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1923,6 +1925,18 @@
   <group>
     <name>stm32</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\misc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_gpio.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_rcc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_tim.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\system_stm32f10x.c</name>
     </file>
   </group>
@@ -1930,6 +1944,12 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\moto.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\speed.c</name>
     </file>
   </group>
   <file>
