@@ -3,7 +3,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+//#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 
 void vTask(void *pvParameters)  
 {  
