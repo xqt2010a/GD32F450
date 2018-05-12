@@ -7,6 +7,6 @@
 
 
 extern void Uart_Init(void);
-
+extern void Uart_PutStr (USART_TypeDef* USARTx, uint8_t *str);  
 
 #endif  /* __UART_H__ */

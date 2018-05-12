@@ -37,6 +37,29 @@ void Uart_Init(void)
     USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);            //使能串口中断，也叫开启串口中断，第二个参数是设置具体开启哪种中断，具体为寄存器SR
 }
 
+void UART_PutChar(USART_TypeDef* USARTx, uint8_t Data)  
+{  
+    USART_SendData(USARTx, Data);  
+    while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET){}  
+}
+
+void Uart_PutStr (USART_TypeDef* USARTx, uint8_t *str)    
+{    
+    while (0 != *str)    
+    {    
+        UART_PutChar(USARTx, *str);    
+        str++;    
+    }    
+}  
+
+int putchar(int c)                                            //putchar函数    
+{    
+    if (c == '\n'){putchar('\r');}                                 //将printf的\n变成\r    
+    USART_SendData(USART1, c);                                   //发送字符    
+    while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET){} //等待发送结束    
+    return c;                                                      //返回值    
+} 
+
 void USART1_IRQHandler(void)
 {
     u16 DATA;
