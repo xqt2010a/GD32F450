@@ -307,6 +307,7 @@
           <state>$PROJ_DIR$\..\..\com\freertos\include</state>
           <state>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3</state>
           <state>$PROJ_DIR$\user</state>
+          <state>$PROJ_DIR$\..\bsp\ip_driver</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1924,6 +1925,18 @@
   <group>
     <name>stm32</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\misc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_gpio.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_rcc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_usart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\system_stm32f10x.c</name>
     </file>
   </group>
@@ -1931,6 +1944,15 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\robot_protocol.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\uart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\uart_task.c</name>
     </file>
   </group>
   <file>

@@ -2,8 +2,9 @@
 #include "string.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "uart_task.h"
 
-#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+//#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 
 void vTask(void *pvParameters)  
 {  
@@ -21,6 +22,8 @@ void main(void)
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
     PRT("hello world!\r\ntoday is :%s,%s\r\n",__DATE__, __TIME__);
     xTaskCreate(vTask,"Task1",50,NULL,1,NULL); 
+    xTaskCreate(vUart_Task,"Uart_Task",50,NULL,1,NULL); 
+    xTaskCreate(vReport_Task,"Report_Task",50,NULL,1,NULL); 
     vTaskStartScheduler(); 
     while(1){
     
