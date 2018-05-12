@@ -599,7 +599,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_freertos_pwm.bin</state>
+          <state>stm32_freertos_robot.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -714,11 +714,11 @@
         </option>
         <option>
           <name>IlinkIcfOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103x8.icf</state>
+          <state>$PROJ_DIR$\stm32_freertos_robot.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1937,6 +1937,9 @@
       <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_tim.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_usart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\system_stm32f10x.c</name>
     </file>
   </group>
@@ -1949,7 +1952,16 @@
       <name>$PROJ_DIR$\user\moto.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\user\robot_protocol.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\user\speed.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\uart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\uart_task.c</name>
     </file>
   </group>
   <file>
