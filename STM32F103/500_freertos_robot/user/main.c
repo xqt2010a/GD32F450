@@ -4,6 +4,7 @@
 #include "task.h"
 #include "moto.h"
 #include "speed.h"
+#include "uart_task.h"
 
 //#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 
@@ -28,6 +29,8 @@ void main(void)
     xTaskCreate(vTask,"Task1",50,NULL,1,NULL); 
     xTaskCreate(vTask_Moto,"Task_Moto",50,NULL,1,NULL); 
     xTaskCreate(vTask_Speed,"Task_Speed",50,NULL,1,NULL); 
+    xTaskCreate(vUart_Task,"Uart_Task",50,NULL,1,NULL); 
+    xTaskCreate(vReport_Task,"Report_Task",50,NULL,1,NULL);
     vTaskStartScheduler(); 
     while(1){
     
