@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F103x8	ST STM32F103x8</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -714,11 +714,11 @@
         </option>
         <option>
           <name>IlinkIcfOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103x8.icf</state>
+          <state>$PROJ_DIR$\stm32_freertos.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>

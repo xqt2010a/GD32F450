@@ -22,8 +22,10 @@ void main(void)
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
     PRT("hello world!\r\ntoday is :%s,%s\r\n",__DATE__, __TIME__);
     xTaskCreate(vTask,"Task1",50,NULL,1,NULL); 
-    xTaskCreate(vUart_Task,"Uart_Task",50,NULL,1,NULL); 
-    xTaskCreate(vReport_Task,"Report_Task",50,NULL,1,NULL); 
+    //xTaskCreate(vUart1_Task,"Uart1_Task",50,NULL,1,NULL); 
+    xTaskCreate(vUart2_Task,"Uart2_Task",50,NULL,1,NULL);
+    //xTaskCreate(vUart1_Report_Task,"Uart1_Report_Task",50,NULL,1,NULL); 
+    xTaskCreate(vUart2_Report_Task,"Uart2_Report_Task",30,NULL,1,NULL);
     vTaskStartScheduler(); 
     while(1){
     

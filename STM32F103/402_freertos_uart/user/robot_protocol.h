@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "uart.h"
 
-#define R_PUTS(pbuf, len)   Uart_StrSend(pbuf, len)
+#define R_PUTS(pbuf, len)   Uart1_StrSend(pbuf, len)
 
 #define R_CMD_HEADER        0x3AA3
 
