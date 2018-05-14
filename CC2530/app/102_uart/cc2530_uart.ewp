@@ -40,12 +40,12 @@
         <option>
           <name>Code Memory Model</name>
           <version>1</version>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>Code Memory Model slave</name>
           <version>1</version>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>Data Memory Model</name>
@@ -155,20 +155,20 @@
         <option>
           <name>Input variant</name>
           <version>1</version>
-          <state>3</state>
+          <state>2</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>No float.</state>
+          <state>Full formatting.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>1</version>
-          <state>4</state>
+          <state>2</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>No float, no field width, no precision.</state>
+          <state>Full formatting.</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -722,7 +722,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>cc2530_base.d51</state>
+          <state>cc2530_uart.d51</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -916,7 +916,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>cc2530_base.sim</state>
+          <state>cc2530_uart.sim</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
