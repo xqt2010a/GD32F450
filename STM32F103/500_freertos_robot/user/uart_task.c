@@ -2,6 +2,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "robot_protocol.h"
+#include "SEGGER_RTT.h"
 
 
 uint8_t Uart_Buf_Rx[UART_BUF_LEN];
@@ -29,6 +30,8 @@ void vUart_Task(void *p)
             
             EncodeProcess(Uart_Buf_Rx);
             
+            PRT("%s",Uart_Buf_Rx);
+                
             Uart_Sta_Rx = 0;
             Uart_Index_Rx = 0;
             USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);    //打开串口接收中断

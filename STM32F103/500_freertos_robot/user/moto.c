@@ -1,6 +1,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "moto.h"
+#include "robot_protocol.h"
 
 void GPIOB_Init(void)
 {
@@ -47,19 +48,35 @@ void Moto_Init(void)
     GPIOB_Init();
     TIM3_Set_Frq(9999,71);    //频率为：72*10^6/(9999+1)/(71+1)=100Hz
     TIM3_Channel_Init();
-    TIM_SetCompare3(TIM3,2499); //CH1得到占空比为50%的pwm波形
-    TIM_SetCompare2(TIM3,2499); //CH2得到占空比为50%的pwm波形
+    TIM_SetCompare3(TIM3,1); //CH1得到占空比为50%的pwm波形 PB0
+    TIM_SetCompare2(TIM3,1); //CH2得到占空比为50%的pwm波形 PB5
 }
 
 void vTask_Moto(void *p)
 {
-    uint16_t i=0;
+    //uint16_t i=0;
+    //char flag = 0;
+    uint32_t v = 0;
     
     while(1){
-        TIM_SetCompare2(TIM3,i); //得到占空比为50%的pwm波形
-        vTaskDelay(2);
-        i++;
-        if(i>9999)
-            i = 0;
+        //TIM_SetCompare2(TIM3,i); //得到占空比为50%的pwm波形
+        //vTaskDelay(2);
+        //i++;
+        //if(i>9999)
+        //    i = 0;
+        if(R_CTRL_DOWN_CMD == Protocol_Status.cmd_type){
+            v = ABS_FUC(Protocol_Status.ctrl.v);
+            if(v > 9999){
+                v = 9999;
+            }
+            TIM_SetCompare3(TIM3,v);
+            TIM_SetCompare2(TIM3,v);
+            Protocol_Status.cmd_type = 0;
+        }
+        else if(R_MODE_DOWN_CMD == Protocol_Status.cmd_type){
+            TIM_SetCompare3(TIM3,1);
+            TIM_SetCompare2(TIM3,1);
+            Protocol_Status.cmd_type = 0;
+        }
     }
 }
