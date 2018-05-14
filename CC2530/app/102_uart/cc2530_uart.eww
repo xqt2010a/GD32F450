@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\TRX.ewp</path>
+    <path>$WS_DIR$\cc2530_uart.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

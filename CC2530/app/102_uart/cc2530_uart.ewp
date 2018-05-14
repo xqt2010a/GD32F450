@@ -40,12 +40,12 @@
         <option>
           <name>Code Memory Model</name>
           <version>1</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>Code Memory Model slave</name>
           <version>1</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>Data Memory Model</name>
@@ -67,7 +67,7 @@
         </option>
         <option>
           <name>Start of extended stack</name>
-          <state>0x002000</state>
+          <state></state>
         </option>
         <option>
           <name>Calling convention</name>
@@ -102,11 +102,11 @@
         </option>
         <option>
           <name>DPS Address</name>
-          <state>0x92</state>
+          <state></state>
         </option>
         <option>
           <name>Sfr Visibility</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>DPTR Addresses</name>
@@ -150,25 +150,25 @@
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\LIB\CLIB\cl-pli-nlxd-1e16x01.r51</state>
+          <state>$TOOLKIT_DIR$\LIB\CLIB\cl-pli-blxd-1e16x01.r51</state>
         </option>
         <option>
           <name>Input variant</name>
           <version>1</version>
-          <state>2</state>
+          <state>3</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Full formatting.</state>
+          <state>No float.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>1</version>
-          <state>2</state>
+          <state>4</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Full formatting.</state>
+          <state>No float, no field width, no precision.</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -188,7 +188,7 @@
         </option>
         <option>
           <name>General Xdata Stack Size</name>
-          <state>0x100</state>
+          <state>0xEFF</state>
         </option>
         <option>
           <name>General Ext Stack Size</name>
@@ -225,7 +225,7 @@
         </option>
         <option>
           <name>PDATA 16-31 register address</name>
-          <state></state>
+          <state>0xEA</state>
         </option>
         <option>
           <name>General Far22 Heap Size</name>
@@ -271,6 +271,15 @@
         <version>10</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
+        <option>
+          <name>CCOptSizeSpeedSlave</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimizationSlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
         <option>
           <name>OutputFile</name>
           <state>$FILE_BNAME$.r51</state>
@@ -423,15 +432,6 @@
         <option>
           <name>CCLibConfigHeader</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>CCOptSizeSpeedSlave</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCOptimizationSlave</name>
-          <version>0</version>
-          <state>0</state>
         </option>
         <option>
           <name>NoUBROFMessages</name>
@@ -709,12 +709,20 @@
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
+          <name>XInfineonPFlashCacheBug</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OXLibIOConfig</name>
+          <state>1</state>
+        </option>
+        <option>
           <name>XOutOverride</name>
           <state>0</state>
         </option>
         <option>
           <name>OutputFile</name>
-          <state>TRX.d51</state>
+          <state>cc2530_base.d51</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -780,11 +788,15 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_CC2530F256.xcl</state>
+          <state>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_CC2530F256_banked.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
           <state></state>
+        </option>
+        <option>
+          <name>Config Include Dir</name>
+          <state>1</state>
         </option>
         <option>
           <name>XLink Dptr Switch mask</name>
@@ -805,18 +817,6 @@
         <option>
           <name>Linker Code Banking</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>Config Include Dir</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OXLibIOConfig</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>XInfineonPFlashCacheBug</name>
-          <state>0</state>
         </option>
         <option>
           <name>DoFill</name>
@@ -916,7 +916,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>TRX.sim</state>
+          <state>cc2530_base.sim</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
@@ -1077,11 +1077,11 @@
         </option>
         <option>
           <name>Previous Derivative File</name>
-          <state>No device selected</state>
+          <state>No derivative selected</state>
         </option>
         <option>
           <name>Showed Derivative</name>
-          <state>No device selected</state>
+          <state>No derivative selected</state>
         </option>
         <option>
           <name>CPU Core</name>
@@ -1123,7 +1123,7 @@
         </option>
         <option>
           <name>Start of extended stack</name>
-          <state>0x002000</state>
+          <state></state>
         </option>
         <option>
           <name>Calling convention</name>
@@ -1170,7 +1170,7 @@
         </option>
         <option>
           <name>CodeBankReg</name>
-          <state>0xC7</state>
+          <state>0x90</state>
         </option>
         <option>
           <name>CodeBankStart</name>
@@ -1244,7 +1244,7 @@
         </option>
         <option>
           <name>General Xdata Stack Size</name>
-          <state>0xEFF</state>
+          <state>0xFFF</state>
         </option>
         <option>
           <name>General Ext Stack Size</name>
@@ -1304,7 +1304,7 @@
         <option>
           <name>GRuntimeLibSelectSlave2</name>
           <version>0</version>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>Extended stack address</name>
@@ -1327,6 +1327,15 @@
         <version>10</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
+        <option>
+          <name>CCOptSizeSpeedSlave</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptimizationSlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
         <option>
           <name>OutputFile</name>
           <state></state>
@@ -1481,15 +1490,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>CCOptSizeSpeedSlave</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CCOptimizationSlave</name>
-          <version>0</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>NoUBROFMessages</name>
           <state>0</state>
         </option>
@@ -1511,7 +1511,7 @@
         </option>
         <option>
           <name>CCStdIncCheck</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1537,11 +1537,11 @@
         <option>
           <name>CCOptStrategy</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules04</name>
@@ -1688,7 +1688,7 @@
         </option>
         <option>
           <name>ADefines</name>
-          <state>NDEBUG</state>
+          <state></state>
         </option>
         <option>
           <name>AWarnEnable</name>
@@ -1764,6 +1764,14 @@
         <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
+        <option>
+          <name>XInfineonPFlashCacheBug</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>OXLibIOConfig</name>
+          <state>1</state>
+        </option>
         <option>
           <name>XOutOverride</name>
           <state>0</state>
@@ -1843,6 +1851,10 @@
           <state></state>
         </option>
         <option>
+          <name>Config Include Dir</name>
+          <state>1</state>
+        </option>
+        <option>
           <name>XLink Dptr Switch mask</name>
           <state>1</state>
         </option>
@@ -1861,18 +1873,6 @@
         <option>
           <name>Linker Code Banking</name>
           <state>1</state>
-        </option>
-        <option>
-          <name>Config Include Dir</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OXLibIOConfig</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>XInfineonPFlashCacheBug</name>
-          <state>0</state>
         </option>
         <option>
           <name>DoFill</name>
@@ -2114,9 +2114,12 @@
       <data/>
     </settings>
   </configuration>
-  <file>
-    <name>$PROJ_DIR$\main.c</name>
-  </file>
+  <group>
+    <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+  </group>
 </project>
 
 
