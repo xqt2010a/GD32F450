@@ -115,7 +115,7 @@ void vTask_Moto(void *p)
     //uint16_t i=0;
     //char flag = 0;
     uint32_t v = 0;
-    //Moto_Init();
+    Moto_Init();
     while(1){
         //TIM_SetCompare2(TIM3,i); //得到占空比为50%的pwm波形
         //vTaskDelay(2);
@@ -136,7 +136,7 @@ void vTask_Moto(void *p)
             TIM_SetCompare2(TIM3,1);
             Protocol_Status.cmd_type = 0;
         }
-        TIM_SetCompare1(TIM1,4999);
-        TIM_SetCompare2(TIM1,4999);
+        TIM_SetCompare1(TIM1,999);
+        TIM_SetCompare2(TIM1,999);
     }
 }

@@ -102,32 +102,7 @@ void Capture_Init(void)
 
 void WheelCaptureIRQ(void)  
 {  
-    if(TIM_GetITStatus(LEFTCAPTURECHANNEL) == SET)   
-    {  
-        speed_contiue=100;  
-        TIM_ClearITPendingBit(LEFTCAPTURECHANNEL);  
-        if(LeftWheelCaptureTime == 0)  
-        {  
-            LeftWheel1stCapture = LEFTCAPTUREVALUE;  
-            LeftWheelCaptureTime = 1;  
-        }  
-        else if(LeftWheelCaptureTime == 1)  
-        {  
-            LeftWheel2ndCapture = LEFTCAPTUREVALUE;   
-            if (LeftWheel2ndCapture > LeftWheel1stCapture)  
-            {  
-                LeftWheelPulsePeriod = (LeftWheel2ndCapture - LeftWheel1stCapture);   
-            }  
-            else  
-            {  
-                LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
-            }  
-            LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
-            if(LeftPeriodIndex == PERIOD_BUFSIZE)   
-                LeftPeriodIndex = 0;  
-            LeftWheelCaptureTime= 0;  
-        }  
-    }  
+      
       
     if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET)   
     {  
@@ -155,6 +130,32 @@ void WheelCaptureIRQ(void)
             RightWheelCaptureTime= 0;  
         }  
     }  
+    if(TIM_GetITStatus(LEFTCAPTURECHANNEL) == SET)   
+    {  
+        speed_contiue=100;  
+        TIM_ClearITPendingBit(LEFTCAPTURECHANNEL);  
+        if(LeftWheelCaptureTime == 0)  
+        {  
+            LeftWheel1stCapture = LEFTCAPTUREVALUE;  
+            LeftWheelCaptureTime = 1;  
+        }  
+        else if(LeftWheelCaptureTime == 1)  
+        {  
+            LeftWheel2ndCapture = LEFTCAPTUREVALUE;   
+            if (LeftWheel2ndCapture > LeftWheel1stCapture)  
+            {  
+                LeftWheelPulsePeriod = (LeftWheel2ndCapture - LeftWheel1stCapture);   
+            }  
+            else  
+            {  
+                LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
+            }  
+            LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
+            if(LeftPeriodIndex == PERIOD_BUFSIZE)   
+                LeftPeriodIndex = 0;  
+            LeftWheelCaptureTime= 0;  
+        }  
+    }
 }  
 
 /**------------------------------------------------------- 
