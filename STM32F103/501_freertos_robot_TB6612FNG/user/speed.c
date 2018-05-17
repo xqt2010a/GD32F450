@@ -212,6 +212,6 @@ void vTask_Speed(void *p)
         Protocol_Status.path.deg = R_CAR_DEG(Protocol_Status.path.deg_w);
         
         PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
-        vTaskDelay(1000/portTICK_RATE_MS); 
+        vTaskDelay(50/portTICK_RATE_MS); 
     }
 }

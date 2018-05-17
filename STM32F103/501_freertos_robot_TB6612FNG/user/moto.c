@@ -2,6 +2,10 @@
 #include "task.h"
 #include "moto.h"
 #include "robot_protocol.h"
+#include "pid.h"
+
+#define SPEED_COUNT_RATE    30      //速度 和 捕获计数值
+#define ARR_VALUE           10000   //自动重装载寄存器的值
 
 void GPIO_Init_Moto(void)
 {
@@ -90,14 +94,25 @@ void Moto1_Right_Back(void)
     GPIO_ResetBits(GPIOC, GPIO_Pin_3);  //PC3 = 1;
 }
 
+void Moto1_Left_Speed(uint16_t Vs)
+{
+    TIM_SetCompare2(TIM1, Vs);  
+    Moto1_Left_Forword();
+}
+
+void Moto1_Right_Speed(uint16_t Vs)
+{
+    TIM_SetCompare1(TIM1, Vs);
+    Moto1_Right_Forword();
+}
 
 void Moto_Init(void)
 {
     GPIO_Init_Moto();
-    TIM1_Set_Frq(9999,71);    //频率为：72*10^6/(9999+1)/(71+1)=100Hz
+    TIM1_Set_Frq(ARR_VALUE-1,71);    //频率为：72*10^6/(9999+1)/(71+1)=100Hz
     TIM1_Channel_Init();
-    TIM_SetCompare1(TIM1,2499); //CH1得到占空比为50%的pwm波形 PB0
-    TIM_SetCompare2(TIM1,2499); //CH2得到占空比为50%的pwm波形 PB5
+    TIM_SetCompare1(TIM1,ARR_VALUE/2-1); //CH1得到占空比为50%的pwm波形 PB0
+    TIM_SetCompare2(TIM1,ARR_VALUE/2-1); //CH2得到占空比为50%的pwm波形 PB5
     TIM_CtrlPWMOutputs(TIM1, ENABLE);
     //Moto1_Left_Stop();
     //Moto1_Right_Stop();
@@ -110,33 +125,43 @@ void Moto_Init(void)
     
 }
 
+
+
 void vTask_Moto(void *p)
 {
-    //uint16_t i=0;
-    //char flag = 0;
-    uint32_t v = 0;
+    int32_t v = 0;
     Moto_Init();
     while(1){
-        //TIM_SetCompare2(TIM3,i); //得到占空比为50%的pwm波形
-        //vTaskDelay(2);
-        //i++;
-        //if(i>9999)
-        //    i = 0;
-        if(R_CTRL_DOWN_CMD == Protocol_Status.cmd_type){
-            v = ABS_FUC(Protocol_Status.ctrl.v);
-            if(v > 9999){
-                v = 9999;
+        if(0 != Protocol_Status.dst.Vl){    //Left PWM
+            v = PID_realize_L(Protocol_Status.dst.Vl, Protocol_Status.cur.Vl);
+            if(v >= (SPEED_COUNT_RATE*ARR_VALUE)){
+                v = (SPEED_COUNT_RATE*ARR_VALUE);
             }
-            TIM_SetCompare1(TIM3,v);
-            TIM_SetCompare2(TIM3,v);
-            Protocol_Status.cmd_type = 0;
+            else if(v < SPEED_COUNT_RATE){
+                v = SPEED_COUNT_RATE;
+            }
+            Moto1_Left_Speed(v/SPEED_COUNT_RATE-1);
+            
         }
-        else if(R_MODE_DOWN_CMD == Protocol_Status.cmd_type){
-            TIM_SetCompare1(TIM3,1);
-            TIM_SetCompare2(TIM3,1);
-            Protocol_Status.cmd_type = 0;
+        else{
+            Moto1_Left_Stop();
+            TIM_SetCompare2(TIM1, 0);
         }
-        TIM_SetCompare1(TIM1,5499);
-        TIM_SetCompare2(TIM1,7499);
+        
+        if(0 != Protocol_Status.dst.Vr){    //Right PWM
+            v = PID_realize_R(Protocol_Status.dst.Vr, Protocol_Status.cur.Vr);
+            if(v >= (SPEED_COUNT_RATE*ARR_VALUE)){
+                v = (SPEED_COUNT_RATE*ARR_VALUE)-1;
+            }
+            else if(v < SPEED_COUNT_RATE){
+                v = SPEED_COUNT_RATE;
+            }
+            Moto1_Right_Speed(v/SPEED_COUNT_RATE-1);
+        }
+        else{
+            Moto1_Right_Stop();
+            TIM_SetCompare1(TIM1,0);
+        }
+        vTaskDelay(50/portTICK_RATE_MS);
     }
 }

@@ -25,11 +25,13 @@ char EncodeProcess(const uint8_t *buf)
         
         if(R_CTRL_DOWN_CMD == pRx->cmd_type){       //行走轨迹控制
             pTx.cmd_type = R_CTRL_UP_CMD;
-            if(bcc == xor_sum((uint8_t *)pRx->cmd_type, pRx->data_len+2)){
+            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Ctrl_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_CTRL_DOWN_CMD;
                     Protocol_Status.ctrl.v = pRx->ctrl.v;
                     Protocol_Status.ctrl.w = pRx->ctrl.w;
+                    Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.ctrl.v, Protocol_Status.ctrl.w);
+                    Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.ctrl.v, Protocol_Status.ctrl.w);
                     pTx.data = R_SUCCESS;
                 }
                 else{
@@ -44,7 +46,7 @@ char EncodeProcess(const uint8_t *buf)
         }
         else if(R_MODE_DOWN_CMD == pRx->cmd_type){  //模式切换
             pTx.cmd_type = R_MODE_UP_CMD;
-            if(bcc == xor_sum((uint8_t *)pRx->cmd_type, pRx->data_len+2)){
+            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Mode_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_MODE_DOWN_CMD;
                     Protocol_Status.mode.mode = pRx->mode.mode;

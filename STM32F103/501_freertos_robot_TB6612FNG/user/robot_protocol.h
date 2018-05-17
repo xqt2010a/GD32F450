@@ -95,7 +95,7 @@ typedef struct{
     Path_Struct path;   //底盘轨迹反馈
     Mode_Struct mode;   //模式切换
     Speed_Struct cur;   //当前速度
-    Speed_Struct det;   //目的速度
+    Speed_Struct dst;   //目的速度
 }Protocol_Status_Struct;
 
 extern Protocol_Status_Struct Protocol_Status;
