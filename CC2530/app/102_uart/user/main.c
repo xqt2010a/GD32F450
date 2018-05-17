@@ -24,30 +24,30 @@ void timer1_enable();
 void rf_send( char *pbuf , int len);
 void rf_receive_isr();
 
-//void uart0_init()
-//{
-//    PERCFG = 0x00;              // UART0 选择位置0 TX@P0.3 RX@P0.2
-//    P0SEL |= 0x0C;              // P0.3 P0.2选择外设功能
-//    U0CSR |= 0xC0;              // UART模式 接收器使能
-//    U0GCR |= 11;                // 查表获得 U0GCR 和 U0BAUD
-//    U0BAUD = 216;               // 115200
-//    UTX0IF = 1;
-//
-//    URX0IE = 1;                 // 使能接收中断 IEN0@BIT2
-//}
-
 void uart0_init()
 {
-    PERCFG = 0x00;   // 外设控制，UART0选择端口位置1 
-    P0SEL = 0x0C;    // 端口0功能选择，P0_2、P0_3用作串口
-    P2DIR &= ~0xC0;  // 端口0外设优先级控制，高2位置0，USART0优先
+    PERCFG = 0x00;              // UART0 选择位置0 TX@P0.3 RX@P0.2
+    P0SEL |= 0x0C;              // P0.3 P0.2选择外设功能
+    U0CSR |= 0xC0;              // UART模式 接收器使能
+    U0GCR |= 11;                // 查表获得 U0GCR 和 U0BAUD
+    U0BAUD = 216;               // 115200
+    UTX0IF = 0;
 
-    U0CSR |= 0x80;   // UART模式
-    U0GCR |= 11;
-    U0BAUD |= 216;   // 采用32MHz系统时钟时，波特率设置为115200
-    UTX0IF = 0;      // UART0 TX中断标志初始置位0
-
+    URX0IE = 1;                 // 使能接收中断 IEN0@BIT2
 }
+
+//void uart0_init()
+//{
+//    PERCFG = 0x00;   // 外设控制，UART0选择端口位置1 
+//    P0SEL = 0x0C;    // 端口0功能选择，P0_2、P0_3用作串口
+//    P2DIR &= ~0xC0;  // 端口0外设优先级控制，高2位置0，USART0优先
+//
+//    U0CSR |= 0x80;   // UART模式
+//    U0GCR |= 11;
+//    U0BAUD |= 216;   // 采用32MHz系统时钟时，波特率设置为115200
+//    UTX0IF = 0;      // UART0 TX中断标志初始置位0
+//    
+//}
 
 void uart0_flush_rxbuf()
 {
@@ -185,7 +185,9 @@ void main(void)
         if( is_serial_receive )                   // 接收到串口数据包
         {
             is_serial_receive = 0;                  // 清除标志位
+            EA = 0;
             rf_send(serial_rxbuf , serial_rxlen);   // 直接转发串口数据
+            EA = 1;
             uart0_flush_rxbuf();                    // 清除串口接收缓冲区
         }
     }
