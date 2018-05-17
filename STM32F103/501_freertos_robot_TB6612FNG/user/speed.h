@@ -9,6 +9,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "robot_protocol.h"
+
 extern void Speed_Init(void);
 extern void vTask_Speed(void *p);
 

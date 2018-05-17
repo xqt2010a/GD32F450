@@ -170,7 +170,7 @@ void TIM2_IRQHandler(void)
 }  
 
 
-unsigned int GetLeftSpeed(void)  
+unsigned int GetLeftCount(void)  
 {  
     uint16_t i;
     uint32_t sum=0, LeftValueAvg = 0;
@@ -182,7 +182,7 @@ unsigned int GetLeftSpeed(void)
     return LeftValueAvg;  
 }  
   
-unsigned int GetRightSpeed(void)  
+unsigned int GetRightCount(void)  
 {  
     uint16_t i;
     uint32_t sum = 0, RightValueAvg = 0;
@@ -202,12 +202,16 @@ void Speed_Init(void)
 
 void vTask_Speed(void *p)
 {
-    uint16_t RightSpeedValue;
-    uint16_t LeftSpeedValue; 
+    Speed_Init();
     while(1){
-        RightSpeedValue = GetRightSpeed();
-        LeftSpeedValue = GetLeftSpeed();
-        PRT("R:\t %4d   L:\t %4d\r\n", RightSpeedValue, LeftSpeedValue);
+        Protocol_Status.cur.Vr = R_CAR_GET_V(GetRightCount());
+        Protocol_Status.cur.Vl = R_CAR_GET_V(GetLeftCount());
+        Protocol_Status.path.v = R_CAR_V(Protocol_Status.cur.Vr, Protocol_Status.cur.Vl) ;
+        Protocol_Status.path.w = R_CAR_W(Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
+        Protocol_Status.path.deg_w = R_CAR_DEG_W(Protocol_Status.path.w);        
+        Protocol_Status.path.deg = R_CAR_DEG(Protocol_Status.path.deg_w);
+        
+        PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
         vTaskDelay(1000/portTICK_RATE_MS); 
     }
 }

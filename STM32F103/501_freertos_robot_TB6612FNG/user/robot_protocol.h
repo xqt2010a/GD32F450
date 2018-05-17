@@ -8,17 +8,32 @@
 
 #define R_CMD_HEADER        0x3AA3
 
-#define R_FIX_LEN           0x05
-#define R_CTRL_DATA_LEN     0x08
+#define R_FIX_LEN           0x05    //协议固定长度
+#define R_CTRL_DATA_LEN     0x08    
 #define R_PATH_DATA_LEN     0x0C
-#define R_OTHER_DATA_LEN    0x01
+#define R_ONE_DATA_LEN      0x01
 
-#define R_CAR_WIDE          237  //车身宽度，即两个轮子间距（mm）
+#define R_REPORT_TIME       40      //40ms上报
+
+#define R_CAR_WIDE          237     //车身宽度，即两个轮子间距（mm）
+#define R_CAR_L             70      //轮子直径70.5mmm
+#define R_CAR_ENCODER_N     500     //转一圈 500 脉冲
+#define R_CAR_PI            3.14
+      
+/* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
+*   v(c) = PI*L/(N*c) = 3.14*70/500/c, 这里c是10的负5次方
+*/
+
+#define R_CAR_GET_V(count)  (43960000/(count))          //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2)    //左轮速度
 
-#define R_CAR_V(r,l)        (((r)+(l))/2)               //线速度
-#define R_CAR_W(r,l)        (((r)-(l))/2)               //角速度
+#define R_CAR_V(Vr,Vl)      (((Vr)+(Vl))/2)                   //线速度 um/s
+#define R_CAR_W(Vr,Vl)      (((Vr)-(Vl))/R_CAR_WIDE)   //角速度 10-3rad/s
+
+
+#define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*PI)
+#define R_CAR_DEG(deg_w)    (((deg_w)*(R_REPORT_TIME))/1000)     //deg = deg_w*40/1000    
 
 
 enum Back_Type{
@@ -44,15 +59,22 @@ typedef struct{
 typedef struct{
     int v;      //线速度 int 值，数据单位为微米每秒（um/s）
     int w;      //角速度 int 值，数据单位为毫弧度每秒（10-3 rad/s）
-    short deg_w;//角速度 short 值，数据单位为百分之一度每秒（10-2 deg/s）   
-    short deg;  //角度 short 值，数据单位为百分之一度（10-2 deg）
+    int16_t deg_w;//角速度 short 值，数据单位为百分之一度每秒（10-2 deg/s）   
+    int16_t deg;  //角度 short 值，数据单位为百分之一度（10-2 deg）
 }Path_Struct;
+
+typedef struct{
+    uint8_t mode;
+}Mode_Struct;
 
 //typedef union{
 //    Ctrl_Struct ctrl;   //行走轨迹控制
 //    Path_Struct path;   //底盘轨迹反馈
 //}Data_Struct;
-
+typedef struct{
+    int Vr;
+    int Vl;
+}Speed_Struct;
 
 typedef struct{
     uint16_t header;
@@ -61,7 +83,7 @@ typedef struct{
     union{
         Ctrl_Struct ctrl;   //行走轨迹控制
         Path_Struct path;   //底盘轨迹反馈
-        uint8_t     mode;   //模式切换
+        Mode_Struct mode;   //模式切换
         uint8_t     data;   //其他类型数据
     };
     uint8_t res;
@@ -71,9 +93,10 @@ typedef struct{
     uint8_t cmd_type;
     Ctrl_Struct ctrl;   //行走轨迹控制
     Path_Struct path;   //底盘轨迹反馈
-    uint8_t     mode;   //模式切换
+    Mode_Struct mode;   //模式切换
+    Speed_Struct cur;   //当前速度
+    Speed_Struct det;   //目的速度
 }Protocol_Status_Struct;
-
 
 extern Protocol_Status_Struct Protocol_Status;
 extern char EncodeProcess(const uint8_t *buf);

@@ -10,11 +10,11 @@ uint8_t Uart_Sta_Rx = 0;
 uint8_t Uart_Index_Rx = 0;
 
 
-void USART1_IRQHandler(void)
+void USART2_IRQHandler(void)
 {
-    if(USART_GetITStatus(USART1,USART_IT_RXNE)) //判断如果收到了数据，收到数据CR1中RXNE位为1，该函数的返回值为1
+    if(USART_GetITStatus(USART2,USART_IT_RXNE)) //判断如果收到了数据，收到数据CR1中RXNE位为1，该函数的返回值为1
     {
-        Uart_Buf_Rx[Uart_Index_Rx++] = USART_ReceiveData(USART1);         //读取数据
+        Uart_Buf_Rx[Uart_Index_Rx++] = USART_ReceiveData(USART2);         //读取数据
         Uart_Sta_Rx = 1;
     }
 }
@@ -45,7 +45,7 @@ void vReport_Task(void *p)
     xLastWakeTime = xTaskGetTickCount();        //获取当前tick
     while(1){
         
-        vTaskDelayUntil( &xLastWakeTime, 5000/portTICK_RATE_MS );
+        vTaskDelayUntil( &xLastWakeTime, R_REPORT_TIME/portTICK_RATE_MS );
         PathReport();
     }
 }

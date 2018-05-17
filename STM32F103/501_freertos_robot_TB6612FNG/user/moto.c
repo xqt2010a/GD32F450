@@ -136,7 +136,7 @@ void vTask_Moto(void *p)
             TIM_SetCompare2(TIM3,1);
             Protocol_Status.cmd_type = 0;
         }
-        TIM_SetCompare1(TIM1,999);
-        TIM_SetCompare2(TIM1,999);
+        TIM_SetCompare1(TIM1,5499);
+        TIM_SetCompare2(TIM1,7499);
     }
 }
