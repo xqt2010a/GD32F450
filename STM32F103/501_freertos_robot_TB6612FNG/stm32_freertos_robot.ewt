@@ -2158,6 +2158,9 @@
       <name>$PROJ_DIR$\user\moto.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\user\pid.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\user\robot_protocol.c</name>
     </file>
     <file>

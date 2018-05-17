@@ -690,7 +690,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -1950,6 +1950,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\user\moto.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\pid.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\user\robot_protocol.c</name>
