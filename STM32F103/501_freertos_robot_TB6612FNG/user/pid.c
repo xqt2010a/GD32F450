@@ -20,6 +20,7 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
     err_last = err_next;
     err_next = err;
     return calc;
+    //return increment;
 }
 
 int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
@@ -33,7 +34,11 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
     err_last = err_next;
     err_next = err;
     return calc;
+    //return increment;
 }
+
+
+
 
 //void PID_init()
 //{

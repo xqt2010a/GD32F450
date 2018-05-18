@@ -25,7 +25,7 @@ char EncodeProcess(const uint8_t *buf)
         
         if(R_CTRL_DOWN_CMD == pRx->cmd_type){       //行走轨迹控制
             pTx.cmd_type = R_CTRL_UP_CMD;
-            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
+            //if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Ctrl_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_CTRL_DOWN_CMD;
                     Protocol_Status.ctrl.v = pRx->ctrl.v;
@@ -37,16 +37,16 @@ char EncodeProcess(const uint8_t *buf)
                 else{
                     pTx.data = R_FAILD;
                 }
-            }
-            else{
-                pTx.data = R_FAILD;
-            }
+            //}
+            //else{
+            //    pTx.data = R_FAILD;
+            //}
             *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);   //bcc
             R_PUTS((uint8_t *)&pTx, R_FIX_LEN+pTx.data_len);
         }
         else if(R_MODE_DOWN_CMD == pRx->cmd_type){  //模式切换
             pTx.cmd_type = R_MODE_UP_CMD;
-            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
+            //if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Mode_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_MODE_DOWN_CMD;
                     Protocol_Status.mode.mode = pRx->mode.mode;
@@ -55,10 +55,10 @@ char EncodeProcess(const uint8_t *buf)
                 else{
                     pTx.data = R_FAILD;
                 }
-            }
-            else{
-                pTx.data = R_FAILD;
-            }
+            //}
+            //else{
+            //    pTx.data = R_FAILD;
+            //}
             *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);    //bcc
             R_PUTS((uint8_t *)&pTx, R_FIX_LEN+pTx.data_len);
         }
