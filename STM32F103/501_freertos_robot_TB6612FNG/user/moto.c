@@ -120,47 +120,49 @@ void Moto_Init(void)
     
 }
 
-int32_t PWM_Increment_L(int32_t dst_v, int32_t cur_v)     //增量式PID
-{
-    int32_t err, increment;
-    static int32_t err_last = 0, err_next = 0;
-    
-    err = dst_v - cur_v;
-    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
-    err_last = err_next;
-    err_next = err;
-    return increment;
-}
-
-int32_t PWM_Increment_R(int32_t dst_v, int32_t cur_v)     //增量式PID
-{
-    int32_t err, increment;
-    static int32_t err_last = 0, err_next = 0;
-    
-    err = dst_v - cur_v;
-    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
-    err_last = err_next;
-    err_next = err;
-    return increment;
-}
+//int32_t PWM_Increment_L(int32_t dst_v, int32_t cur_v)     //增量式PID
+//{
+//    int32_t err, increment;
+//    static int32_t err_last = 0, err_next = 0;
+//    
+//    err = dst_v - cur_v;
+//    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
+//    err_last = err_next;
+//    err_next = err;
+//    return increment;
+//}
+//
+//int32_t PWM_Increment_R(int32_t dst_v, int32_t cur_v)     //增量式PID
+//{
+//    int32_t err, increment;
+//    static int32_t err_last = 0, err_next = 0;
+//    
+//    err = dst_v - cur_v;
+//    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
+//    err_last = err_next;
+//    err_next = err;
+//    return increment;
+//}
 
 
 void vTask_Moto(void *p)
 {
     static int32_t Vl_last = 0, Vr_last = 0; 
-    int32_t Vl, Vr, abs_Vl, abs_Vr, Vr_calc, Vl_calc;
+    int32_t Vl, Vr, abs_Vl, abs_Vr;
     
     Moto_Init();
     
     while(1){
-        Vl = PID_realize_L(Protocol_Status.dst.Vl, Protocol_Status.cur.Vl);
-        Vr = PID_realize_R(Protocol_Status.dst.Vr, Protocol_Status.cur.Vr);
+        //Vl = PID_realize_L(Protocol_Status.dst.Vl, Protocol_Status.cur.Vl);
+        //Vr = PID_realize_R(Protocol_Status.dst.Vr, Protocol_Status.cur.Vr);
         
-        Vl_calc = Vl_last + PWM_Increment_L(Vl, Protocol_Status.cur.Vl)/1000;
-        Vr_calc = Vr_last + PWM_Increment_R(Vr, Protocol_Status.cur.Vr)/1000;
+        //Vl_calc = Vl_last + PWM_Increment_L(Vl, Protocol_Status.cur.Vl)/1000;
+        //Vr_calc = Vr_last + PWM_Increment_R(Vr, Protocol_Status.cur.Vr)/1000;
+        Vl = Vl_last + PID_realize_L(Protocol_Status.dst.Vl, Protocol_Status.cur.Vl)/1000;
+        Vr = Vr_last + PID_realize_R(Protocol_Status.dst.Vr, Protocol_Status.cur.Vr)/1000;
         
-        abs_Vl = ABS_FUC(Vl_calc);
-        abs_Vr = ABS_FUC(Vr_calc);
+        abs_Vl = ABS_FUC(Vl);
+        abs_Vr = ABS_FUC(Vr);
         
         if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
             abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
@@ -170,20 +172,32 @@ void vTask_Moto(void *p)
             abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
         }
         
-        if(Vl >= 0){
+        if(Protocol_Status.dst.Vl >= 0){
+            if(Vl < 0){
+                abs_Vl = 0;
+            }
             Vl_last = abs_Vl;
             Moto1_Left_Forword(abs_Vl);
         }
         else{
+            if(Vl > 0){
+                abs_Vl = 0;
+            }
             Vl_last = -(abs_Vl);
             Moto1_Left_Back(abs_Vl);
         }
         
-        if(Vr >= 0){
+        if(Protocol_Status.dst.Vr >= 0){
+            if(Vr < 0){
+                abs_Vr = 0;
+            }
             Vr_last = abs_Vr;
             Moto1_Right_Forword(abs_Vr);
         }
         else{
+            if(Vr > 0){
+                abs_Vr = 0;
+            }
             Vr_last = -(abs_Vr);
             Moto1_Right_Back(abs_Vr);
         }

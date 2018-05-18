@@ -1,40 +1,40 @@
 #include "pid.h"
 
-#define PID_KP_R  100     //0.2 = 200/1000
-#define PID_KI_R  2000      
-#define PID_KD_R  100
+#define PID_KP_R  10     //0.2 = 200/1000
+#define PID_KI_R  200      
+#define PID_KD_R  10
 
-#define PID_KP_L  100     //0.2 = 200/1000
-#define PID_KI_L  2000      
-#define PID_KD_L  100
+#define PID_KP_L  10     //0.2 = 200/1000
+#define PID_KI_L  200      
+#define PID_KD_L  10
 
 
 int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
 {
-    int32_t err, increment, calc;
+    int32_t err, increment;//, calc;
     static int32_t err_last = 0, err_next = 0;
     
     err = dst_v - cur_v;
     increment = PID_KP_R*(err - err_next) + PID_KI_R*err + PID_KD_R*(err - 2*err_next + err_last);
-    calc = cur_v + increment/1000;
+    //calc = cur_v + increment/1000;
     err_last = err_next;
     err_next = err;
-    return calc;
-    //return increment;
+    //return calc;
+    return increment;
 }
 
 int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
 {
-    int32_t err, increment, calc;
+    int32_t err, increment;//, calc;
     static int32_t err_last = 0, err_next = 0;
     
     err = dst_v - cur_v;
     increment = PID_KP_L*(err - err_next) + PID_KI_L*err + PID_KD_L*(err - 2*err_next + err_last);
-    calc = cur_v + increment/1000;
+    //calc = cur_v + increment/1000;
     err_last = err_next;
     err_next = err;
-    return calc;
-    //return increment;
+    //return calc;
+    return increment;
 }
 
 

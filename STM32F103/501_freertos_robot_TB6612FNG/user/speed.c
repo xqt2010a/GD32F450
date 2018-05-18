@@ -1,5 +1,5 @@
 #include "speed.h"
-
+#include "string.h"
 
 
 //定义左轮捕捉通道与捕获值  TIM2通道3 
@@ -176,6 +176,7 @@ unsigned int GetLeftCount(void)
     uint32_t sum=0, LeftValueAvg = 0;
     for(i=0; i<PERIOD_BUFSIZE; i++){
         sum += LeftPeriodBuf[i];
+        //LeftPeriodBuf[i] = 0;
     }
     LeftValueAvg = sum/PERIOD_BUFSIZE;
     //PRT("\t%d\r\n",LeftValueAvg);  
@@ -188,8 +189,9 @@ unsigned int GetRightCount(void)
     uint32_t sum = 0, RightValueAvg = 0;
     for(i=0; i<PERIOD_BUFSIZE; i++){
         sum += RightPeriodBuf[i];
+        //RightPeriodBuf[i] = 0;
     }
-    RightValueAvg = sum/PERIOD_BUFSIZE;
+    RightValueAvg = sum/PERIOD_BUFSIZE;   
     //PRT("\t%d\r\n",RightValueAvg);
     return RightValueAvg;  
 }  
