@@ -75,15 +75,15 @@ void Moto1_Right_Stop(void)
 void Moto1_Left_Back(uint32_t Vs)
 {
     TIM_SetCompare2(TIM1, Vs/SPEED_COUNT_RATE);          //Left
-    GPIO_SetBits(GPIOC, GPIO_Pin_0);    //PC0 = 0;
-    GPIO_ResetBits(GPIOC, GPIO_Pin_1);  //PC1 = 1;
+    GPIO_SetBits(GPIOC, GPIO_Pin_1);    //PC1 = 1;
+    GPIO_ResetBits(GPIOC, GPIO_Pin_0);  //PC0 = 0;
 }
 
 void Moto1_Right_Back(uint32_t Vs)
 {
     TIM_SetCompare1(TIM1, Vs/SPEED_COUNT_RATE);          //Right
-    GPIO_SetBits(GPIOC, GPIO_Pin_2);    //PC2 = 0;
-    GPIO_ResetBits(GPIOC, GPIO_Pin_3);  //PC3 = 1;
+    GPIO_SetBits(GPIOC, GPIO_Pin_3);    //PC3 = 1;
+    GPIO_ResetBits(GPIOC, GPIO_Pin_2);  //PC2 = 0;
 }
 
 void Moto1_Left_Forword(uint32_t Vs)
@@ -148,7 +148,7 @@ void Moto_Init(void)
 void vTask_Moto(void *p)
 {
     static int32_t Vl_last = 0, Vr_last = 0; 
-    int32_t Vl, Vr, abs_Vl, abs_Vr;
+    int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr;
     
     Moto_Init();
     
@@ -158,8 +158,18 @@ void vTask_Moto(void *p)
         
         //Vl_calc = Vl_last + PWM_Increment_L(Vl, Protocol_Status.cur.Vl)/1000;
         //Vr_calc = Vr_last + PWM_Increment_R(Vr, Protocol_Status.cur.Vr)/1000;
-        Vl = Vl_last + PID_realize_L(Protocol_Status.dst.Vl, Protocol_Status.cur.Vl)/1000;
-        Vr = Vr_last + PID_realize_R(Protocol_Status.dst.Vr, Protocol_Status.cur.Vr)/1000;
+        Vl = 0;
+        Vr = 0;
+        
+        abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);        
+        abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
+        
+        if(0 != abs_dst_Vl){
+            Vl = Vl_last + PID_realize_L(abs_dst_Vl, Protocol_Status.cur.Vl)/1000;
+        }
+        if(0 != abs_dst_Vr){
+            Vr = Vr_last + PID_realize_R(abs_dst_Vr, Protocol_Status.cur.Vr)/1000;
+        }
         
         abs_Vl = ABS_FUC(Vl);
         abs_Vr = ABS_FUC(Vr);
@@ -180,10 +190,10 @@ void vTask_Moto(void *p)
             Moto1_Left_Forword(abs_Vl);
         }
         else{
-            if(Vl > 0){
+            if(Vl < 0){
                 abs_Vl = 0;
             }
-            Vl_last = -(abs_Vl);
+            Vl_last = abs_Vl;
             Moto1_Left_Back(abs_Vl);
         }
         
@@ -195,10 +205,10 @@ void vTask_Moto(void *p)
             Moto1_Right_Forword(abs_Vr);
         }
         else{
-            if(Vr > 0){
+            if(Vr < 0){
                 abs_Vr = 0;
             }
-            Vr_last = -(abs_Vr);
+            Vr_last = abs_Vr;
             Moto1_Right_Back(abs_Vr);
         }
         

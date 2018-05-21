@@ -179,6 +179,9 @@ unsigned int GetLeftCount(void)
         //LeftPeriodBuf[i] = 0;
     }
     LeftValueAvg = sum/PERIOD_BUFSIZE;
+//    for(i=0; i<PERIOD_BUFSIZE; i++){
+//        LeftPeriodBuf[i] = 0;
+//    }
     //PRT("\t%d\r\n",LeftValueAvg);  
     return LeftValueAvg;  
 }  
@@ -191,7 +194,10 @@ unsigned int GetRightCount(void)
         sum += RightPeriodBuf[i];
         //RightPeriodBuf[i] = 0;
     }
-    RightValueAvg = sum/PERIOD_BUFSIZE;   
+    RightValueAvg = sum/PERIOD_BUFSIZE;  
+//    for(i=0; i<PERIOD_BUFSIZE; i++){
+//        RightPeriodBuf[i] = 0;
+//    }
     //PRT("\t%d\r\n",RightValueAvg);
     return RightValueAvg;  
 }  
