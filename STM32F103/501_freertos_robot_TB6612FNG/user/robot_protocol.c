@@ -28,8 +28,8 @@ char EncodeProcess(const uint8_t *buf)
             //if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Ctrl_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_CTRL_DOWN_CMD;
-                    Protocol_Status.ctrl.v = pRx->ctrl.v;
-                    Protocol_Status.ctrl.w = pRx->ctrl.w;
+                    Protocol_Status.ctrl.v = R_BL_32(pRx->ctrl.v);
+                    Protocol_Status.ctrl.w = R_BL_32(pRx->ctrl.w);
                     Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.ctrl.v, Protocol_Status.ctrl.w);
                     Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.ctrl.v, Protocol_Status.ctrl.w);
                     pTx.data = R_SUCCESS;

@@ -17,14 +17,14 @@
 
 #define R_CAR_WIDE          237     //车身宽度，即两个轮子间距（mm）
 #define R_CAR_L             70      //轮子直径70.5mmm
-#define R_CAR_ENCODER_N     500     //转一圈 500 脉冲
+#define R_CAR_ENCODER_N     563     //转一圈 563 脉冲
 #define R_CAR_PI            3.14
       
 /* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
 *   v(c) = PI*L/(N*c) = 3.14*70/500/c, 这里c是10的负5次方
 */
 
-#define R_CAR_GET_V(count)  (43960000/(count))          //单位 um/s
+#define R_CAR_GET_V(count)  (39040852/(count))          //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2)    //左轮速度
 
@@ -34,6 +34,13 @@
 
 #define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*PI)
 #define R_CAR_DEG(deg_w)    (((deg_w)*(R_REPORT_TIME))/1000)     //deg = deg_w*40/1000    
+
+
+#define R_BL_16(x)          ((uint16_t)((x)&0x00FFU)<<8)|((uint16_t)((x)&0xFF00U)>>8)
+#define R_BL_32(x)          (((uint32_t)((x)&0x000000FFU)<<24)| \
+                            (((uint32_t)((x)&0x0000FF00U)<<8))|\
+                            (((uint32_t)((x)&0x00FF0000U)>>8))|\
+                            (((uint32_t)((x)&0xFF000000U)>>24)))
 
 
 enum Back_Type{

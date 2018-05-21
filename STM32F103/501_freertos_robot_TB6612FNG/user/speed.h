@@ -11,6 +11,14 @@
 
 #include "robot_protocol.h"
 
+
+#define DEBUG_COUNT     0   //打开编码器测试编码器线数
+
+#if(DEBUG_COUNT)
+extern uint32_t Right_Count;
+extern uint32_t Left_Count;
+#endif  /* DEBUG_COUNT */
+
 extern void Speed_Init(void);
 extern void vTask_Speed(void *p);
 

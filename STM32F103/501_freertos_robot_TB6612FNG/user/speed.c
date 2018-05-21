@@ -9,7 +9,7 @@
 #define  RIGHTCAPTURECHANNEL TIM2, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM2)  
 
-#define PERIOD_BUFSIZE 20
+#define PERIOD_BUFSIZE      10
 
 uint16_t speed_contiue;
 uint16_t RightWheelPulsePeriod;
@@ -36,6 +36,10 @@ uint16_t RightWheelCaptureTime = 0;
 uint16_t RightPeriodBuf[PERIOD_BUFSIZE];
 uint16_t LeftPeriodBuf[PERIOD_BUFSIZE];
 
+#if(DEBUG_COUNT)
+uint32_t Right_Count = 0;
+uint32_t Left_Count = 0;
+#endif  /* DEBUG_COUNT */
 
 void Capture_Init(void)
 {
@@ -125,6 +129,10 @@ void WheelCaptureIRQ(void)
                 RightWheelPulsePeriod = ((60000 - RightWheel1stCapture) + RightWheel2ndCapture);   
             }  
             RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
+#if(DEBUG_COUNT)            
+            Right_Count++;
+#endif  /* DEBUG_COUNT */
+            
             if(RightPeriodIndex == PERIOD_BUFSIZE) 
                 RightPeriodIndex = 0;  
             RightWheelCaptureTime= 0;  
@@ -151,6 +159,10 @@ void WheelCaptureIRQ(void)
                 LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
             }  
             LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
+#if(DEBUG_COUNT)            
+            Left_Count++;
+#endif  /* DEBUG_COUNT */
+            
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
                 LeftPeriodIndex = 0;  
             LeftWheelCaptureTime= 0;  
