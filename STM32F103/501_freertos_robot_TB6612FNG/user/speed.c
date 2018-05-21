@@ -9,7 +9,7 @@
 #define  RIGHTCAPTURECHANNEL TIM2, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM2)  
 
-#define PERIOD_BUFSIZE      10
+#define PERIOD_BUFSIZE      1
 
 uint16_t speed_contiue;
 uint16_t RightWheelPulsePeriod;
@@ -191,9 +191,9 @@ unsigned int GetLeftCount(void)
         //LeftPeriodBuf[i] = 0;
     }
     LeftValueAvg = sum/PERIOD_BUFSIZE;
-//    for(i=0; i<PERIOD_BUFSIZE; i++){
-//        LeftPeriodBuf[i] = 0;
-//    }
+    for(i=0; i<PERIOD_BUFSIZE; i++){
+        LeftPeriodBuf[i] = 0;
+    }
     //PRT("\t%d\r\n",LeftValueAvg);  
     return LeftValueAvg;  
 }  
@@ -207,9 +207,9 @@ unsigned int GetRightCount(void)
         //RightPeriodBuf[i] = 0;
     }
     RightValueAvg = sum/PERIOD_BUFSIZE;  
-//    for(i=0; i<PERIOD_BUFSIZE; i++){
-//        RightPeriodBuf[i] = 0;
-//    }
+    for(i=0; i<PERIOD_BUFSIZE; i++){
+        RightPeriodBuf[i] = 0;
+    }
     //PRT("\t%d\r\n",RightValueAvg);
     return RightValueAvg;  
 }  
@@ -224,14 +224,33 @@ void vTask_Speed(void *p)
 {
     Speed_Init();
     while(1){
-        Protocol_Status.cur.Vr = R_CAR_GET_V(GetRightCount());
-        Protocol_Status.cur.Vl = R_CAR_GET_V(GetLeftCount());
+        if(Protocol_Status.dst.Vr > 0){
+            Protocol_Status.cur.Vr = R_CAR_GET_V(GetRightCount());
+        }
+        else if(Protocol_Status.dst.Vr < 0){
+            Protocol_Status.cur.Vr = -(R_CAR_GET_V(GetRightCount()));
+        }
+        else{
+            Protocol_Status.cur.Vr = 0;
+        }
+        
+        if(Protocol_Status.dst.Vl > 0){
+            Protocol_Status.cur.Vl = R_CAR_GET_V(GetLeftCount());
+        }
+        else if(Protocol_Status.dst.Vl < 0){
+            Protocol_Status.cur.Vl = -(R_CAR_GET_V(GetLeftCount()));
+        }
+        else{
+            Protocol_Status.cur.Vl = 0;
+        }
+        
+        
         Protocol_Status.path.v = R_CAR_V(Protocol_Status.cur.Vr, Protocol_Status.cur.Vl) ;
         Protocol_Status.path.w = R_CAR_W(Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
         Protocol_Status.path.deg_w = R_CAR_DEG_W(Protocol_Status.path.w);        
         Protocol_Status.path.deg = R_CAR_DEG(Protocol_Status.path.deg_w);
         
         PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
-        vTaskDelay(50/portTICK_RATE_MS); 
+        vTaskDelay(30/portTICK_RATE_MS); 
     }
 }

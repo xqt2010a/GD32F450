@@ -149,64 +149,67 @@ void Moto_Init(void)
 void vTask_Moto(void *p)
 {
     static int32_t Vl_last = 0, Vr_last = 0; 
-    int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr;
+    int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
     
     Moto_Init();
     
     while(1){
-//        Vl = 0;
-//        Vr = 0;
-//        
-//        abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);        
-//        abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
-//        
-//        if(0 != abs_dst_Vl){
-//            Vl = Vl_last + PID_realize_L(abs_dst_Vl, Protocol_Status.cur.Vl)/1000;
-//        }
-//        if(0 != abs_dst_Vr){
-//            Vr = Vr_last + PID_realize_R(abs_dst_Vr, Protocol_Status.cur.Vr)/1000;
-//        }
-//        
-//        abs_Vl = ABS_FUC(Vl);
-//        abs_Vr = ABS_FUC(Vr);
-//        
-//        if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
-//            abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
-//        }
-//        
-//        if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
-//            abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
-//        }
-//        
-//        if(Protocol_Status.dst.Vl >= 0){
-//            if(Vl < 0){
-//                abs_Vl = 0;
-//            }
-//            Vl_last = abs_Vl;
-//            Moto1_Left_Forword(abs_Vl);
-//        }
-//        else{
-//            if(Vl < 0){
-//                abs_Vl = 0;
-//            }
-//            Vl_last = abs_Vl;
-//            Moto1_Left_Back(abs_Vl);
-//        }
-//        
-//        if(Protocol_Status.dst.Vr >= 0){
-//            if(Vr < 0){
-//                abs_Vr = 0;
-//            }
-//            Vr_last = abs_Vr;
-//            Moto1_Right_Forword(abs_Vr);
-//        }
-//        else{
-//            if(Vr < 0){
-//                abs_Vr = 0;
-//            }
-//            Vr_last = abs_Vr;
-//            Moto1_Right_Back(abs_Vr);
-//        }
+        Vl = 0;
+        Vr = 0;
+        
+        abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);        
+        abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
+        
+        abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
+        abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
+        
+        if(0 != abs_dst_Vl){
+            Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl)/1000;
+        }
+        if(0 != abs_dst_Vr){
+            Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr)/1000;
+        }
+        
+        abs_Vl = ABS_FUC(Vl);
+        abs_Vr = ABS_FUC(Vr);
+        
+        if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
+            abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
+        }
+        
+        if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
+            abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
+        }
+        
+        if(Protocol_Status.dst.Vl >= 0){
+            if(Vl < 0){
+                abs_Vl = 0;
+            }
+            Vl_last = abs_Vl;
+            Moto1_Left_Forword(abs_Vl);
+        }
+        else{
+            if(Vl < 0){
+                abs_Vl = 0;
+            }
+            Vl_last = abs_Vl;
+            Moto1_Left_Back(abs_Vl);
+        }
+        
+        if(Protocol_Status.dst.Vr >= 0){
+            if(Vr < 0){
+                abs_Vr = 0;
+            }
+            Vr_last = abs_Vr;
+            Moto1_Right_Forword(abs_Vr);
+        }
+        else{
+            if(Vr < 0){
+                abs_Vr = 0;
+            }
+            Vr_last = abs_Vr;
+            Moto1_Right_Back(abs_Vr);
+        }
 #if(DEBUG_COUNT)
         if(Right_Count < (300*500)){
             Moto1_Right_Forword(7999*30);

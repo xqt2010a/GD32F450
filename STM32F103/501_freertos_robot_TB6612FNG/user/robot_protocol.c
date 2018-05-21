@@ -25,7 +25,7 @@ char EncodeProcess(const uint8_t *buf)
         
         if(R_CTRL_DOWN_CMD == pRx->cmd_type){       //行走轨迹控制
             pTx.cmd_type = R_CTRL_UP_CMD;
-            //if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
+            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Ctrl_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_CTRL_DOWN_CMD;
                     Protocol_Status.ctrl.v = R_BL_32(pRx->ctrl.v);
@@ -37,16 +37,16 @@ char EncodeProcess(const uint8_t *buf)
                 else{
                     pTx.data = R_FAILD;
                 }
-            //}
-            //else{
-            //    pTx.data = R_FAILD;
-            //}
+            }
+            else{
+                pTx.data = R_FAILD;
+            }
             *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);   //bcc
             R_PUTS((uint8_t *)&pTx, R_FIX_LEN+pTx.data_len);
         }
         else if(R_MODE_DOWN_CMD == pRx->cmd_type){  //模式切换
             pTx.cmd_type = R_MODE_UP_CMD;
-            //if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
+            if(bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2)){
                 if(sizeof(Mode_Struct) == pRx->data_len){
                     Protocol_Status.cmd_type = R_MODE_DOWN_CMD;
                     Protocol_Status.mode.mode = pRx->mode.mode;
@@ -55,10 +55,10 @@ char EncodeProcess(const uint8_t *buf)
                 else{
                     pTx.data = R_FAILD;
                 }
-            //}
-            //else{
-            //    pTx.data = R_FAILD;
-            //}
+            }
+            else{
+                pTx.data = R_FAILD;
+            }
             *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);    //bcc
             R_PUTS((uint8_t *)&pTx, R_FIX_LEN+pTx.data_len);
         }
@@ -74,16 +74,16 @@ void PathReport(void)
     pTx.header = R_CMD_HEADER;
     pTx.cmd_type = R_PATH_REPORT_CMD;
     pTx.data_len = R_PATH_DATA_LEN;
-//    pTx.path.v = Protocol_Status.path.v;
-//    pTx.path.w = Protocol_Status.path.w;
-//    pTx.path.deg_w = Protocol_Status.path.deg_w;
-//    pTx.path.deg = Protocol_Status.path.deg;
+    pTx.path.v = R_BL_32(Protocol_Status.path.v);
+    pTx.path.w = R_BL_32(Protocol_Status.path.w);
+    pTx.path.deg_w = R_BL_16(Protocol_Status.path.deg_w);
+    pTx.path.deg = R_BL_16(Protocol_Status.path.deg);
     //BCC Code
-    pTx.path.v = 0x31313131;
-    pTx.path.w = 0x32323232;  
-    pTx.path.deg_w = 0x3333;  
-    pTx.path.deg = 0x3434;
-        
-    //R_PUTS((uint8_t *)&pTx, (R_FIX_LEN+R_PATH_DATA_LEN));
-    R_PUTS("helloabcdefghijklmn\r\n",21);
+//    pTx.path.v = 0x31313131;
+//    pTx.path.w = 0x32323232;  
+//    pTx.path.deg_w = 0x3333;  
+//    pTx.path.deg = 0x3434;
+    *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);    //bcc    
+    R_PUTS((uint8_t *)&pTx, (R_FIX_LEN+R_PATH_DATA_LEN));
+    //R_PUTS("helloabcdefghijklmn\r\n",21);
 }
