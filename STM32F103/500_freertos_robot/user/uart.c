@@ -8,7 +8,9 @@ void Uart_Init(void)
     
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_USART1,ENABLE);
     
-    GPIO_InitStrue.GPIO_Mode=GPIO_Mode_AF_PP;       //复用功能推挽输出模式
+    //GPIO_InitStrue.GPIO_Mode=GPIO_Mode_AF_PP;       //复用功能推挽输出模式
+    
+        GPIO_InitStrue.GPIO_Mode=GPIO_Mode_AF_PP;
     GPIO_InitStrue.GPIO_Pin=GPIO_Pin_9;             //PA9  USART1_Tx
     GPIO_InitStrue.GPIO_Speed=GPIO_Speed_50MHz;     //设置输出速度
     GPIO_Init(GPIOA,&GPIO_InitStrue);
