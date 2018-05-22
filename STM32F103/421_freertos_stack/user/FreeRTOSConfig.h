@@ -28,6 +28,9 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+#if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
+extern unsigned int ulHighFrequencyTimerTicks;
+#endif
 /*-----------------------------------------------------------
  * Application specific definitions.
  *
@@ -49,9 +52,10 @@
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 128 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 17 * 1024 ) )
 #define configMAX_TASK_NAME_LEN		( 16 )
-#define configUSE_TRACE_FACILITY	0
+//#define configUSE_TRACE_FACILITY	0
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		1
+#define configCHECK_FOR_STACK_OVERFLOW 1    //stack overflow mode1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0
@@ -81,7 +85,14 @@ priority values, 0 to 15.  This must correspond to the
 configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
 NVIC value of 255. */
 #define configLIBRARY_KERNEL_INTERRUPT_PRIORITY	15
-   
+
+/* Run time and task stats gathering related definitions */
+#define configUSE_TRACE_FACILITY        1
+#define configGENERATE_RUN_TIME_STATS   1
+#define configUSE_STATS_FORMATTING_FUNCTIONS    1
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()    (ulHighFrequencyTimerTicks = 0ul)
+#define portGET_RUN_TIME_COUNTER_VALUE()            ulHighFrequencyTimerTicks
+
 #define xPortPendSVHandler      PendSV_Handler
 #define vPortSVCHandler         SVC_Handler
 #define xPortSysTickHandler     SysTick_Handler

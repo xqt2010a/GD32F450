@@ -307,6 +307,7 @@
           <state>$PROJ_DIR$\..\..\com\freertos\include</state>
           <state>$PROJ_DIR$\..\..\com\freertos\portable\IAR\ARM_CM3</state>
           <state>$PROJ_DIR$\user</state>
+          <state>$PROJ_DIR$\..\bsp\ip_driver</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -713,11 +714,11 @@
         </option>
         <option>
           <name>IlinkIcfOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103x8.icf</state>
+          <state>$PROJ_DIR$\stm32_freertos.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1924,6 +1925,15 @@
   <group>
     <name>stm32</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\misc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_rcc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_tim.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\system_stm32f10x.c</name>
     </file>
   </group>
@@ -1931,6 +1941,9 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\stack.c</name>
     </file>
   </group>
   <file>
