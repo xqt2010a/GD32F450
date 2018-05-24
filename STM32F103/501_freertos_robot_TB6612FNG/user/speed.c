@@ -30,16 +30,11 @@ uint16_t RightWheel2ndCapture = 0;
 uint16_t LeftWheelCaptureTime = 0;
 uint16_t RightWheelCaptureTime = 0;
 
-
-
-
 uint16_t RightPeriodBuf[PERIOD_BUFSIZE];
 uint16_t LeftPeriodBuf[PERIOD_BUFSIZE];
 
-#if(DEBUG_COUNT)
 uint32_t Right_Count = 0;
 uint32_t Left_Count = 0;
-#endif  /* DEBUG_COUNT */
 
 void Capture_Init(void)
 {
@@ -105,9 +100,7 @@ void Capture_Init(void)
 }
 
 void WheelCaptureIRQ(void)  
-{  
-      
-      
+{    
     if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET)   
     {  
         speed_contiue=100;  
@@ -129,9 +122,9 @@ void WheelCaptureIRQ(void)
                 RightWheelPulsePeriod = ((60000 - RightWheel1stCapture) + RightWheel2ndCapture);   
             }  
             RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
-#if(DEBUG_COUNT)            
+           
             Right_Count++;
-#endif  /* DEBUG_COUNT */
+
             
             if(RightPeriodIndex == PERIOD_BUFSIZE) 
                 RightPeriodIndex = 0;  
@@ -159,9 +152,9 @@ void WheelCaptureIRQ(void)
                 LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
             }  
             LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
-#if(DEBUG_COUNT)            
+           
             Left_Count++;
-#endif  /* DEBUG_COUNT */
+
             
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
                 LeftPeriodIndex = 0;  
@@ -251,6 +244,6 @@ void vTask_Speed(void *p)
         Protocol_Status.path.deg = R_CAR_DEG(Protocol_Status.path.deg_w);
         
         PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
-        vTaskDelay(30/portTICK_RATE_MS); 
+        vTaskDelay(20/portTICK_RATE_MS); 
     }
 }

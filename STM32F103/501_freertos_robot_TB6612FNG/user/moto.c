@@ -4,6 +4,7 @@
 #include "robot_protocol.h"
 #include "pid.h"
 #include "speed.h"
+#include "string.h"
 
 #define SPEED_COUNT_RATE    30      //速度 和 捕获计数值
 #define ARR_VALUE           9999   //自动重装载寄存器的值
@@ -121,39 +122,41 @@ void Moto_Init(void)
     
 }
 
-//int32_t PWM_Increment_L(int32_t dst_v, int32_t cur_v)     //增量式PID
-//{
-//    int32_t err, increment;
-//    static int32_t err_last = 0, err_next = 0;
-//    
-//    err = dst_v - cur_v;
-//    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
-//    err_last = err_next;
-//    err_next = err;
-//    return increment;
-//}
-//
-//int32_t PWM_Increment_R(int32_t dst_v, int32_t cur_v)     //增量式PID
-//{
-//    int32_t err, increment;
-//    static int32_t err_last = 0, err_next = 0;
-//    
-//    err = dst_v - cur_v;
-//    increment = 20*(err - err_next) + 100*err + 20*(err - 2*err_next + err_last);
-//    err_last = err_next;
-//    err_next = err;
-//    return increment;
-//}
-
 
 void vTask_Moto(void *p)
 {
     static int32_t Vl_last = 0, Vr_last = 0; 
     int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
     
+    uint32_t count;
+    //uint8_t tx_buf[10] = {0xBB, 0xBB, 0x00, 0x00, 0x00, 0x00, 0x00};
+    
     Moto_Init();
     
     while(1){
+        if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||
+                (R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
+            count = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+            if(Left_Count >= count){
+                Protocol_Status.dst.Vl = 0;
+                //memcpy(&tx_buf[2], (uint8_t *)&Left_Count, 4);
+                //R_PUTS(tx_buf, 7);
+                Left_Count = 0;
+                //memset(&tx_buf[2], 0, 4);
+            }
+            count = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+            if(Right_Count >= count){
+                Protocol_Status.dst.Vr = 0;
+                //memcpy(&tx_buf[2], (uint8_t *)&Right_Count, 4);
+                //R_PUTS(tx_buf, 7);
+                Right_Count = 0;
+                //memset(&tx_buf[2], 0, 4);
+            }
+        }
+        else{
+            Right_Count = Left_Count = 0;
+        }
+        
         Vl = 0;
         Vr = 0;
         
@@ -210,6 +213,9 @@ void vTask_Moto(void *p)
             Vr_last = abs_Vr;
             Moto1_Right_Back(abs_Vr);
         }
+       
+        
+        
 #if(DEBUG_COUNT)
         if(Right_Count < (300*500)){
             Moto1_Right_Forword(7999*30);
@@ -226,6 +232,6 @@ void vTask_Moto(void *p)
         }
 #endif  /* DEBUG_COUNT */
         
-        vTaskDelay(50/portTICK_RATE_MS);
+        vTaskDelay(20/portTICK_RATE_MS);
     }
 }
