@@ -137,6 +137,10 @@ typedef struct{
     
 }Protocol_Status_Struct;
 
+extern uint32_t Right_Num;
+extern uint32_t Left_Num;
+
+
 extern Protocol_Status_Struct Protocol_Status;
 extern char EncodeProcess(const uint8_t *buf);
 extern void PathReport(void);

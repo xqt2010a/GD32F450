@@ -133,7 +133,8 @@ void vTask_Moto(void *p)
     
     Moto_Init();
     
-    while(1){
+    while(1){      
+     
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||
                 (R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
             count = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
@@ -214,8 +215,6 @@ void vTask_Moto(void *p)
             Moto1_Right_Back(abs_Vr);
         }
        
-        
-        
 #if(DEBUG_COUNT)
         if(Right_Count < (300*500)){
             Moto1_Right_Forword(7999*30);
@@ -229,7 +228,8 @@ void vTask_Moto(void *p)
         }
         else{
             Moto1_Left_Forword(0);
-        }
+        }     
+        
 #endif  /* DEBUG_COUNT */
         
         vTaskDelay(20/portTICK_RATE_MS);

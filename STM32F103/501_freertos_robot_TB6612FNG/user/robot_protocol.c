@@ -1,5 +1,8 @@
 #include "robot_protocol.h"
 
+uint32_t Right_Num = 0;
+uint32_t Left_Num = 0;
+
 Protocol_Status_Struct Protocol_Status;
 Protocol_Struct pTx;
 
@@ -38,6 +41,7 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = R_BL_32(pRx->vs.s)*1000;
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
+        Right_Num = Left_Num = 0;
         pTx->data = R_SUCCESS;
     }
     else{
@@ -54,6 +58,7 @@ void WD_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = 314*R_CAR_WIDE*R_BL_32(pRx->wd.d)/36;      //s = PI*L*deg/360
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
+        Right_Num = Left_Num = 0;
         pTx->data = R_SUCCESS;
     }
     else{

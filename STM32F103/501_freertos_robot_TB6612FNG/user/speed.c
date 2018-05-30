@@ -9,9 +9,9 @@
 #define  RIGHTCAPTURECHANNEL TIM2, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM2)  
 
-#define PERIOD_BUFSIZE      1
+#define PERIOD_BUFSIZE      40
 
-uint16_t speed_contiue;
+
 uint16_t RightWheelPulsePeriod;
 
 uint16_t LeftPeriodIndex = 0;
@@ -103,15 +103,14 @@ void WheelCaptureIRQ(void)
 {    
     if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET)   
     {  
-        speed_contiue=100;  
         TIM_ClearITPendingBit(RIGHTCAPTURECHANNEL);  
         if(RightWheelCaptureTime == 0)  
-        {  
+        {
             RightWheel1stCapture = RIGHTCAPTUREVALUE;  
             RightWheelCaptureTime = 1;  
-        }  
+        }
         else if(RightWheelCaptureTime == 1)  
-        {  
+        {
             RightWheel2ndCapture = RIGHTCAPTUREVALUE;   
             if (RightWheel2ndCapture >= RightWheel1stCapture)  
             {  
@@ -123,7 +122,7 @@ void WheelCaptureIRQ(void)
             }  
             RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
            
-            Right_Count++;
+            Right_Count++;  //用于行走距离
 
             
             if(RightPeriodIndex == PERIOD_BUFSIZE) 
@@ -132,8 +131,7 @@ void WheelCaptureIRQ(void)
         }  
     }  
     if(TIM_GetITStatus(LEFTCAPTURECHANNEL) == SET)   
-    {  
-        speed_contiue=100;  
+    {   
         TIM_ClearITPendingBit(LEFTCAPTURECHANNEL);  
         if(LeftWheelCaptureTime == 0)  
         {  
@@ -153,7 +151,7 @@ void WheelCaptureIRQ(void)
             }  
             LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
            
-            Left_Count++;
+            Left_Count++;   //用于行走距离
 
             
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
@@ -179,15 +177,15 @@ unsigned int GetLeftCount(void)
 {  
     uint16_t i;
     uint32_t sum=0, LeftValueAvg = 0;
-    for(i=0; i<PERIOD_BUFSIZE; i++){
+    for(i=0; i<LeftPeriodIndex; i++){
         sum += LeftPeriodBuf[i];
         //LeftPeriodBuf[i] = 0;
     }
-    LeftValueAvg = sum/PERIOD_BUFSIZE;
-    for(i=0; i<PERIOD_BUFSIZE; i++){
+    LeftValueAvg = sum/LeftPeriodIndex;
+    for(i=0; i<LeftPeriodIndex; i++){
         LeftPeriodBuf[i] = 0;
     }
-    //PRT("\t%d\r\n",LeftValueAvg);  
+    LeftPeriodIndex = 0;
     return LeftValueAvg;  
 }  
   
@@ -195,15 +193,15 @@ unsigned int GetRightCount(void)
 {  
     uint16_t i;
     uint32_t sum = 0, RightValueAvg = 0;
-    for(i=0; i<PERIOD_BUFSIZE; i++){
+    for(i=0; i<RightPeriodIndex; i++){
         sum += RightPeriodBuf[i];
         //RightPeriodBuf[i] = 0;
     }
-    RightValueAvg = sum/PERIOD_BUFSIZE;  
-    for(i=0; i<PERIOD_BUFSIZE; i++){
+    RightValueAvg = sum/RightPeriodIndex;  
+    for(i=0; i<RightPeriodIndex; i++){
         RightPeriodBuf[i] = 0;
     }
-    //PRT("\t%d\r\n",RightValueAvg);
+    RightPeriodIndex = 0;
     return RightValueAvg;  
 }  
 
@@ -211,6 +209,8 @@ unsigned int GetRightCount(void)
 void Speed_Init(void)
 {
     Capture_Init();
+    memset(RightPeriodBuf, 0, PERIOD_BUFSIZE);
+    memset(LeftPeriodBuf, 0, PERIOD_BUFSIZE);
 }
 
 void vTask_Speed(void *p)
