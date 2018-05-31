@@ -33,8 +33,7 @@ uint16_t RightWheelCaptureTime = 0;
 uint16_t RightPeriodBuf[PERIOD_BUFSIZE];
 uint16_t LeftPeriodBuf[PERIOD_BUFSIZE];
 
-uint32_t Right_Count = 0;
-uint32_t Left_Count = 0;
+
 
 void Capture_Init(void)
 {

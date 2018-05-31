@@ -1,7 +1,10 @@
 #include "robot_protocol.h"
 
-uint32_t Right_Num = 0;
+uint32_t Right_Num = 0;     //pid 次数，用于数据帧判断是否连续
 uint32_t Left_Num = 0;
+
+uint32_t Right_Count = 0;   //采集计数，用于行走距离
+uint32_t Left_Count = 0;
 
 Protocol_Status_Struct Protocol_Status;
 Protocol_Struct pTx;
@@ -41,7 +44,10 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = R_BL_32(pRx->vs.s)*1000;
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-        Right_Num = Left_Num = 0;
+		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+        Right_Num = Left_Num = 0;		//pid 次数
+		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;
     }
     else{
@@ -58,7 +64,10 @@ void WD_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = 314*R_CAR_WIDE*R_BL_32(pRx->wd.d)/36;      //s = PI*L*deg/360
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-        Right_Num = Left_Num = 0;
+		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+        Right_Num = Left_Num = 0;		//pid 次数
+		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;
     }
     else{

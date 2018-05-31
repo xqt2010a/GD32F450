@@ -14,8 +14,6 @@
 
 #define DEBUG_COUNT     0   //打开编码器测试编码器线数
 
-extern uint32_t Right_Count;
-extern uint32_t Left_Count;
 
 extern void Speed_Init(void);
 extern void vTask_Speed(void *p);

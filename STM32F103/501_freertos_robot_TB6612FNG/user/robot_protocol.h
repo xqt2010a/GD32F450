@@ -127,9 +127,9 @@ typedef struct{
     int w;  //down cmd 
     int Sr; //down cmd  单位 um
     int Sl; //down cmd  单位 um
-//    Ctrl_Struct ctrl;   //行走轨迹控制
-//    VS_Struct   vs;     //线速度，距离
-//    WD_Struct   wd;     //角速度，度
+    uint32_t count_r;   //用于电机停止
+    uint32_t count_l;   //用于电机停止
+
     Path_Struct path;   //底盘轨迹反馈
     Mode_Struct mode;   //模式切换
     Speed_Struct cur;   //当前速度
@@ -140,6 +140,8 @@ typedef struct{
 extern uint32_t Right_Num;
 extern uint32_t Left_Num;
 
+extern uint32_t Right_Count;
+extern uint32_t Left_Count;
 
 extern Protocol_Status_Struct Protocol_Status;
 extern char EncodeProcess(const uint8_t *buf);
