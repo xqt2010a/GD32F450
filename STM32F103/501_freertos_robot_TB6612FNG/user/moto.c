@@ -9,6 +9,9 @@
 #define SPEED_COUNT_RATE    30      //速度 和 捕获计数值
 #define ARR_VALUE           9999   //自动重装载寄存器的值
 
+static int32_t Vl_last = 0, Vr_last = 0; 
+int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
+
 void GPIO_Init_Moto(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;//定义结构体
@@ -122,120 +125,66 @@ void Moto_Init(void)
     
 }
 
-
-void Moto_Run(void)
-{
-
-}
-
-void Moto_Stop(void)
-{
-
-}
-
 void vTask_Moto(void *p)
-{
-    static int32_t i,n,Vl_last = 0, Vr_last = 0; 
-    int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
-    
+{  
     Moto_Init();
     
     while(1){
-        if(Left_Count >= Protocol_Status.count_l){      //left stop
+                                            
+        if(0 != Protocol_Status.dst.Vl){    //left run                             
+            Vl = 0;
+            abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);
             abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
-            n = abs_cur_Vl/100000;
+            if(0 != abs_dst_Vl){
+                Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl)/1000;
+            }
+            abs_Vl = ABS_FUC(Vl);
+            if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
+                abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
+            }
             if(Protocol_Status.dst.Vl >= 0){
-                for(i=0; i<n; i++){
-                    Moto1_Left_Back(n-i-1);
-                    vTaskDelay(1/portTICK_RATE_MS);
-                }
+                if(Vl < 0){
+                    abs_Vl = 0;
+                }         
+                Vl_last = abs_Vl;
+                Moto1_Left_Forword(abs_Vl);
             }
             else{
-                for(i=0; i<n; i++){
-                    Moto1_Left_Forword(n-i-1);
-                    vTaskDelay(1/portTICK_RATE_MS);
+                if(Vl < 0){
+                    abs_Vl = 0;
                 }
-            }
-            Moto1_Left_Stop();
-            Protocol_Status.dst.Vl = 0;
-            Left_Count = 0;
-        }
-        else{                                       //left run
-            if(0 != Protocol_Status.dst.Vl){                             
-                Vl = 0;
-                abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);
-                abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
-                if(0 != abs_dst_Vl){
-                    Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl)/1000;
-                }
-                abs_Vl = ABS_FUC(Vl);
-                if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
-                    abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
-                }
-                if(Protocol_Status.dst.Vl >= 0){
-                    if(Vl < 0){
-                        abs_Vl = 0;
-                    }         
-                    Vl_last = abs_Vl;
-                    Moto1_Left_Forword(abs_Vl);
-                }
-                else{
-                    if(Vl < 0){
-                        abs_Vl = 0;
-                    }
-                    Vl_last = abs_Vl;
-                    Moto1_Left_Back(abs_Vl);
-                }
+                Vl_last = abs_Vl;
+                Moto1_Left_Back(abs_Vl);
             }
         }
-        
-        if(Right_Count >= Protocol_Status.count_r){     //right stop
+                                                  //right run
+        if(0 != Protocol_Status.dst.Vr){
+            Vr = 0;      
+            abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
             abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
-            n = abs_cur_Vr/100000;
+            if(0 != abs_dst_Vr){
+                Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr)/1000;
+            }
+            abs_Vr = ABS_FUC(Vr);
+            if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
+                abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
+            }
             if(Protocol_Status.dst.Vr >= 0){
-                for(i=0; i<n; i++){
-                    Moto1_Right_Back(n-i-1);
-                    vTaskDelay(1/portTICK_RATE_MS);
+                if(Vr < 0){
+                    abs_Vr = 0;
                 }
+                Vr_last = abs_Vr;
+                Moto1_Right_Forword(abs_Vr);
             }
             else{
-                for(i=0; i<n; i++){
-                    Moto1_Right_Forword(n-i-1);
-                    vTaskDelay(1/portTICK_RATE_MS);
+                if(Vr < 0){
+                    abs_Vr = 0;
                 }
+                Vr_last = abs_Vr;
+                Moto1_Right_Back(abs_Vr);
             }
-            Moto1_Right_Stop();
-            Protocol_Status.dst.Vr = 0;
-            Right_Count = 0;
-        }
-        else{                                           //right run
-            if(0 != Protocol_Status.dst.Vr){
-                Vr = 0;      
-                abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
-                abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
-                if(0 != abs_dst_Vr){
-                    Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr)/1000;
-                }
-                abs_Vr = ABS_FUC(Vr);
-                if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
-                    abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
-                }
-                if(Protocol_Status.dst.Vr >= 0){
-                    if(Vr < 0){
-                        abs_Vr = 0;
-                    }
-                    Vr_last = abs_Vr;
-                    Moto1_Right_Forword(abs_Vr);
-                }
-                else{
-                    if(Vr < 0){
-                        abs_Vr = 0;
-                    }
-                    Vr_last = abs_Vr;
-                    Moto1_Right_Back(abs_Vr);
-                }
-            }
-        }
+        }     
+        
         
 #if(DEBUG_COUNT)
         if(Right_Count < (300*500)){
@@ -255,5 +204,70 @@ void vTask_Moto(void *p)
 #endif  /* DEBUG_COUNT */
         
         vTaskDelay(20/portTICK_RATE_MS);
+    }
+}
+
+void vTask_Moto_Stop(void *p)
+{
+    uint8_t flag,i,n;
+    
+    while(1){
+        flag = 0;
+        
+        if(0 == Protocol_Status.dst.Vl){      //left stop
+            if(0 != Protocol_Status.cur.Vl){
+                abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
+                n = abs_cur_Vl/100000;
+                if(Protocol_Status.dst.Vl >= 0){
+                    for(i=0; i<n; i++){
+                        Moto1_Left_Back(n-i-1);
+                        vTaskDelay(1/portTICK_RATE_MS);
+                    }
+                }
+                else{
+                    for(i=0; i<n; i++){
+                        Moto1_Left_Forword(n-i-1);
+                        vTaskDelay(1/portTICK_RATE_MS);
+                    }
+                }
+                Moto1_Left_Stop();
+                Protocol_Status.dst.Vl = 0;
+                Protocol_Status.cur.Vl = 0;
+                Left_Count = 0;
+                flag = 1;
+            }
+        }
+    
+        if(0 == Protocol_Status.dst.Vr){     //right stop
+            if(0 != Protocol_Status.cur.Vr){
+                abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
+                n = abs_cur_Vr/100000;
+                if(Protocol_Status.dst.Vr >= 0){
+                    for(i=0; i<n; i++){
+                        Moto1_Right_Back(n-i-1);
+                        vTaskDelay(1/portTICK_RATE_MS);
+                    }
+                }
+                else{
+                    for(i=0; i<n; i++){
+                        Moto1_Right_Forword(n-i-1);
+                        vTaskDelay(1/portTICK_RATE_MS);
+                    }
+                }
+                Moto1_Right_Stop();
+                Protocol_Status.dst.Vr = 0;
+                Protocol_Status.cur.Vr = 0;
+                Right_Count = 0;
+                flag = 1;
+            }           
+        }
+        if(1 == flag){                //stop at the same time
+            Moto1_Left_Stop();
+            Moto1_Right_Stop();
+            Right_Count = 0;
+            Left_Count = 0;
+            Protocol_Status.dst.Vr = 0;
+            Protocol_Status.dst.Vl = 0;
+        }
     }
 }

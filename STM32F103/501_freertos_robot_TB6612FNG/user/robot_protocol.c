@@ -1,4 +1,5 @@
 #include "robot_protocol.h"
+#include "string.h"
 
 uint32_t Right_Num = 0;     //pid 次数，用于数据帧判断是否连续
 uint32_t Left_Num = 0;
@@ -17,6 +18,14 @@ uint8_t xor_sum(const uint8_t* pDataIn, int iLenIn) //BCC
         ret ^= pDataIn[i];
     }
     return ret;
+}
+
+void Protocol_Init(void)
+{
+    memset((uint8_t *)&Protocol_Status, 0, sizeof(Protocol_Status_Struct));
+    memset((uint8_t *)&pTx, 0, sizeof(Protocol_Struct));
+    Right_Num = Left_Num = 0;
+    Right_Count = Left_Count = 0;
 }
 
 void CTRL_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)

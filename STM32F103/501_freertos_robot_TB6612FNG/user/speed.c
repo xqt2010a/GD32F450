@@ -9,7 +9,7 @@
 #define  RIGHTCAPTURECHANNEL TIM2, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM2)  
 
-#define PERIOD_BUFSIZE      40
+#define PERIOD_BUFSIZE      20
 
 
 uint16_t RightWheelPulsePeriod;
@@ -122,7 +122,9 @@ void WheelCaptureIRQ(void)
             RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
            
             Right_Count++;  //用于行走距离
-
+            if(Right_Count > Protocol_Status.count_r){
+                Protocol_Status.dst.Vr = 0;
+            }
             
             if(RightPeriodIndex == PERIOD_BUFSIZE) 
                 RightPeriodIndex = 0;  
@@ -151,7 +153,9 @@ void WheelCaptureIRQ(void)
             LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
            
             Left_Count++;   //用于行走距离
-
+            if(Left_Count > Protocol_Status.count_l){
+                Protocol_Status.dst.Vl = 0;
+            }
             
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
                 LeftPeriodIndex = 0;  
@@ -215,6 +219,8 @@ void Speed_Init(void)
 void vTask_Speed(void *p)
 {
     Speed_Init();
+    Protocol_Init();
+    
     while(1){
         if(Protocol_Status.dst.Vr > 0){
             Protocol_Status.cur.Vr = R_CAR_GET_V(GetRightCount());

@@ -6,7 +6,9 @@
 #include "stm32f10x_rcc.h"
 
 #define ABS_FUC(x)  ((x)>=0?(x):(-(x)))
+
 extern void Moto_Init(void);
 extern void vTask_Moto(void *p);
+extern void vTask_Moto_Stop(void *p);
 
 #endif  /* __MOTO_H__ */

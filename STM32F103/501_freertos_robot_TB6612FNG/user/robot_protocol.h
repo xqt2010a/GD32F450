@@ -144,6 +144,8 @@ extern uint32_t Right_Count;
 extern uint32_t Left_Count;
 
 extern Protocol_Status_Struct Protocol_Status;
+
+extern void Protocol_Init(void);
 extern char EncodeProcess(const uint8_t *buf);
 extern void PathReport(void);
 

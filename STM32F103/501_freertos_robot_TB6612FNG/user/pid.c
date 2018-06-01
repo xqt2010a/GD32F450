@@ -3,13 +3,13 @@
 #include "string.h"
 #include "robot_protocol.h"
 
-#define PID_KP_R  10     //0.2 = 200/1000
-#define PID_KI_R  100      
-#define PID_KD_R  5
+#define PID_KP_R  20     //0.2 = 200/1000
+#define PID_KI_R  90      
+#define PID_KD_R  10
 
-#define PID_KP_L  10     //0.2 = 200/1000
-#define PID_KI_L  100      
-#define PID_KD_L  5
+#define PID_KP_L  20     //0.2 = 200/1000
+#define PID_KI_L  90      
+#define PID_KD_L  10
 
 
 #define PID_BUF_LEN     33
@@ -36,7 +36,7 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
-    //Uart_StrSend(pid_buf, PID_BUF_LEN);
+    Uart_StrSend(pid_buf, PID_BUF_LEN);
     Right_Num++;
     
     err_t2 = err_t1;
@@ -61,7 +61,7 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
-    //Uart_StrSend(pid_buf, PID_BUF_LEN);
+    Uart_StrSend(pid_buf, PID_BUF_LEN);
     Left_Num++;
     
     err_t2 = err_t1;
