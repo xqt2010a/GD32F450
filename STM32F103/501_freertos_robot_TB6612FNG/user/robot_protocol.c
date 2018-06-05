@@ -53,8 +53,8 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = R_BL_32(pRx->vs.s)*1000;
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
-		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70-80;     //S*N/PI*L
+		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70-80;     //S*N/PI*L
         Right_Num = Left_Num = 0;		//pid 次数
 		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;
@@ -73,8 +73,8 @@ void WD_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = 314*R_CAR_WIDE*R_BL_32(pRx->wd.d)/36;      //s = PI*L*deg/360
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
-		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70;     //S*N/PI*L
+		Protocol_Status.count_r = Protocol_Status.Sr*R_CAR_ENCODER_N/3142/70-80;     //S*N/PI*L
+		Protocol_Status.count_l = Protocol_Status.Sl*R_CAR_ENCODER_N/3142/70-80;     //S*N/PI*L
         Right_Num = Left_Num = 0;		//pid 次数
 		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;

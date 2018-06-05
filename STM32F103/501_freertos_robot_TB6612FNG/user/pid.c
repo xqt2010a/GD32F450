@@ -12,7 +12,7 @@
 #define PID_KD_L  10
 
 
-#define PID_BUF_LEN     33
+#define PID_BUF_LEN     37
 #define V_BUF_LEN       6
 
 uint8_t pid_buf[PID_BUF_LEN]={0xEE,0xEE,0xEE, 0xEE,0x00};
@@ -36,6 +36,7 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
+    memcpy(pid_buf+33,(uint8_t *)&Right_Count, 4);
     Uart_StrSend(pid_buf, PID_BUF_LEN);
     Right_Num++;
     
@@ -61,6 +62,7 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
+    memcpy(pid_buf+33,(uint8_t *)&Left_Count, 4);
     Uart_StrSend(pid_buf, PID_BUF_LEN);
     Left_Num++;
     
