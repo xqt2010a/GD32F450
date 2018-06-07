@@ -4,21 +4,16 @@
 #include "robot_protocol.h"
 
 #define PID_KP_R  20     //0.2 = 200/1000
-#define PID_KI_R  90      
+#define PID_KI_R  80      
 #define PID_KD_R  10
 
 #define PID_KP_L  20     //0.2 = 200/1000
-#define PID_KI_L  90      
+#define PID_KI_L  80      
 #define PID_KD_L  10
 
 
-#define PID_BUF_LEN     37
-#define V_BUF_LEN       6
-
 uint8_t pid_buf[PID_BUF_LEN]={0xEE,0xEE,0xEE, 0xEE,0x00};
 
-int32_t R_V_Cur[V_BUF_LEN]={0};
-int32_t L_V_Cur[V_BUF_LEN]={0};
 
 int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //ÔöÁ¿Ê½PID
 {

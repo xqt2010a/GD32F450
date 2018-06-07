@@ -11,6 +11,7 @@
 
 static int32_t Vl_last = 0, Vr_last = 0; 
 int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
+uint8_t com_flag=0;
 
 void GPIO_Init_Moto(void)
 {
@@ -125,19 +126,32 @@ void Moto_Init(void)
     
 }
 
+
+int32_t Correct_Count(void)    //½ÃÕý×óÓÒÂÖÔËÐÐÎó²î
+{
+    if(ABS_FUC(Protocol_Status.dst.Vl) == ABS_FUC(Protocol_Status.dst.Vr)){
+        return ((Right_Count-Left_Count)*SPEED_COUNT_RATE*4);
+    }
+    return 0;
+}
+
 void vTask_Moto(void *p)
 {  
+    static uint8_t r_i=0, l_i=0;
+    
     Moto_Init();
     
     while(1){
                                             
-        if(0 != Protocol_Status.dst.Vl){    //left run                             
+        if(0 != Protocol_Status.dst.Vl){    //left run    
+            com_flag = 0;
             Vl = 0;
             abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);
             abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
             if(0 != abs_dst_Vl){
                 Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl)/1000;
             }
+            Vl += Correct_Count();
             abs_Vl = ABS_FUC(Vl);
             if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
                 abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
@@ -157,8 +171,22 @@ void vTask_Moto(void *p)
                 Moto1_Left_Back(abs_Vl);
             }
         }
-                                                  //right run
-        if(0 != Protocol_Status.dst.Vr){
+        else{
+            if(1 == com_flag){
+                vTaskDelay(50/portTICK_RATE_MS);
+                pid_buf[4] = 0x02;      //×ó
+                memcpy(pid_buf+33,(uint8_t *)&Left_Count, 4);
+                Uart_StrSend(pid_buf, PID_BUF_LEN);
+                l_i++;
+                if(l_i>20){
+                    com_flag = 2;
+                    l_i = r_i = 0;
+                }
+            }
+        }
+                                                  
+        if(0 != Protocol_Status.dst.Vr){        //right run
+            com_flag = 0;
             Vr = 0;      
             abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
             abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
@@ -183,7 +211,20 @@ void vTask_Moto(void *p)
                 Vr_last = abs_Vr;
                 Moto1_Right_Back(abs_Vr);
             }
-        }     
+        }
+        else{
+            if(1 == com_flag){
+                vTaskDelay(50/portTICK_RATE_MS);
+                pid_buf[4] = 0x01;      //ÓÒ
+                memcpy(pid_buf+33,(uint8_t *)&Right_Count, 4);
+                Uart_StrSend(pid_buf, PID_BUF_LEN);
+                r_i++;
+                if(r_i>20){
+                    com_flag = 2;
+                    r_i = l_i = 0;
+                }
+            }
+        }
         
         
 #if(DEBUG_COUNT)
@@ -210,64 +251,90 @@ void vTask_Moto(void *p)
 void vTask_Moto_Stop(void *p)
 {
     uint8_t flag,i,n;
+    //static uint8_t flag_lock = 0;
     
     while(1){
-        flag = 0;
+        flag = 0;       
         
         if(0 == Protocol_Status.dst.Vl){      //left stop
             if(0 != Protocol_Status.cur.Vl){
-                abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
-                n = abs_cur_Vl/100000;
-                if(Protocol_Status.dst.Vl >= 0){
-                    for(i=0; i<n; i++){
-                        Moto1_Left_Back(n-i-1);
-                        vTaskDelay(1/portTICK_RATE_MS);
-                    }
-                }
-                else{
-                    for(i=0; i<n; i++){
-                        Moto1_Left_Forword(n-i-1);
-                        vTaskDelay(1/portTICK_RATE_MS);
-                    }
-                }
-                Moto1_Left_Stop();
+//                abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
+//                n = abs_cur_Vl/100000;
+//                if(Protocol_Status.dst.Vl >= 0){
+//                    for(i=0; i<n; i++){
+//                        Moto1_Left_Back(n-i-1);
+//                        vTaskDelay(1/portTICK_RATE_MS);
+//                    }
+//                }
+//                else{
+//                    for(i=0; i<n; i++){
+//                        Moto1_Left_Forword(n-i-1);
+//                        vTaskDelay(1/portTICK_RATE_MS);
+//                    }
+//                }
+//                Moto1_Left_Stop();
                 Protocol_Status.dst.Vl = 0;
                 Protocol_Status.cur.Vl = 0;
-                Left_Count = 0;
+                //Left_Count = 0;
                 flag = 1;
+                com_flag = 1;
+                //flag_lock = flag_lock | 0x01;
             }
+//            else{
+//                if(flag_lock & 0x01){
+//                    pid_buf[4] = 0x02;      //×ó
+//                    memcpy(pid_buf+33,(uint8_t *)&Left_Count, 4);
+//                    Uart_StrSend(pid_buf, PID_BUF_LEN);
+//                    flag_lock = flag_lock & 0xFE;
+//                    vTaskDelay(1/portTICK_RATE_MS);
+//                }
+//            }
         }
     
         if(0 == Protocol_Status.dst.Vr){     //right stop
             if(0 != Protocol_Status.cur.Vr){
-                abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
-                n = abs_cur_Vr/100000;
-                if(Protocol_Status.dst.Vr >= 0){
-                    for(i=0; i<n; i++){
-                        Moto1_Right_Back(n-i-1);
-                        vTaskDelay(1/portTICK_RATE_MS);
-                    }
-                }
-                else{
-                    for(i=0; i<n; i++){
-                        Moto1_Right_Forword(n-i-1);
-                        vTaskDelay(1/portTICK_RATE_MS);
-                    }
-                }
-                Moto1_Right_Stop();
+//                abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
+//                n = abs_cur_Vr/100000;
+//                if(Protocol_Status.dst.Vr >= 0){
+//                    for(i=0; i<n; i++){
+//                        Moto1_Right_Back(n-i-1);
+//                        vTaskDelay(1/portTICK_RATE_MS);
+//                    }
+//                }
+//                else{
+//                    for(i=0; i<n; i++){
+//                        Moto1_Right_Forword(n-i-1);
+//                        vTaskDelay(1/portTICK_RATE_MS);
+//                    }
+//                }
+//                Moto1_Right_Stop();
                 Protocol_Status.dst.Vr = 0;
                 Protocol_Status.cur.Vr = 0;
-                Right_Count = 0;
+                
+                //Right_Count = 0;
                 flag = 1;
-            }           
+                com_flag = 1;
+                //flag_lock = flag_lock | 0x10;
+            } 
+//            else{
+//                if(flag_lock & 0x10){
+//                    pid_buf[4] = 0x01;      //ÓÒ
+//                    memcpy(pid_buf+33,(uint8_t *)&Right_Count, 4);
+//                    Uart_StrSend(pid_buf, PID_BUF_LEN);
+//                    flag_lock = flag_lock & 0xEF;
+//                    vTaskDelay(1/portTICK_RATE_MS);
+//                }
+//            }
         }
         if(1 == flag){                //stop at the same time
             Moto1_Left_Stop();
             Moto1_Right_Stop();
-            Right_Count = 0;
-            Left_Count = 0;
+            //Right_Count = 0;
+            //Left_Count = 0;
             Protocol_Status.dst.Vr = 0;
             Protocol_Status.dst.Vl = 0;
+            Protocol_Status.temp.Vr = 0;
+            Protocol_Status.temp.Vr = 0;
         }
     }
 }

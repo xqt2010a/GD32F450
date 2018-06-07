@@ -134,6 +134,7 @@ typedef struct{
     Mode_Struct mode;   //模式切换
     Speed_Struct cur;   //当前速度
     Speed_Struct dst;   //目的速度
+    Speed_Struct temp;  //临时存储
     
 }Protocol_Status_Struct;
 

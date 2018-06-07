@@ -9,7 +9,7 @@
 //#define PRT(...) SEGGER_RTT_printf(0, __VA_ARGS__)
 
 void vTask(void *pvParameters)  
-{  
+{
     int i=0;
      while(1)  
      {  

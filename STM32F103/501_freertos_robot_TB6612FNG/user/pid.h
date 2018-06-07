@@ -19,6 +19,9 @@
 //    float umin;
 //}PID_Struct;
 
+#define PID_BUF_LEN     37
+
+extern uint8_t pid_buf[PID_BUF_LEN];
 
 extern int32_t PID_realize_R(int32_t dst_v, int32_t cur_v);   //增量式PID;
 extern int32_t PID_realize_L(int32_t dst_v, int32_t cur_v);   //增量式PID;
