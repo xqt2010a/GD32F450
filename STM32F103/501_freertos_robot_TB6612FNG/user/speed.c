@@ -11,7 +11,7 @@
 
 #define PERIOD_BUFSIZE      20
 
-#define STOP_COUNT      80
+#define STOP_COUNT      200
 
 
 uint16_t RightWheelPulsePeriod;
@@ -103,6 +103,7 @@ void Capture_Init(void)
 void WheelCaptureIRQ(void)  
 {    
     uint8_t flag = 0;
+    
     if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET)   
     {  
         TIM_ClearITPendingBit(RIGHTCAPTURECHANNEL);  
@@ -125,12 +126,14 @@ void WheelCaptureIRQ(void)
             RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
            
             Right_Count++;  //用于行走距离
-            if(Right_Count > Protocol_Status.count_r){
-                Protocol_Status.dst.Vr = 0;
-                Protocol_Status.dst.Vl = 0;
-            }
-            else if(Right_Count > (Protocol_Status.count_r-STOP_COUNT)){
-                flag = 1;
+            if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
+                if(Right_Count > Protocol_Status.count_r){
+                    Protocol_Status.dst.Vr = 0;
+                    Protocol_Status.dst.Vl = 0;
+                }
+                else if(Right_Count > (Protocol_Status.count_r-STOP_COUNT)){
+                    flag = 1;
+                }
             }
             
             if(RightPeriodIndex == PERIOD_BUFSIZE) 
@@ -161,13 +164,14 @@ void WheelCaptureIRQ(void)
             LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
            
             Left_Count++;   //用于行走距离
-            
-            if(Left_Count > Protocol_Status.count_l){
-                Protocol_Status.dst.Vl = 0;
-                Protocol_Status.dst.Vr = 0;
-            }
-            else if(Left_Count > (Protocol_Status.count_l-STOP_COUNT)){
-                flag = 1;
+            if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
+                if(Left_Count > Protocol_Status.count_l){
+                    Protocol_Status.dst.Vl = 0;
+                    Protocol_Status.dst.Vr = 0;
+                }
+                else if(Left_Count > (Protocol_Status.count_l-STOP_COUNT)){
+                    flag = 1;
+                }
             }
             
             if(LeftPeriodIndex == PERIOD_BUFSIZE)   
@@ -176,13 +180,44 @@ void WheelCaptureIRQ(void)
         }  
     }
     if(1 == flag){
-        if(Protocol_Status.temp.Vr == Protocol_Status.temp.Vl){
-            Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-            Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
-            if(Protocol_Status.dst.Vr < 50000){
-                Protocol_Status.dst.Vr = 50000;
-                Protocol_Status.dst.Vl = 50000;
+        if((ABS_FUC(Protocol_Status.temp.Vr) - ABS_FUC(Protocol_Status.temp.Vl))<5){
+            if(Protocol_Status.temp.Vr >=0){
+                if(Protocol_Status.temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
+                    if(Protocol_Status.dst.Vr < 50000){
+                        Protocol_Status.dst.Vr = 50000;
+                        Protocol_Status.dst.Vl = 50000;
+                    }
+                }
+                else{   //Protocol_Status.temp.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
+                    if(Protocol_Status.dst.Vr < 50000){
+                        Protocol_Status.dst.Vr = 50000;
+                        Protocol_Status.dst.Vl = -50000;
+                    }
+                }
             }
+            else{   //Protocol_Status.temp.Vr < 0
+                if(Protocol_Status.temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
+                    if(Protocol_Status.dst.Vl < 50000){
+                        Protocol_Status.dst.Vr = -50000;
+                        Protocol_Status.dst.Vl = 50000;
+                    }
+                }
+                else{   //Protocol_Status.temp.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
+                    if(Protocol_Status.dst.Vl > -50000){
+                        Protocol_Status.dst.Vr = -50000;
+                        Protocol_Status.dst.Vl = -50000;
+                    }
+                }
+            }
+            
         }
         else{
             Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);

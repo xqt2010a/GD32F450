@@ -55,8 +55,8 @@ enum Cmd_Type{
     R_CTRL_UP_CMD     = 0xB0,
     R_VS_DOWN_CMD     = 0xA1,       //线速度，距离
     R_VS_UP_CMD       = 0xB1,
-    R_WD_DOWN_CMD     = 0xA2,
-    R_WD_UP_CMD       = 0xB2,       //角速度，度
+    R_WD_DOWN_CMD     = 0xA2,       //角速度，度
+    R_WD_UP_CMD       = 0xB2,       
     R_PATH_REPORT_CMD = 0x10,
     R_MODE_DOWN_CMD   = 0x12,       //模式切换
     R_MODE_UP_CMD     = 0x22,
