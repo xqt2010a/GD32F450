@@ -23,7 +23,8 @@
 
 extern uint8_t pid_buf[PID_BUF_LEN];
 
-extern int32_t PID_realize_R(int32_t dst_v, int32_t cur_v);   //增量式PID;
-extern int32_t PID_realize_L(int32_t dst_v, int32_t cur_v);   //增量式PID;
+extern int32_t PID_realize_R(int32_t dst_v, int32_t cur_v, uint32_t count);   //增量式PID;
+extern int32_t PID_realize_L(int32_t dst_v, int32_t cur_v, uint32_t count);   //增量式PID;
+extern int32_t PID_Correct_Count(uint32_t dst, uint32_t cur);   //位置式PID
 
 #endif  /* __PID_H__ */

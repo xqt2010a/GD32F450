@@ -15,16 +15,16 @@
 
 #define R_REPORT_TIME       40      //40ms上报
 
-#define R_CAR_WIDE          237     //车身宽度，即两个轮子间距（mm）
-#define R_CAR_L             70      //轮子直径70.5mmm
-#define R_CAR_ENCODER_N     282     //563/2     //转一圈 563 脉冲
-#define R_CAR_PI            3.14
+#define R_CAR_WIDE          234//237     //车身宽度，即两个轮子间距（mm）
+#define R_CAR_LEN           71      //轮子直径70.5mmm
+#define R_CAR_ENCODER_N     563     //563/2     //转一圈 563 脉冲
+#define R_CAR_PI            314
       
 /* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
 *   v(c) = PI*L/(N*c) = 3.14*70/500/c, 这里c是10的负5次方
 */
 
-#define R_CAR_GET_V(count)  (39040852/(count))          //单位 um/s
+#define R_CAR_GET_V(count)  (39623801/(count))//(39040852/(count))          //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2)    //左轮速度
 

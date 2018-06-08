@@ -5,37 +5,21 @@
 //定义左轮捕捉通道与捕获值  TIM2通道3 
 #define  LEFTCAPTURECHANNEL TIM2, TIM_IT_CC3  
 #define  LEFTCAPTUREVALUE TIM_GetCapture3(TIM2)  
-//<span style="font-family: Arial, Helvetica, sans-serif;">TIM1通道4</span>  
+
 #define  RIGHTCAPTURECHANNEL TIM2, TIM_IT_CC4  
 #define  RIGHTCAPTUREVALUE TIM_GetCapture4(TIM2)  
 
 #define PERIOD_BUFSIZE      20
+#define TIM_PERIOD_VALUE    60000
+#define STOP_COUNT          450
+#define MIN_SPEED           80000
 
-#define STOP_COUNT      200
-
-
-uint16_t RightWheelPulsePeriod;
 
 uint16_t LeftPeriodIndex = 0;
 uint16_t RightPeriodIndex = 0;
 
-uint16_t LeftWheelPulsePeriod = 0;
-uint16_t LRightWheelPulsePeriod = 0;
-
-
-uint16_t LeftWheel1stCapture = 0;
-uint16_t RightWheel1stCapture = 0;
-
-uint16_t LeftWheel2ndCapture = 0;
-uint16_t RightWheel2ndCapture = 0;
-
-uint16_t LeftWheelCaptureTime = 0;
-uint16_t RightWheelCaptureTime = 0;
-
 uint16_t RightPeriodBuf[PERIOD_BUFSIZE];
 uint16_t LeftPeriodBuf[PERIOD_BUFSIZE];
-
-
 
 void Capture_Init(void)
 {
@@ -50,7 +34,7 @@ void Capture_Init(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);  
       
       //速度捕获通道时基和通道配置 时钟 10000  
-    TIM_TimeBaseStructure.TIM_Period = 60000;   //65535
+    TIM_TimeBaseStructure.TIM_Period = TIM_PERIOD_VALUE;   //65535
     TIM_TimeBaseStructure.TIM_Prescaler = 720-1;  //采样=72000000/(psc+1)，mix=0.01ms
     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;  
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
@@ -100,102 +84,25 @@ void Capture_Init(void)
     TIM_Cmd(TIM2, ENABLE);  
 }
 
-void WheelCaptureIRQ(void)  
-{    
-    uint8_t flag = 0;
-    
-    if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET)   
-    {  
-        TIM_ClearITPendingBit(RIGHTCAPTURECHANNEL);  
-        if(RightWheelCaptureTime == 0)  
-        {
-            RightWheel1stCapture = RIGHTCAPTUREVALUE;  
-            RightWheelCaptureTime = 1;  
-        }
-        else if(RightWheelCaptureTime == 1)  
-        {
-            RightWheel2ndCapture = RIGHTCAPTUREVALUE;   
-            if (RightWheel2ndCapture >= RightWheel1stCapture)  
-            {  
-                RightWheelPulsePeriod = (RightWheel2ndCapture - RightWheel1stCapture);   
-            }  
-            else  
-            {  
-                RightWheelPulsePeriod = ((60000 - RightWheel1stCapture) + RightWheel2ndCapture);   
-            }  
-            RightPeriodBuf[RightPeriodIndex++] = RightWheelPulsePeriod;//记录最近的10个值  
-           
-            Right_Count++;  //用于行走距离
-            if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-                if(Right_Count > Protocol_Status.count_r){
-                    Protocol_Status.dst.Vr = 0;
-                    Protocol_Status.dst.Vl = 0;
-                }
-                else if(Right_Count > (Protocol_Status.count_r-STOP_COUNT)){
-                    flag = 1;
-                }
-            }
-            
-            if(RightPeriodIndex == PERIOD_BUFSIZE) 
-                RightPeriodIndex = 0;  
-            RightWheelCaptureTime= 0;  
-        }  
-    } 
-    
-    if(TIM_GetITStatus(LEFTCAPTURECHANNEL) == SET)   
-    {   
-        TIM_ClearITPendingBit(LEFTCAPTURECHANNEL);  
-        if(LeftWheelCaptureTime == 0)  
-        {  
-            LeftWheel1stCapture = LEFTCAPTUREVALUE;  
-            LeftWheelCaptureTime = 1;  
-        }  
-        else if(LeftWheelCaptureTime == 1)  
-        {  
-            LeftWheel2ndCapture = LEFTCAPTUREVALUE;   
-            if (LeftWheel2ndCapture > LeftWheel1stCapture)  
-            {  
-                LeftWheelPulsePeriod = (LeftWheel2ndCapture - LeftWheel1stCapture);   
-            }  
-            else  
-            {  
-                LeftWheelPulsePeriod = ((60000 - LeftWheel1stCapture) + LeftWheel2ndCapture+1);   
-            }  
-            LeftPeriodBuf[LeftPeriodIndex++] = LeftWheelPulsePeriod;//记录最近的10个值  
-           
-            Left_Count++;   //用于行走距离
-            if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-                if(Left_Count > Protocol_Status.count_l){
-                    Protocol_Status.dst.Vl = 0;
-                    Protocol_Status.dst.Vr = 0;
-                }
-                else if(Left_Count > (Protocol_Status.count_l-STOP_COUNT)){
-                    flag = 1;
-                }
-            }
-            
-            if(LeftPeriodIndex == PERIOD_BUFSIZE)   
-                LeftPeriodIndex = 0;  
-            LeftWheelCaptureTime= 0;  
-        }  
-    }
+void ShutDown(char flag)
+{
     if(1 == flag){
         if((ABS_FUC(Protocol_Status.temp.Vr) - ABS_FUC(Protocol_Status.temp.Vl))<5){
             if(Protocol_Status.temp.Vr >=0){
                 if(Protocol_Status.temp.Vl >= 0){
                     Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
                     Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
-                    if(Protocol_Status.dst.Vr < 50000){
-                        Protocol_Status.dst.Vr = 50000;
-                        Protocol_Status.dst.Vl = 50000;
+                    if(Protocol_Status.dst.Vr < MIN_SPEED){
+                        Protocol_Status.dst.Vr = MIN_SPEED;
+                        Protocol_Status.dst.Vl = MIN_SPEED;
                     }
                 }
                 else{   //Protocol_Status.temp.Vl < 0
                     Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
                     Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
-                    if(Protocol_Status.dst.Vr < 50000){
-                        Protocol_Status.dst.Vr = 50000;
-                        Protocol_Status.dst.Vl = -50000;
+                    if(Protocol_Status.dst.Vr < MIN_SPEED){
+                        Protocol_Status.dst.Vr = MIN_SPEED;
+                        Protocol_Status.dst.Vl = -MIN_SPEED;
                     }
                 }
             }
@@ -203,34 +110,71 @@ void WheelCaptureIRQ(void)
                 if(Protocol_Status.temp.Vl >= 0){
                     Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
                     Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
-                    if(Protocol_Status.dst.Vl < 50000){
-                        Protocol_Status.dst.Vr = -50000;
-                        Protocol_Status.dst.Vl = 50000;
+                    if(Protocol_Status.dst.Vl < MIN_SPEED){
+                        Protocol_Status.dst.Vr = -MIN_SPEED;
+                        Protocol_Status.dst.Vl = MIN_SPEED;
                     }
                 }
                 else{   //Protocol_Status.temp.Vl < 0
                     Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
                     Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
-                    if(Protocol_Status.dst.Vl > -50000){
-                        Protocol_Status.dst.Vr = -50000;
-                        Protocol_Status.dst.Vl = -50000;
+                    if(Protocol_Status.dst.Vl > -MIN_SPEED){
+                        Protocol_Status.dst.Vr = -MIN_SPEED;
+                        Protocol_Status.dst.Vl = -MIN_SPEED;
                     }
                 }
             }
             
         }
         else{
-            Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-            Protocol_Status.dst.Vl = Protocol_Status.temp.Vl-((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
-            if(Protocol_Status.dst.Vr < 50000){
-                Protocol_Status.dst.Vr = 50000;
+            if(Protocol_Status.temp.Vr >= 0){
+                if(Protocol_Status.temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl-((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    if(Protocol_Status.dst.Vr < MIN_SPEED){
+                        Protocol_Status.dst.Vr = MIN_SPEED;
+                    }
+                    if(Protocol_Status.dst.Vl < MIN_SPEED){
+                        Protocol_Status.dst.Vl = MIN_SPEED;
+                    }
+                }
+                else{   //Protocol_Status.dst.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl+((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    if(Protocol_Status.dst.Vr < MIN_SPEED){
+                        Protocol_Status.dst.Vr = MIN_SPEED;
+                    }
+                    if(Protocol_Status.dst.Vl > -MIN_SPEED){
+                        Protocol_Status.dst.Vl = -MIN_SPEED;
+                    }
+                }
             }
-            if(Protocol_Status.dst.Vl < 50000){
-                Protocol_Status.dst.Vl = 50000;
+            else{       //Protocol_Status.dst.Vr < 0
+                if(Protocol_Status.temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl-((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    if(Protocol_Status.dst.Vr > -MIN_SPEED){
+                        Protocol_Status.dst.Vr = -MIN_SPEED;
+                    }
+                    if(Protocol_Status.dst.Vl < MIN_SPEED){
+                        Protocol_Status.dst.Vl = MIN_SPEED;
+                    }
+                }
+                else{   //Protocol_Status.dst.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl+((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    if(Protocol_Status.dst.Vr > -MIN_SPEED){
+                        Protocol_Status.dst.Vr = -MIN_SPEED;
+                    }
+                    if(Protocol_Status.dst.Vl > -MIN_SPEED){
+                        Protocol_Status.dst.Vl = -MIN_SPEED;
+                    }
+                }
             }
+            
         }
     }
-}  
+}
 
 /**------------------------------------------------------- 
   * @函数名 TIM1_IRQHandler 
@@ -240,7 +184,61 @@ void WheelCaptureIRQ(void)
 ***------------------------------------------------------*/  
 void TIM2_IRQHandler(void)  
 {  
-    WheelCaptureIRQ();  
+    char flag = 0;
+    uint16_t capture_value, value;
+    static uint16_t last_capture_r = 0, last_capture_l = 0;
+    
+    if(TIM_GetITStatus(RIGHTCAPTURECHANNEL) == SET){
+        TIM_ClearITPendingBit(RIGHTCAPTURECHANNEL);
+        capture_value = RIGHTCAPTUREVALUE;
+        if(capture_value >= last_capture_r){
+            value = capture_value - last_capture_r;
+        }
+        else{
+            value = TIM_PERIOD_VALUE - last_capture_r + capture_value;
+        }
+        last_capture_r = capture_value;
+        RightPeriodBuf[RightPeriodIndex++] = value;     //记录最近的 n 个值  
+        if(RightPeriodIndex == PERIOD_BUFSIZE) 
+            RightPeriodIndex = PERIOD_BUFSIZE-1;
+        
+        Right_Count++;  //用于行走距离
+        if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
+            if(Right_Count > Protocol_Status.count_r){
+                Protocol_Status.dst.Vr = 0;
+                Protocol_Status.dst.Vl = 0;
+            }
+            else if(Right_Count > (Protocol_Status.count_r-STOP_COUNT)){
+                flag = 1;
+            }
+        }
+    }
+    if(TIM_GetITStatus(LEFTCAPTURECHANNEL) == SET)   
+    {   
+        TIM_ClearITPendingBit(LEFTCAPTURECHANNEL);
+        capture_value = LEFTCAPTUREVALUE;
+        if(capture_value >= last_capture_l){
+            value = capture_value - last_capture_l;
+        }
+        else{
+            value = TIM_PERIOD_VALUE - last_capture_l + capture_value;
+        }
+        last_capture_l = capture_value;
+        LeftPeriodBuf[LeftPeriodIndex++] = value;//记录最近的10个值
+        if(LeftPeriodIndex == PERIOD_BUFSIZE)   
+            LeftPeriodIndex = PERIOD_BUFSIZE-1;
+        Left_Count++;   //用于行走距离
+        if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
+            if(Left_Count > Protocol_Status.count_l){
+                Protocol_Status.dst.Vl = 0;
+                Protocol_Status.dst.Vr = 0;
+            }
+            else if(Left_Count > (Protocol_Status.count_l-STOP_COUNT)){
+                flag = 1;
+            }
+        }
+    }
+    ShutDown(flag); 
 }  
 
 
@@ -310,7 +308,7 @@ void vTask_Speed(void *p)
         Protocol_Status.path.deg_w = R_CAR_DEG_W(Protocol_Status.path.w);        
         Protocol_Status.path.deg = R_CAR_DEG(Protocol_Status.path.deg_w);
         
-        PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
+        //PRT("R:\t %4d   L:\t %4d\r\n", Protocol_Status.cur.Vr, Protocol_Status.cur.Vl);
         vTaskDelay(20/portTICK_RATE_MS); 
     }
 }

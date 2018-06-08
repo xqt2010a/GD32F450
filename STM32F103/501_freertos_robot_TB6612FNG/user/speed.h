@@ -12,9 +12,6 @@
 #include "robot_protocol.h"
 
 
-#define DEBUG_COUNT     0   //´ò¿ª±àÂëÆ÷²âÊÔ±àÂëÆ÷ÏßÊý
-
-
 #define ABS_FUC(x)  ((x)>=0?(x):(-(x)))
 
 extern void Speed_Init(void);

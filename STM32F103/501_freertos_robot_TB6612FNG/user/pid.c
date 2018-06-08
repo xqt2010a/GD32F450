@@ -2,6 +2,7 @@
 #include "uart.h"
 #include "string.h"
 #include "robot_protocol.h"
+#include "SEGGER_RTT.h"
 
 #define PID_KP_R  20     //0.2 = 200/1000
 #define PID_KI_R  80      
@@ -11,11 +12,15 @@
 #define PID_KI_L  80      
 #define PID_KD_L  10
 
+#define PID_KP_C  10    //calc = 120左右有较好的调节
+#define PID_KI_C  100
+#define PID_KD_C  5
+
 
 uint8_t pid_buf[PID_BUF_LEN]={0xEE,0xEE,0xEE, 0xEE,0x00};
 
 
-int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
+int32_t PID_realize_R(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式PID
 {
     int32_t err, increment;//, calc;
     static int32_t err_t2 = 0, err_t1 = 0;
@@ -31,8 +36,8 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
-    memcpy(pid_buf+33,(uint8_t *)&Right_Count, 4);
-    Uart_StrSend(pid_buf, PID_BUF_LEN);
+    memcpy(pid_buf+33,(uint8_t *)&count, 4);
+    //Uart_StrSend(pid_buf, PID_BUF_LEN);
     Right_Num++;
     
     err_t2 = err_t1;
@@ -41,7 +46,7 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v)     //增量式PID
     return increment;
 }
 
-int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
+int32_t PID_realize_L(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式PID
 {
     int32_t err, increment;//, calc;
     static int32_t err_t2 = 0, err_t1 = 0;
@@ -57,8 +62,8 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
-    memcpy(pid_buf+33,(uint8_t *)&Left_Count, 4);
-    Uart_StrSend(pid_buf, PID_BUF_LEN);
+    memcpy(pid_buf+33,(uint8_t *)&count, 4);
+    //Uart_StrSend(pid_buf, PID_BUF_LEN);
     Left_Num++;
     
     err_t2 = err_t1;
@@ -67,6 +72,19 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v)     //增量式PID
     return increment;
 }
 
+int32_t PID_Correct_Count(uint32_t dst, uint32_t cur)
+{
+    int32_t err, calc;
+    static int32_t err_t1 = 0, err_t2 = 0;
+
+    err = dst - cur;
+    //PRT("err:%d, %d %d\r\n", err, dst, cur);
+    calc = PID_KP_C*(err-err_t1) + PID_KI_C*err + PID_KD_C*(err-2*err_t1+err_t2);
+    err_t2 = err_t1;
+    err_t1 = err;
+    
+    return calc;
+}
 
 
 

@@ -127,10 +127,11 @@ void Moto_Init(void)
 }
 
 
-int32_t Correct_Count(void)    //矫正左右轮运行误差
+int32_t Correct_Count(uint32_t r_count, uint32_t l_count)    //矫正左右轮运行误差
 {
-    if(ABS_FUC(Protocol_Status.dst.Vl) == ABS_FUC(Protocol_Status.dst.Vr)){
-        return ((Right_Count-Left_Count)*SPEED_COUNT_RATE*4);
+    if((ABS_FUC(Protocol_Status.dst.Vl) - ABS_FUC(Protocol_Status.dst.Vr))<5){
+        //return ((Right_Count-Left_Count)*SPEED_COUNT_RATE*4);
+        return PID_Correct_Count(r_count, l_count);
     }
     return 0;
 }
@@ -138,20 +139,23 @@ int32_t Correct_Count(void)    //矫正左右轮运行误差
 void vTask_Moto(void *p)
 {  
     static uint8_t r_i=0, l_i=0;
+    uint32_t r_count, l_count;
     
     Moto_Init();
     
     while(1){
-                                            
+        l_count = Left_Count;
+        r_count = Right_Count;
         if(0 != Protocol_Status.dst.Vl){    //left run    
             com_flag = 0;
             Vl = 0;
             abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);
             abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
+            
             if(0 != abs_dst_Vl){
-                Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl)/1000;
+                Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl, l_count)/1000;
             }
-            Vl += Correct_Count();
+            Vl += Correct_Count(r_count, l_count);
             abs_Vl = ABS_FUC(Vl);
             if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
                 abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
@@ -175,8 +179,8 @@ void vTask_Moto(void *p)
             if(1 == com_flag){
                 vTaskDelay(50/portTICK_RATE_MS);
                 pid_buf[4] = 0x02;      //左
-                memcpy(pid_buf+33,(uint8_t *)&Left_Count, 4);
-                Uart_StrSend(pid_buf, PID_BUF_LEN);
+                memcpy(pid_buf+33,(uint8_t *)&l_count, 4);
+                //Uart_StrSend(pid_buf, PID_BUF_LEN);
                 l_i++;
                 if(l_i>20){
                     com_flag = 2;
@@ -191,7 +195,7 @@ void vTask_Moto(void *p)
             abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
             abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
             if(0 != abs_dst_Vr){
-                Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr)/1000;
+                Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr, r_count)/1000;
             }
             abs_Vr = ABS_FUC(Vr);
             if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
@@ -216,8 +220,8 @@ void vTask_Moto(void *p)
             if(1 == com_flag){
                 vTaskDelay(50/portTICK_RATE_MS);
                 pid_buf[4] = 0x01;      //右
-                memcpy(pid_buf+33,(uint8_t *)&Right_Count, 4);
-                Uart_StrSend(pid_buf, PID_BUF_LEN);
+                memcpy(pid_buf+33,(uint8_t *)&r_count, 4);
+                //Uart_StrSend(pid_buf, PID_BUF_LEN);
                 r_i++;
                 if(r_i>20){
                     com_flag = 2;
@@ -225,24 +229,6 @@ void vTask_Moto(void *p)
                 }
             }
         }
-        
-        
-#if(DEBUG_COUNT)
-        if(Right_Count < (300*500)){
-            Moto1_Right_Forword(7999*30);
-        }
-        else{
-            Moto1_Right_Forword(0);
-        }
-        
-        if(Left_Count < (300*500)){
-            Moto1_Left_Forword(7999*30);
-        }
-        else{
-            Moto1_Left_Forword(0);
-        }     
-        
-#endif  /* DEBUG_COUNT */
         
         vTaskDelay(20/portTICK_RATE_MS);
     }
