@@ -5,11 +5,11 @@
 #include "SEGGER_RTT.h"
 
 #define PID_KP_R  20     //0.2 = 200/1000
-#define PID_KI_R  60      
+#define PID_KI_R  50      
 #define PID_KD_R  10
 
 #define PID_KP_L  20     //0.2 = 200/1000
-#define PID_KI_L  60      
+#define PID_KI_L  50      
 #define PID_KD_L  10
 
 #define PID_KP_C  5    //calc = 120左右有较好的调节

@@ -11,9 +11,9 @@
 
 #define PERIOD_BUFSIZE      20
 #define TIM_PERIOD_VALUE    60000
-#define STOP_LEN            178194//450
+#define STOP_LEN            250000//178194//450
 #define MIN_SPEED           80000
-#define COUNT_RATE          2
+#define COUNT_RATE          5
 
 uint16_t LeftPeriodIndex = 0;
 uint16_t RightPeriodIndex = 0;
@@ -204,7 +204,7 @@ void TIM2_IRQHandler(void)
         
         Right_Count++;  //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-            Protocol_Status.run_sr = 390*Right_Count;//(((uint64_t)(R_CAR_PI)*(R_CAR_LEN_L)*Right_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            Protocol_Status.run_sr = (((uint64_t)(R_CAR_PI)*(R_CAR_LEN_R)*Right_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
             if(Protocol_Status.run_sr > Protocol_Status.Sr){
                 Protocol_Status.dst.Vr = 0;
                 Protocol_Status.dst.Vl = 0;
@@ -230,7 +230,7 @@ void TIM2_IRQHandler(void)
             LeftPeriodIndex = PERIOD_BUFSIZE-1;
         Left_Count++;   //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-            Protocol_Status.run_sl = 396*Left_Count;//(((uint64_t)(R_CAR_PI)*(R_CAR_LEN_R)*Left_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            Protocol_Status.run_sl = (((uint64_t)(R_CAR_PI)*(R_CAR_LEN_L)*Left_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
             if(Protocol_Status.run_sl > Protocol_Status.Sl){
                 Protocol_Status.dst.Vl = 0;
                 Protocol_Status.dst.Vr = 0;
