@@ -53,10 +53,10 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = R_BL_32(pRx->vs.s)*1000;
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-		Protocol_Status.count_r = (uint64_t)Protocol_Status.Sr*R_CAR_ENCODER_N/(3142*R_CAR_LEN);     //S*N/PI*L
-		Protocol_Status.count_l = (uint64_t)Protocol_Status.Sl*R_CAR_ENCODER_N/(3142*R_CAR_LEN);     //S*N/PI*L
-        Protocol_Status.temp.Vr = Protocol_Status.dst.Vr;
-        Protocol_Status.temp.Vl = Protocol_Status.dst.Vl;
+		//Protocol_Status.count_r = (uint64_t)Protocol_Status.Sr*R_CAR_ENCODER_N/(3142*R_CAR_LEN_R);     //S*N/PI*L
+		//Protocol_Status.count_l = (uint64_t)Protocol_Status.Sl*R_CAR_ENCODER_N/(3142*R_CAR_LEN_L);     //S*N/PI*L
+        Protocol_Status.dst_temp.Vr = Protocol_Status.dst.Vr;
+        Protocol_Status.dst_temp.Vl = Protocol_Status.dst.Vl;
         Right_Num = Left_Num = 0;		//pid 次数
 		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;
@@ -75,10 +75,10 @@ void WD_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.Sr = Protocol_Status.Sl = 314*R_CAR_WIDE*R_BL_32(pRx->wd.d)/36;      //s = PI*L*deg/360
         Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
         Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-		Protocol_Status.count_r = (uint64_t)Protocol_Status.Sr*R_CAR_ENCODER_N/(3142*R_CAR_LEN);     //S*N/PI*L
-		Protocol_Status.count_l = (uint64_t)Protocol_Status.Sl*R_CAR_ENCODER_N/(3142*R_CAR_LEN);     //S*N/PI*L
-        Protocol_Status.temp.Vr = Protocol_Status.dst.Vr;
-        Protocol_Status.temp.Vl = Protocol_Status.dst.Vl;
+		//Protocol_Status.count_r = (uint64_t)Protocol_Status.Sr*R_CAR_ENCODER_N/(3142*R_CAR_LEN_R);     //S*N/PI*L
+		//Protocol_Status.count_l = (uint64_t)Protocol_Status.Sl*R_CAR_ENCODER_N/(3142*R_CAR_LEN_L);     //S*N/PI*L
+        Protocol_Status.dst_temp.Vr = Protocol_Status.dst.Vr;
+        Protocol_Status.dst_temp.Vl = Protocol_Status.dst.Vl;
         Right_Num = Left_Num = 0;		//pid 次数
 		Right_Count = Left_Count = 0;	//速度采样次数
         pTx->data = R_SUCCESS;

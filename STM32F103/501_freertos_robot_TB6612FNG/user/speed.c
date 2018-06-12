@@ -11,9 +11,9 @@
 
 #define PERIOD_BUFSIZE      20
 #define TIM_PERIOD_VALUE    60000
-#define STOP_COUNT          450
+#define STOP_LEN            178194//450
 #define MIN_SPEED           80000
-
+#define COUNT_RATE          2
 
 uint16_t LeftPeriodIndex = 0;
 uint16_t RightPeriodIndex = 0;
@@ -87,18 +87,18 @@ void Capture_Init(void)
 void ShutDown(char flag)
 {
     if(1 == flag){
-        if((ABS_FUC(Protocol_Status.temp.Vr) - ABS_FUC(Protocol_Status.temp.Vl))<5){
-            if(Protocol_Status.temp.Vr >=0){
-                if(Protocol_Status.temp.Vl >= 0){
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+        if((ABS_FUC(Protocol_Status.dst_temp.Vr) - ABS_FUC(Protocol_Status.dst_temp.Vl))<5){
+            if(Protocol_Status.dst_temp.Vr >=0){
+                if(Protocol_Status.dst_temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr-((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
                     Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
                     if(Protocol_Status.dst.Vr < MIN_SPEED){
                         Protocol_Status.dst.Vr = MIN_SPEED;
                         Protocol_Status.dst.Vl = MIN_SPEED;
                     }
                 }
-                else{   //Protocol_Status.temp.Vl < 0
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                else{   //Protocol_Status.dst_temp.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr-((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
                     Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
                     if(Protocol_Status.dst.Vr < MIN_SPEED){
                         Protocol_Status.dst.Vr = MIN_SPEED;
@@ -106,17 +106,17 @@ void ShutDown(char flag)
                     }
                 }
             }
-            else{   //Protocol_Status.temp.Vr < 0
-                if(Protocol_Status.temp.Vl >= 0){
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+            else{   //Protocol_Status.dst_temp.Vr < 0
+                if(Protocol_Status.dst_temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr+((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
                     Protocol_Status.dst.Vl = -(Protocol_Status.dst.Vr);
                     if(Protocol_Status.dst.Vl < MIN_SPEED){
                         Protocol_Status.dst.Vr = -MIN_SPEED;
                         Protocol_Status.dst.Vl = MIN_SPEED;
                     }
                 }
-                else{   //Protocol_Status.temp.Vl < 0
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
+                else{   //Protocol_Status.dst_temp.Vl < 0
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr+((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
                     Protocol_Status.dst.Vl = Protocol_Status.dst.Vr;
                     if(Protocol_Status.dst.Vl > -MIN_SPEED){
                         Protocol_Status.dst.Vr = -MIN_SPEED;
@@ -127,10 +127,10 @@ void ShutDown(char flag)
             
         }
         else{
-            if(Protocol_Status.temp.Vr >= 0){
-                if(Protocol_Status.temp.Vl >= 0){
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl-((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+            if(Protocol_Status.dst_temp.Vr >= 0){
+                if(Protocol_Status.dst_temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr-((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst_temp.Vl-((Protocol_Status.run_sl+STOP_LEN-Protocol_Status.Sl)*COUNT_RATE);
                     if(Protocol_Status.dst.Vr < MIN_SPEED){
                         Protocol_Status.dst.Vr = MIN_SPEED;
                     }
@@ -139,8 +139,8 @@ void ShutDown(char flag)
                     }
                 }
                 else{   //Protocol_Status.dst.Vl < 0
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr-((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl+((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr-((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst_temp.Vl+((Protocol_Status.run_sl+STOP_LEN-Protocol_Status.Sl)*COUNT_RATE);
                     if(Protocol_Status.dst.Vr < MIN_SPEED){
                         Protocol_Status.dst.Vr = MIN_SPEED;
                     }
@@ -150,9 +150,9 @@ void ShutDown(char flag)
                 }
             }
             else{       //Protocol_Status.dst.Vr < 0
-                if(Protocol_Status.temp.Vl >= 0){
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl-((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                if(Protocol_Status.dst_temp.Vl >= 0){
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr+((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst_temp.Vl-((Protocol_Status.run_sl+STOP_LEN-Protocol_Status.Sl)*COUNT_RATE);
                     if(Protocol_Status.dst.Vr > -MIN_SPEED){
                         Protocol_Status.dst.Vr = -MIN_SPEED;
                     }
@@ -161,8 +161,8 @@ void ShutDown(char flag)
                     }
                 }
                 else{   //Protocol_Status.dst.Vl < 0
-                    Protocol_Status.dst.Vr = Protocol_Status.temp.Vr+((Right_Count+STOP_COUNT-Protocol_Status.count_r)*10000);
-                    Protocol_Status.dst.Vl = Protocol_Status.temp.Vl+((Left_Count+STOP_COUNT-Protocol_Status.count_l)*10000);
+                    Protocol_Status.dst.Vr = Protocol_Status.dst_temp.Vr+((Protocol_Status.run_sr+STOP_LEN-Protocol_Status.Sr)*COUNT_RATE);
+                    Protocol_Status.dst.Vl = Protocol_Status.dst_temp.Vl+((Protocol_Status.run_sl+STOP_LEN-Protocol_Status.Sl)*COUNT_RATE);
                     if(Protocol_Status.dst.Vr > -MIN_SPEED){
                         Protocol_Status.dst.Vr = -MIN_SPEED;
                     }
@@ -204,11 +204,12 @@ void TIM2_IRQHandler(void)
         
         Right_Count++;  //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-            if(Right_Count > Protocol_Status.count_r){
+            Protocol_Status.run_sr = 390*Right_Count;//(((uint64_t)(R_CAR_PI)*(R_CAR_LEN_L)*Right_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            if(Protocol_Status.run_sr > Protocol_Status.Sr){
                 Protocol_Status.dst.Vr = 0;
                 Protocol_Status.dst.Vl = 0;
             }
-            else if(Right_Count > (Protocol_Status.count_r-STOP_COUNT)){
+            else if(Protocol_Status.run_sr > (Protocol_Status.Sr-STOP_LEN)){
                 flag = 1;
             }
         }
@@ -229,11 +230,12 @@ void TIM2_IRQHandler(void)
             LeftPeriodIndex = PERIOD_BUFSIZE-1;
         Left_Count++;   //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
-            if(Left_Count > Protocol_Status.count_l){
+            Protocol_Status.run_sl = 396*Left_Count;//(((uint64_t)(R_CAR_PI)*(R_CAR_LEN_R)*Left_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            if(Protocol_Status.run_sl > Protocol_Status.Sl){
                 Protocol_Status.dst.Vl = 0;
                 Protocol_Status.dst.Vr = 0;
             }
-            else if(Left_Count > (Protocol_Status.count_l-STOP_COUNT)){
+            else if(Protocol_Status.run_sl > (Protocol_Status.Sl-STOP_LEN)){
                 flag = 1;
             }
         }
@@ -286,20 +288,20 @@ void vTask_Speed(void *p)
 {
     Speed_Init();
     Protocol_Init();
-    
+
     while(1){
-        if(Protocol_Status.dst.Vr >= 0){
-            Protocol_Status.cur.Vr = R_CAR_GET_V(GetRightCount());
+        if(Protocol_Status.dst.Vr >= 0){            
+            Protocol_Status.cur.Vr = R_CAR_GET_Vr(GetRightCount());
         }
         else{
-            Protocol_Status.cur.Vr = -(R_CAR_GET_V(GetRightCount()));
+            Protocol_Status.cur.Vr = (-(R_CAR_GET_Vr(GetRightCount())));
         }
         
         if(Protocol_Status.dst.Vl >= 0){
-            Protocol_Status.cur.Vl = R_CAR_GET_V(GetLeftCount());
+            Protocol_Status.cur.Vl = R_CAR_GET_Vl(GetLeftCount());
         }
         else{
-            Protocol_Status.cur.Vl = -(R_CAR_GET_V(GetLeftCount()));
+            Protocol_Status.cur.Vl = (-(R_CAR_GET_Vl(GetLeftCount())));
         }
         
         

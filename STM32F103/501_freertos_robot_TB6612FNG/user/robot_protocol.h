@@ -15,16 +15,18 @@
 
 #define R_REPORT_TIME       40      //40ms上报
 
-#define R_CAR_WIDE          234//237     //车身宽度，即两个轮子间距（mm）
-#define R_CAR_LEN           71      //轮子直径70.5mmm
+#define R_CAR_WIDE          234000//237     //车身宽度，即两个轮子间距（mm）
+#define R_CAR_LEN_R         70000      //轮子直径70.5mmm
+#define R_CAR_LEN_L         71000         
 #define R_CAR_ENCODER_N     563     //563/2     //转一圈 563 脉冲
 #define R_CAR_PI            314
       
 /* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
-*   v(c) = PI*L/(N*c) = 3.14*70/500/c, 这里c是10的负5次方
+*   v(c) = PI*L/(N*c) = 3.14*R_CAR_LEN/R_CAR_ENCODER_N/c, 这里c是10的负5次方
 */
 
-#define R_CAR_GET_V(count)  (39623801/(count))//(39040852/(count))          //单位 um/s
+#define R_CAR_GET_Vl(count)  39598579/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
+#define R_CAR_GET_Vr(count)  39040852/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2)    //左轮速度
 
@@ -32,7 +34,7 @@
 #define R_CAR_W(Vr,Vl)      (((Vr)-(Vl))/R_CAR_WIDE)   //角速度 10-3rad/s
 
 
-#define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*PI)
+#define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*R_CAR_PI)
 #define R_CAR_DEG(deg_w)    (((deg_w)*(R_REPORT_TIME))/1000)     //deg = deg_w*40/1000    
 
 
@@ -127,14 +129,17 @@ typedef struct{
     int w;  //down cmd 
     int Sr; //down cmd  单位 um
     int Sl; //down cmd  单位 um
+    uint32_t run_sl;    //行走距离
+    uint32_t run_sr;  
+    
     uint32_t count_r;   //用于电机停止
-    uint32_t count_l;   //用于电机停止
+    uint32_t count_l;   
 
     Path_Struct path;   //底盘轨迹反馈
     Mode_Struct mode;   //模式切换
     Speed_Struct cur;   //当前速度
     Speed_Struct dst;   //目的速度
-    Speed_Struct temp;  //临时存储
+    Speed_Struct dst_temp;  //临时存储
     
 }Protocol_Status_Struct;
 
