@@ -16,7 +16,7 @@
 #define R_REPORT_TIME       40      //40ms上报
 
 #define R_CAR_WIDE          234000//237     //车身宽度，即两个轮子间距（mm）
-#define R_CAR_LEN_R         70530      //轮子直径70.5mmm
+#define R_CAR_LEN_R         70700//70530      //轮子直径70.5mmm
 #define R_CAR_LEN_L         71000         
 #define R_CAR_ENCODER_N     563     //563/2     //转一圈 563 脉冲
 #define R_CAR_PI            314
@@ -27,11 +27,11 @@
 
 #define R_CAR_GET_Vl(count)  39598579/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
 #define R_CAR_GET_Vr(count)  39342025/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
-#define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2)    //右轮速度
-#define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2)    //左轮速度
+#define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2000)    //右轮速度
+#define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2000)    //左轮速度
 
 #define R_CAR_V(Vr,Vl)      (((Vr)+(Vl))/2)                   //线速度 um/s
-#define R_CAR_W(Vr,Vl)      (((Vr)-(Vl))/R_CAR_WIDE)   //角速度 10-3rad/s
+#define R_CAR_W(Vr,Vl)      (((Vr)-(Vl))*1000/R_CAR_WIDE)   //角速度 10-3rad/s
 
 
 #define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*R_CAR_PI)
