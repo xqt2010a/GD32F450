@@ -185,6 +185,7 @@ void ShutDown(char flag)
 void TIM2_IRQHandler(void)  
 {  
     char flag = 0;
+    int32_t err_s;
     uint16_t capture_value, value;
     static uint16_t last_capture_r = 0, last_capture_l = 0;
     
@@ -205,11 +206,14 @@ void TIM2_IRQHandler(void)
         Right_Count++;  //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
             Protocol_Status.run_sr = (((uint64_t)(R_CAR_PI)*(R_CAR_LEN_R)*Right_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            err_s = Protocol_Status.Sr-STOP_LEN;
+            if(err_s < 0)
+                err_s = 0;
             if(Protocol_Status.run_sr > Protocol_Status.Sr){
                 Protocol_Status.dst.Vr = 0;
                 Protocol_Status.dst.Vl = 0;
             }
-            else if(Protocol_Status.run_sr > (Protocol_Status.Sr-STOP_LEN)){
+            else if(Protocol_Status.run_sr > err_s){
                 flag = 1;
             }
         }
@@ -231,11 +235,14 @@ void TIM2_IRQHandler(void)
         Left_Count++;   //用于行走距离
         if((R_VS_DOWN_CMD == Protocol_Status.cmd_type)||(R_WD_DOWN_CMD == Protocol_Status.cmd_type)){
             Protocol_Status.run_sl = (((uint64_t)(R_CAR_PI)*(R_CAR_LEN_L)*Left_Count+R_CAR_ENCODER_N*50)/((R_CAR_ENCODER_N)*100));
+            err_s = Protocol_Status.Sl-STOP_LEN;
+            if(err_s < 0)
+                err_s = 0;
             if(Protocol_Status.run_sl > Protocol_Status.Sl){
                 Protocol_Status.dst.Vl = 0;
                 Protocol_Status.dst.Vr = 0;
             }
-            else if(Protocol_Status.run_sl > (Protocol_Status.Sl-STOP_LEN)){
+            else if(Protocol_Status.run_sl > err_s){
                 flag = 1;
             }
         }
