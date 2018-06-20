@@ -99,5 +99,6 @@ vPortStartFirstTask
 	dsb
 	isb
 	svc 0
+    nop
 
 	END
