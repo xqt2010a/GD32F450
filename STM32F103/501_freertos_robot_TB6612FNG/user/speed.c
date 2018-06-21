@@ -11,8 +11,6 @@
 
 #define PERIOD_BUFSIZE      20
 #define TIM_PERIOD_VALUE    60000
-#define STOP_LEN            250000//178194//450
-#define MIN_SPEED           80000
 #define COUNT_RATE          5
 
 uint16_t LeftPeriodIndex = 0;

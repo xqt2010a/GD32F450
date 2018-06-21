@@ -16,17 +16,21 @@
 #define R_REPORT_TIME       40      //40ms上报
 
 #define R_CAR_WIDE          234000//237     //车身宽度，即两个轮子间距（mm）
-#define R_CAR_LEN_R         70700//70530      //轮子直径70.5mmm
-#define R_CAR_LEN_L         71000         
+#define R_CAR_LEN_R         70600//70530      //轮子直径70.5mmm
+#define R_CAR_LEN_L         71080//71000         
 #define R_CAR_ENCODER_N     563     //563/2     //转一圈 563 脉冲
 #define R_CAR_PI            314
+
+#define STOP_LEN            250000//178194//450 提前減速距离um
+#define MIN_SPEED           80000       //最小速度
+#define MAX_SPEED           300000
       
 /* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
 *   v(c) = PI*L/(N*c) = 3.14*R_CAR_LEN/R_CAR_ENCODER_N/c, 这里c是10的负5次方
 */
 
-#define R_CAR_GET_Vl(count)  39598579/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
-#define R_CAR_GET_Vr(count)  39342025/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
+#define R_CAR_GET_Vl(count)  39643197/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
+#define R_CAR_GET_Vr(count)  39375489/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2000)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2000)    //左轮速度
 
@@ -37,6 +41,10 @@
 #define R_CAR_DEG_W(w)      ((w)*573/100)               //deg_w = 360*rad/(2*R_CAR_PI)
 #define R_CAR_DEG(deg_w)    (((deg_w)*(R_REPORT_TIME))/1000)     //deg = deg_w*40/1000    
 
+
+#define ABS_FUC(x)  ((x)>=0?(x):(-(x)))
+
+#define ZOOM_RATE            10000
 
 #define R_BL_16(x)          ((uint16_t)((x)&0x00FFU)<<8)|((uint16_t)((x)&0xFF00U)>>8)
 #define R_BL_32(x)          (((uint32_t)((x)&0x000000FFU)<<24)| \

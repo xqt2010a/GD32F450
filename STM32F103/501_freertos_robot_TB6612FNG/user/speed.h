@@ -12,7 +12,7 @@
 #include "robot_protocol.h"
 
 
-#define ABS_FUC(x)  ((x)>=0?(x):(-(x)))
+
 
 extern void Speed_Init(void);
 extern void vTask_Speed(void *p);
