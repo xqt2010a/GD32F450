@@ -597,7 +597,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>stm32_base.bin</state>
+          <state>stm32_iic.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1906,6 +1906,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip_driver\stm32f10x_rcc.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip_driver\system_stm32f10x.c</name>
