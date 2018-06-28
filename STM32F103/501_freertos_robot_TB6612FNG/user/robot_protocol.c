@@ -1,12 +1,6 @@
 #include "robot_protocol.h"
 #include "string.h"
 
-uint32_t Right_Num = 0;     //pid 次数，用于数据帧判断是否连续
-uint32_t Left_Num = 0;
-
-uint32_t Right_Count = 0;   //采集计数，用于行走距离
-uint32_t Left_Count = 0;
-
 Protocol_Status_Struct Protocol_Status;
 Protocol_Struct pTx;
 
@@ -20,40 +14,38 @@ uint8_t xor_sum(const uint8_t* pDataIn, int iLenIn) //BCC
     return ret;
 }
 
-void Speed_Limit(uint8_t type)  //0:VS  1:WD
-{
-    int32_t a,b,s;
-    s = ABS_FUC(Protocol_Status.Sr);
-    if(s<(R_CAR_PI*R_CAR_WIDE/100)){
-        if(s > STOP_LEN){
-            a = (int64_t)(MAX_SPEED-MIN_SPEED)*ZOOM_RATE/(R_CAR_PI*R_CAR_WIDE/100-STOP_LEN);   //放大10000倍
-            b = MAX_SPEED - (int64_t)a*(R_CAR_PI*R_CAR_WIDE/100)/ZOOM_RATE;
-            if(type){   //WD
-                if(Protocol_Status.dst.Vr >= 0){
-                    Protocol_Status.dst.Vr = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
-                    Protocol_Status.dst.Vl = -Protocol_Status.dst.Vr;
-                }
-                else{
-                    Protocol_Status.dst.Vl = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
-                    Protocol_Status.dst.Vr = Protocol_Status.dst.Vl;
-                }
-            }
-            else{       //VS
-                Protocol_Status.dst.Vl = Protocol_Status.dst.Vr = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
-            }
-        }
-        else if(s > 0){
-            Protocol_Status.dst.Vl = Protocol_Status.dst.Vr = MIN_SPEED;
-        }
-    }
-}
+//void Speed_Limit(uint8_t type)  //0:VS  1:WD
+//{
+//    int32_t a,b,s;
+//    s = ABS_FUC(Protocol_Status.dst_s.r);
+//    if(s<(R_CAR_PI*R_CAR_WIDE/100)){
+//        if(s > STOP_LEN){
+//            a = (int64_t)(MAX_SPEED-MIN_SPEED)*ZOOM_RATE/(R_CAR_PI*R_CAR_WIDE/100-STOP_LEN);   //放大10000倍
+//            b = MAX_SPEED - (int64_t)a*(R_CAR_PI*R_CAR_WIDE/100)/ZOOM_RATE;
+//            if(type){   //WD
+//                if(Protocol_Status.dst_v.Vr >= 0){
+//                    Protocol_Status.dst_v.Vr = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
+//                    Protocol_Status.dst_v.Vl = -Protocol_Status.dst_v.Vr;
+//                }
+//                else{
+//                    Protocol_Status.dst_v.Vl = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
+//                    Protocol_Status.dst_v.Vr = Protocol_Status.dst_v.Vl;
+//                }
+//            }
+//            else{       //VS
+//                Protocol_Status.dst_v.Vl = Protocol_Status.dst_v.Vr = (int64_t)a*s/ZOOM_RATE+b; //y = ax + b
+//            }
+//        }
+//        else if(s > 0){
+//            Protocol_Status.dst_v.Vl = Protocol_Status.dst_v.Vr = MIN_SPEED;
+//        }
+//    }
+//}
 
 void Protocol_Init(void)
 {
     memset((uint8_t *)&Protocol_Status, 0, sizeof(Protocol_Status_Struct));
     memset((uint8_t *)&pTx, 0, sizeof(Protocol_Struct));
-    Right_Num = Left_Num = 0;
-    Right_Count = Left_Count = 0;
 }
 
 void CTRL_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
@@ -62,9 +54,9 @@ void CTRL_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.cmd_type = R_CTRL_DOWN_CMD;
         Protocol_Status.v = R_BL_32(pRx->ctrl.v);
         Protocol_Status.w = R_BL_32(pRx->ctrl.w);
-        Protocol_Status.Sr = Protocol_Status.Sl = 0;
-        Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
-        Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
+        Protocol_Status.dst_s.r = Protocol_Status.dst_s.l = 0;
+        Protocol_Status.dst_v.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
+        Protocol_Status.dst_v.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
         pTx->data = R_SUCCESS;
     }
     else{
@@ -79,14 +71,12 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
         Protocol_Status.cmd_type = R_VS_DOWN_CMD;
         Protocol_Status.v = R_BL_32(pRx->vs.v);
         Protocol_Status.w = 0;
-        Protocol_Status.Sr = Protocol_Status.Sl = R_BL_32(pRx->vs.s)*1000;
-        Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
-        Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-        Speed_Limit(0);
-        Protocol_Status.dst_temp.Vr = Protocol_Status.dst.Vr;
-        Protocol_Status.dst_temp.Vl = Protocol_Status.dst.Vl;
-        Right_Num = Left_Num = 0;		//pid 次数
-		Right_Count = Left_Count = 0;	//速度采样次数
+        Protocol_Status.dst_s.r = Protocol_Status.dst_s.l = R_BL_32(pRx->vs.s)*1000;
+        Protocol_Status.dst_v.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
+        Protocol_Status.dst_v.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
+        //Speed_Limit(0);
+        Protocol_Status.dst_temp_v.Vr = Protocol_Status.dst_v.Vr;
+        Protocol_Status.dst_temp_v.Vl = Protocol_Status.dst_v.Vl;
         pTx->data = R_SUCCESS;
     }
     else{
@@ -97,20 +87,19 @@ void VS_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
 /* 角速度 角度 */
 void WD_Handle(Protocol_Struct *pRx, Protocol_Struct *pTx)
 {
-    int64_t run_s;
+    uint64_t run_s;
     if(sizeof(WD_Struct) == pRx->data_len){
+        
         Protocol_Status.cmd_type = R_WD_DOWN_CMD;
         Protocol_Status.v = 0;
         Protocol_Status.w = R_BL_32(pRx->wd.w); 
-        run_s = (int64_t)314*R_CAR_WIDE*R_BL_32(pRx->wd.d);
-        Protocol_Status.Sr = Protocol_Status.Sl = run_s/36000;      //s = PI*L*deg/360
-        Protocol_Status.dst.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
-        Protocol_Status.dst.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
-        Speed_Limit(1);
-        Protocol_Status.dst_temp.Vr = Protocol_Status.dst.Vr;
-        Protocol_Status.dst_temp.Vl = Protocol_Status.dst.Vl;
-        Right_Num = Left_Num = 0;		//pid 次数
-		Right_Count = Left_Count = 0;	//速度采样次数
+        run_s = (uint64_t)R_CAR_PI*R_CAR_WIDE*R_BL_32(ABS_FUC(pRx->wd.d));
+        Protocol_Status.dst_s.r = Protocol_Status.dst_s.l = run_s/36000;      //s = PI*L*deg/360
+        Protocol_Status.dst_v.Vr = R_CAR_Vr(Protocol_Status.v, Protocol_Status.w);
+        Protocol_Status.dst_v.Vl = R_CAR_Vl(Protocol_Status.v, Protocol_Status.w);
+        //Speed_Limit(1);
+        Protocol_Status.dst_temp_v.Vr = Protocol_Status.dst_v.Vr;
+        Protocol_Status.dst_temp_v.Vl = Protocol_Status.dst_v.Vl;
         pTx->data = R_SUCCESS;
     }
     else{
@@ -154,6 +143,9 @@ char EncodeProcess(const uint8_t *buf)
         
         if((bcc == xor_sum((uint8_t *)(&pRx->cmd_type), pRx->data_len+2))||
             (Protocol_Status.bcc_flag == 1)){
+                
+            memset((uint8_t *)&Protocol_Status, 0, sizeof(Protocol_Status_Struct));
+            
             if(R_CTRL_DOWN_CMD == pRx->cmd_type){       //行走轨迹控制
                 pTx.cmd_type = R_CTRL_UP_CMD;
                 CTRL_Handle(pRx, &pTx);
@@ -216,12 +208,6 @@ void PathReport(void)
     pTx.path.w = R_BL_32(Protocol_Status.path.w);
     pTx.path.deg_w = R_BL_16(Protocol_Status.path.deg_w);
     pTx.path.deg = R_BL_16(Protocol_Status.path.deg);
-    //BCC Code
-//    pTx.path.v = 0x31313131;
-//    pTx.path.w = 0x32323232;  
-//    pTx.path.deg_w = 0x3333;  
-//    pTx.path.deg = 0x3434;
     *(((uint8_t *)&pTx.cmd_type)+2+pTx.data_len) = xor_sum((uint8_t *)&pTx.cmd_type, 2+pTx.data_len);    //bcc    
     R_PUTS((uint8_t *)&pTx, (R_FIX_LEN+R_PATH_DATA_LEN));
-    //R_PUTS("helloabcdefghijklmn\r\n",21);
 }

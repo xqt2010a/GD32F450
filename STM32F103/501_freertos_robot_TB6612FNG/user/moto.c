@@ -9,7 +9,7 @@
 #define SPEED_COUNT_RATE    30      //速度 和 捕获计数值
 #define ARR_VALUE           9999   //自动重装载寄存器的值
 
-static int32_t Vl_last = 0, Vr_last = 0; 
+//static int32_t Vl_last = 0, Vr_last = 0; 
 int32_t Vl, Vr, abs_Vl, abs_Vr, abs_dst_Vl, abs_dst_Vr, abs_cur_Vl, abs_cur_Vr;
 uint8_t com_flag=0;
 
@@ -122,14 +122,12 @@ void Moto_Init(void)
     
     //Moto1_Left_Back();
     //Moto1_Right_Back();
-    
-    
 }
 
 
 int32_t Correct_Count(uint32_t sr, uint32_t sl)    //矫正左右轮运行误差
 {
-    if((ABS_FUC(Protocol_Status.dst.Vl) - ABS_FUC(Protocol_Status.dst.Vr))<5){
+    if((ABS_FUC(Protocol_Status.dst_v.Vl) - ABS_FUC(Protocol_Status.dst_v.Vr))<5){
         return PID_Correct_Len(sr, sl);
     }
     return 0;
@@ -143,94 +141,95 @@ void vTask_Moto(void *p)
     Moto_Init();
     
     while(1){
-        //l_count = Left_Count;
-        //r_count = Right_Count;
-        run_sl = Protocol_Status.run_sl;
-        run_sr = Protocol_Status.run_sr;
-        if(0 != Protocol_Status.dst.Vl){    //left run    
-            com_flag = 0;
-            Vl = 0;
-            abs_dst_Vl = ABS_FUC(Protocol_Status.dst.Vl);
-            abs_cur_Vl = ABS_FUC(Protocol_Status.cur.Vl);
-            
-            if(0 != abs_dst_Vl){
-                Vl = Vl_last + PID_realize_L(abs_dst_Vl, abs_cur_Vl, run_sl)/1000;
-            }
-            Vl += Correct_Count(run_sr, run_sl);
-            abs_Vl = ABS_FUC(Vl);
-            if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
-                abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
-            }
-            if(Protocol_Status.dst.Vl >= 0){
-                if(Vl < 0){
-                    abs_Vl = 0;
-                }         
-                Vl_last = abs_Vl;
-                Moto1_Left_Forword(abs_Vl);
+        if(Protocol_Status.cmd_type){   //有命令
+            run_sl = Protocol_Status.cur_s.l;
+            run_sr = Protocol_Status.cur_s.r;
+            if(0 != Protocol_Status.dst_v.Vl){    //left run    
+                com_flag = 0;
+                Vl = 0;
+                abs_dst_Vl = ABS_FUC(Protocol_Status.dst_v.Vl);
+                abs_cur_Vl = ABS_FUC(Protocol_Status.cur_v.Vl);
+                
+                if(0 != abs_dst_Vl){
+                    Vl = Protocol_Status.last_Vl + PID_realize_L(abs_dst_Vl, abs_cur_Vl, run_sl)/1000;
+                }
+                Vl += Correct_Count(run_sr, run_sl);
+                abs_Vl = ABS_FUC(Vl);
+                if(abs_Vl > SPEED_COUNT_RATE*ARR_VALUE){
+                    abs_Vl = SPEED_COUNT_RATE*ARR_VALUE;
+                }
+                if(Protocol_Status.dst_v.Vl >= 0){
+                    if(Vl < 0){
+                        abs_Vl = 0;
+                    }         
+                    Protocol_Status.last_Vl = abs_Vl;
+                    Moto1_Left_Forword(abs_Vl);
+                }
+                else{
+                    if(Vl < 0){
+                        abs_Vl = 0;
+                    }
+                    Protocol_Status.last_Vl = abs_Vl;
+                    Moto1_Left_Back(abs_Vl);
+                }
             }
             else{
-                if(Vl < 0){
-                    abs_Vl = 0;
-                }
-                Vl_last = abs_Vl;
-                Moto1_Left_Back(abs_Vl);
-            }
-        }
-        else{
-            if(1 == com_flag){
-                vTaskDelay(50/portTICK_RATE_MS);
-                pid_buf[4] = 0x02;      //左
-                memcpy(pid_buf+33,(uint8_t *)&run_sl, 4);
-                Uart_StrSend(pid_buf, PID_BUF_LEN);
-                l_i++;
-                if(l_i>20){
-                    com_flag = 2;
-                    l_i = r_i = 0;
+                if(1 == com_flag){
+                    vTaskDelay(50/portTICK_RATE_MS);
+                    pid_buf[4] = 0x02;      //左
+                    memcpy(pid_buf+33,(uint8_t *)&run_sl, 4);
+                    Uart_StrSend(pid_buf, PID_BUF_LEN);
+                    l_i++;
+                    if(l_i>20){
+                        com_flag = 2;
+                        l_i = r_i = 0;
+                    }
                 }
             }
-        }
-                                                  
-        if(0 != Protocol_Status.dst.Vr){        //right run
-            com_flag = 0;
-            Vr = 0;      
-            abs_dst_Vr = ABS_FUC(Protocol_Status.dst.Vr);
-            abs_cur_Vr = ABS_FUC(Protocol_Status.cur.Vr);
-            if(0 != abs_dst_Vr){
-                Vr = Vr_last + PID_realize_R(abs_dst_Vr, abs_cur_Vr, run_sr)/1000;
-            }
-            abs_Vr = ABS_FUC(Vr);
-            if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
-                abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
-            }
-            if(Protocol_Status.dst.Vr >= 0){
-                if(Vr < 0){
-                    abs_Vr = 0;
+                                                    
+            if(0 != Protocol_Status.dst_v.Vr){        //right run
+                com_flag = 0;
+                Vr = 0;      
+                abs_dst_Vr = ABS_FUC(Protocol_Status.dst_v.Vr);
+                abs_cur_Vr = ABS_FUC(Protocol_Status.cur_v.Vr);
+                if(0 != abs_dst_Vr){
+                    Vr = Protocol_Status.last_Vr + PID_realize_R(abs_dst_Vr, abs_cur_Vr, run_sr)/1000;
                 }
-                Vr_last = abs_Vr;
-                Moto1_Right_Forword(abs_Vr);
+                abs_Vr = ABS_FUC(Vr);
+                if(abs_Vr > SPEED_COUNT_RATE*ARR_VALUE){
+                    abs_Vr = SPEED_COUNT_RATE*ARR_VALUE;
+                }
+                if(Protocol_Status.dst_v.Vr >= 0){
+                    if(Vr < 0){
+                        abs_Vr = 0;
+                    }
+                    Protocol_Status.last_Vr = abs_Vr;
+                    Moto1_Right_Forword(abs_Vr);
+                }
+                else{
+                    if(Vr < 0){
+                        abs_Vr = 0;
+                    }
+                    Protocol_Status.last_Vr = abs_Vr;
+                    Moto1_Right_Back(abs_Vr);
+                }
             }
             else{
-                if(Vr < 0){
-                    abs_Vr = 0;
-                }
-                Vr_last = abs_Vr;
-                Moto1_Right_Back(abs_Vr);
-            }
-        }
-        else{
-            if(1 == com_flag){
-                vTaskDelay(50/portTICK_RATE_MS);
-                pid_buf[4] = 0x01;      //右
-                memcpy(pid_buf+33,(uint8_t *)&run_sr, 4);
-                Uart_StrSend(pid_buf, PID_BUF_LEN);
-                r_i++;
-                if(r_i>20){
-                    com_flag = 2;
-                    r_i = l_i = 0;
+                if(1 == com_flag){
+                    vTaskDelay(50/portTICK_RATE_MS);
+                    pid_buf[4] = 0x01;      //右
+                    memcpy(pid_buf+33,(uint8_t *)&run_sr, 4);
+                    Uart_StrSend(pid_buf, PID_BUF_LEN);
+                    r_i++;
+                    if(r_i>20){
+                        com_flag = 2;
+                        r_i = l_i = 0;
+                    }
                 }
             }
         }
-        
+        //Moto1_Left_Forword(8000*30);
+        //Moto1_Right_Forword(8000*30);
         vTaskDelay(20/portTICK_RATE_MS);
     }
 }
@@ -242,19 +241,15 @@ void vTask_Moto_Stop(void *p)
     while(1){
         flag = 0;       
         
-        if(0 == Protocol_Status.dst.Vl){      //left stop
-            if(0 != Protocol_Status.cur.Vl){
-                Protocol_Status.dst.Vl = 0;
-                //Protocol_Status.cur.Vl = 0;
+        if(0 == Protocol_Status.dst_v.Vl){      //left stop
+            if(0 != Protocol_Status.cur_v.Vl){
                 flag = 1;
                 com_flag = 1;
             }
         }
     
-        if(0 == Protocol_Status.dst.Vr){     //right stop
-            if(0 != Protocol_Status.cur.Vr){
-                Protocol_Status.dst.Vr = 0;
-                //Protocol_Status.cur.Vr = 0;
+        if(0 == Protocol_Status.dst_v.Vr){     //right stop
+            if(0 != Protocol_Status.cur_v.Vr){
                 flag = 1;
                 com_flag = 1;
             }
@@ -262,10 +257,10 @@ void vTask_Moto_Stop(void *p)
         if(1 == flag){                //stop at the same time
             Moto1_Left_Stop();
             Moto1_Right_Stop();
-            Protocol_Status.dst.Vr = 0;
-            Protocol_Status.dst.Vl = 0;
-            Protocol_Status.dst_temp.Vr = 0;
-            Protocol_Status.dst_temp.Vr = 0;
+            Protocol_Status.dst_v.Vr = 0;
+            Protocol_Status.dst_v.Vl = 0;
+            Protocol_Status.dst_temp_v.Vr = 0;
+            Protocol_Status.dst_temp_v.Vr = 0;
         }
     }
 }

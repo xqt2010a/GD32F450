@@ -25,6 +25,8 @@
 #define MIN_SPEED           80000       //最小速度
 #define MAX_SPEED           300000
       
+#define PERIOD_BUFSIZE      20
+
 /* 根据编码器返回的一个脉冲的count,算出当前速度v,注意count单位 
 *   v(c) = PI*L/(N*c) = 3.14*R_CAR_LEN/R_CAR_ENCODER_N/c, 这里c是10的负5次方
 */
@@ -105,14 +107,22 @@ typedef struct{
     uint8_t bcc;
 }Flag_Struct;
 
-//typedef union{
-//    Ctrl_Struct ctrl;   //行走轨迹控制
-//    Path_Struct path;   //底盘轨迹反馈
-//}Data_Struct;
 typedef struct{
     int Vr;
     int Vl;
 }Speed_Struct;
+
+typedef struct{
+    uint32_t r;
+    uint32_t l;
+}U32RL_Struct;
+
+typedef struct{     //定时器捕获时间
+    uint16_t buf_r[PERIOD_BUFSIZE];
+    uint16_t buf_l[PERIOD_BUFSIZE];
+    uint8_t index_r;
+    uint8_t index_l;
+}Capture_Struct;
 
 typedef struct{
     uint16_t header;
@@ -132,30 +142,24 @@ typedef struct{
 
 typedef struct{
     uint8_t cmd_type;
-    uint8_t bcc_flag;   //1:off 0:on
-    int v;  //down cmd 
-    int w;  //down cmd 
-    int Sr; //down cmd  单位 um
-    int Sl; //down cmd  单位 um
-    uint32_t run_sl;    //行走距离
-    uint32_t run_sr;  
-    
-    uint32_t count_r;   //用于电机停止
-    uint32_t count_l;   
+    uint8_t bcc_flag;           //1:off 0:on
+    int v;                      //down cmd 
+    int w;                      //down cmd 
+    int last_Vl;                //记录上一次的 Vl
+    int last_Vr; 
+    U32RL_Struct count;         //记录左右轮运行count
+    U32RL_Struct dst_s;         //目的行走距离
+    U32RL_Struct cur_s;         //当前行走距离
+    U32RL_Struct num;           //记录上报帧数
 
-    Path_Struct path;   //底盘轨迹反馈
-    Mode_Struct mode;   //模式切换
-    Speed_Struct cur;   //当前速度
-    Speed_Struct dst;   //目的速度
-    Speed_Struct dst_temp;  //临时存储
-    
+    Path_Struct path;           //底盘轨迹反馈
+    Mode_Struct mode;           //模式切换
+    Speed_Struct cur_v;         //当前速度
+    Speed_Struct dst_v;         //目的速度
+    Speed_Struct dst_temp_v;    //临时存储
+    Capture_Struct cap;         //捕获左右轮脉冲时间
 }Protocol_Status_Struct;
 
-extern uint32_t Right_Num;
-extern uint32_t Left_Num;
-
-extern uint32_t Right_Count;
-extern uint32_t Left_Count;
 
 extern Protocol_Status_Struct Protocol_Status;
 

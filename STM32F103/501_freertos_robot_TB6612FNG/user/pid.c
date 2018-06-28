@@ -29,16 +29,16 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式
     increment = PID_KP_R*(err - err_t1) + PID_KI_R*err + PID_KD_R*(err - 2*err_t1 + err_t2);
     //calc = cur_v + increment/1000;
     pid_buf[4] = 0x01;      //右
-    memcpy(pid_buf+5, (uint8_t *)&Right_Num, 4);
-    memcpy(pid_buf+9, (uint8_t *)&Protocol_Status.dst.Vr, 4);
-    memcpy(pid_buf+13, (uint8_t *)&Protocol_Status.cur.Vr, 4);
+    memcpy(pid_buf+5, (uint8_t *)&Protocol_Status.num.r, 4);
+    memcpy(pid_buf+9, (uint8_t *)&Protocol_Status.dst_v.Vr, 4);
+    memcpy(pid_buf+13, (uint8_t *)&Protocol_Status.cur_v.Vr, 4);
     memcpy(pid_buf+17, (uint8_t *)&err, 4);
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
     memcpy(pid_buf+33,(uint8_t *)&count, 4);
     Uart_StrSend(pid_buf, PID_BUF_LEN);
-    Right_Num++;
+    Protocol_Status.num.r++;
     
     err_t2 = err_t1;
     err_t1 = err;
@@ -55,16 +55,16 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式
     increment = PID_KP_L*(err - err_t1) + PID_KI_L*err + PID_KD_L*(err - 2*err_t1 + err_t2);
     //calc = cur_v + increment/1000;
     pid_buf[4] = 0x02;      //左
-    memcpy(pid_buf+5, (uint8_t *)&Left_Num, 4);
-    memcpy(pid_buf+9, (uint8_t *)&Protocol_Status.dst.Vl, 4);
-    memcpy(pid_buf+13,(uint8_t *)&Protocol_Status.cur.Vl, 4);
+    memcpy(pid_buf+5, (uint8_t *)&Protocol_Status.num.l, 4);
+    memcpy(pid_buf+9, (uint8_t *)&Protocol_Status.dst_v.Vl, 4);
+    memcpy(pid_buf+13,(uint8_t *)&Protocol_Status.cur_v.Vl, 4);
     memcpy(pid_buf+17, (uint8_t *)&err, 4);
     memcpy(pid_buf+21, (uint8_t *)&err_t1, 4);
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
     memcpy(pid_buf+33,(uint8_t *)&count, 4);
     Uart_StrSend(pid_buf, PID_BUF_LEN);
-    Left_Num++;
+    Protocol_Status.num.l++;
     
     err_t2 = err_t1;
     err_t1 = err;
@@ -79,7 +79,6 @@ int32_t PID_Correct_Len(uint32_t dst, uint32_t cur)
 
     err = dst - cur;
     err /= 392;
-    //PRT("err:%d, %d %d\r\n", err, dst, cur);
     calc = PID_KP_C*(err-err_t1) + PID_KI_C*err + PID_KD_C*(err-2*err_t1+err_t2);
     err_t2 = err_t1;
     err_t1 = err;
