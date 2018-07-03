@@ -4,6 +4,8 @@
 #include "stdint.h"
 #include "uart.h"
 
+#define ROBOT_DEBUG         0
+
 #define R_PUTS(pbuf, len)   Uart_StrSend(pbuf, len)
 
 #define R_CMD_HEADER        0x3AA3

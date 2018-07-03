@@ -37,7 +37,9 @@ int32_t PID_realize_R(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
     memcpy(pid_buf+33,(uint8_t *)&count, 4);
+#if ROBOT_DEBUG
     Uart_StrSend(pid_buf, PID_BUF_LEN);
+#endif  /* ROBOT_DEBUG */
     Protocol_Status.num.r++;
     
     err_t2 = err_t1;
@@ -63,7 +65,9 @@ int32_t PID_realize_L(int32_t dst_v, int32_t cur_v, uint32_t count)     //增量式
     memcpy(pid_buf+25,(uint8_t *)&err_t2, 4);
     memcpy(pid_buf+29,(uint8_t *)&increment, 4);
     memcpy(pid_buf+33,(uint8_t *)&count, 4);
+#if ROBOT_DEBUG
     Uart_StrSend(pid_buf, PID_BUF_LEN);
+#endif  /* ROBOT_DEBUG */
     Protocol_Status.num.l++;
     
     err_t2 = err_t1;

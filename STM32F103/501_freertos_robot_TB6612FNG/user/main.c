@@ -29,7 +29,11 @@ void main(void)
     xTaskCreate(vUart_Task,"Uart_Task",200,NULL,1,NULL); 
     xTaskCreate(vTask_Moto,"Moto",200,NULL,1,NULL); 
     xTaskCreate(vTask_Moto_Stop,"Moto_Stop",100,NULL,1,NULL); 
-    //xTaskCreate(vReport_Task,"Report_Task",50,NULL,1,NULL);
+#if ROBOT_DEBUG
+
+#else
+    xTaskCreate(vReport_Task,"Report_Task",50,NULL,1,NULL);
+#endif  /* ROBOT_DEBUG */
     vTaskStartScheduler(); 
     while(1){
     

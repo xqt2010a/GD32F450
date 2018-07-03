@@ -178,7 +178,9 @@ void vTask_Moto(void *p)
                     vTaskDelay(50/portTICK_RATE_MS);
                     pid_buf[4] = 0x02;      //×ó
                     memcpy(pid_buf+33,(uint8_t *)&run_sl, 4);
+#if ROBOT_DEBUG
                     Uart_StrSend(pid_buf, PID_BUF_LEN);
+#endif /* ROBOT_DEBUG */
                     l_i++;
                     if(l_i>20){
                         com_flag = 2;
@@ -219,7 +221,9 @@ void vTask_Moto(void *p)
                     vTaskDelay(50/portTICK_RATE_MS);
                     pid_buf[4] = 0x01;      //ÓÒ
                     memcpy(pid_buf+33,(uint8_t *)&run_sr, 4);
+#if ROBOT_DEBUG
                     Uart_StrSend(pid_buf, PID_BUF_LEN);
+#endif  /* ROBOT_DEBUG */
                     r_i++;
                     if(r_i>20){
                         com_flag = 2;
