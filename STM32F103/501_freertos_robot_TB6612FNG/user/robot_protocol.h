@@ -17,9 +17,9 @@
 
 #define R_REPORT_TIME       40      //40ms上报
 
-#define R_CAR_WIDE          234000//237     //车身宽度，即两个轮子间距（mm）
-#define R_CAR_LEN_R         70600//70530      //轮子直径70.5mmm
-#define R_CAR_LEN_L         71080//71000         
+#define R_CAR_WIDE          255000//234000//237     //车身宽度，即两个轮子间距（mm）
+#define R_CAR_LEN_R         69419//70600//70530      //轮子直径70.5mmm
+#define R_CAR_LEN_L         69865//71080//71000         
 #define R_CAR_ENCODER_N     563     //563/2     //转一圈 563 脉冲
 #define R_CAR_PI            314
 
@@ -33,8 +33,8 @@
 *   v(c) = PI*L/(N*c) = 3.14*R_CAR_LEN/R_CAR_ENCODER_N/c, 这里c是10的负5次方
 */
 
-#define R_CAR_GET_Vl(count)  39643197/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
-#define R_CAR_GET_Vr(count)  39375489/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
+#define R_CAR_GET_Vl(count)  38965560/(count)//39643197/(count)//((R_CAR_PI)*(R_CAR_LEN_L)*1000/(R_CAR_ENCODER_N*count)) //39623801 --- 71
+#define R_CAR_GET_Vr(count)  38716813/(count)//39375489/(count)//((R_CAR_PI)*(R_CAR_LEN_R)*1000/(R_CAR_ENCODER_N*count))         //(39040852/(count))  ---- 70    //单位 um/s
 #define R_CAR_Vr(v,w)       ((v)+((w)*R_CAR_WIDE)/2000)    //右轮速度
 #define R_CAR_Vl(v,w)       ((v)-((w)*R_CAR_WIDE)/2000)    //左轮速度
 
