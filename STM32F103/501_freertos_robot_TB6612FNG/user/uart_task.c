@@ -26,7 +26,7 @@ void vUart_Task(void *p)
     while(1){
         if(Uart_Sta_Rx){
             vTaskDelay(10/portTICK_RATE_MS);    //10ms ,115200, 14.4B/s
-            USART_ITConfig(USART1,USART_IT_RXNE,DISABLE);    //关闭串口接收中断
+            //USART_ITConfig(USART1,USART_IT_RXNE,DISABLE);    //关闭串口接收中断
             
             EncodeProcess(Uart_Buf_Rx);
             
@@ -34,7 +34,7 @@ void vUart_Task(void *p)
                 
             Uart_Sta_Rx = 0;
             Uart_Index_Rx = 0;
-            USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);    //打开串口接收中断
+            //USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);    //打开串口接收中断
         }
     }
 }
