@@ -5,7 +5,7 @@ typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char uint8_t;
 
-#define UART_CLK 22000000  //22M
+#define UART_CLK 11000000  //22M
 
 #define UART0_BASE         0x3ff24000
 #define UART1_BASE         0x3ff25000

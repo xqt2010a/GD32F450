@@ -10,7 +10,7 @@
         MODULE  ?cstartup
 
         ;; Forward declaration of sections.
-        SECTION CSTACK:DATA:NOROOT(3)
+        SECTION CSTACK:DATA:NOROOT(2)
 
         SECTION .intvec:CODE:NOROOT(2)
 
