@@ -1,5 +1,7 @@
 #include "jx_uart.h"
 #include "stdio.h"
+#include "ddr.h"
+
 
 #define JX_W4(x)    (*(unsigned int *)(x))
 
@@ -27,14 +29,14 @@ void smu_init(void)
     JX_W4(0x0190d124) = 0xFFFFFFFF;
     
 	/* Delay for somewhile to wait reset de-assertion to be stable. */
-	udelay(10000);
+	udelay(1000);
 }
 
 void main(void)
 {
     smu_init();
-    
-    uart_init(115200);
-    printf("hello world!\r\n");
+    ddr_init();
+    //uart_init(115200);
+    //printf("hello world!\r\n");
     while(1);
 }

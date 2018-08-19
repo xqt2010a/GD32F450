@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>uart.bin</state>
+          <state>ddr.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1898,6 +1898,12 @@
   </group>
   <group>
     <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\user\dv_ddr_code.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\lpddr4_init.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
     </file>
