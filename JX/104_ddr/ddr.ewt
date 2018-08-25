@@ -2101,14 +2101,14 @@
   <group>
     <name>jx</name>
     <file>
-      <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>
   <group>
     <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\user\ddr_test.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\user\dv_ddr_code.c</name>
     </file>
@@ -2117,6 +2117,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\phy_init.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\uart.c</name>
     </file>
   </group>
   <file>

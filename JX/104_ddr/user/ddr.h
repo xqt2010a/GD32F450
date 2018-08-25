@@ -1,6 +1,12 @@
 #ifndef __DDRC_H__
 #define __DDRC_H__
 
+typedef unsigned int u32;
+typedef unsigned short u16;
+typedef unsigned char u8;
+
+#define debug(...)
+
 #define reg32_write(addr, val)  ((*((volatile unsigned int *) (addr))) = (val))
 #define reg32_read(addr)        (*((volatile unsigned int *) (addr)))
 #define reg16_write(addr, val)  ((*((volatile unsigned short *) (addr))) = (val))
@@ -26,11 +32,17 @@
 #define IMEM_OFFSET_ADDR        0x00050000
 #define DMEM_OFFSET_ADDR        0x00054000
 
+#define TRAIN_1D	(1)
+#define TRAIN_2D	(2)
+
 typedef enum  {
 	FW_1D_IMAGE=0,
 	FW_2D_IMAGE,
 }fw_type;
 
 void ddr_init(void);
-
+void set_ddrc_freq(u32 freq_MHZ);
+void WritePIECode(void);
+int ddr_load_train_code_jtag(u8 num);
+void ddrphy_apb_wr(unsigned long addr, unsigned long val);
 #endif
