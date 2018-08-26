@@ -42,7 +42,7 @@ void main(void)
     printf("start ddr init\n");
     ddr_init();
 
-    //ddr_order();
+    ddr_order();
     ddr_rand();
     while(1);
 }

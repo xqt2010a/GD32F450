@@ -215,7 +215,7 @@ void dram_controller_cfg(void)
 	reg32_write(DDRC_BASE_REG(0x210), 0x00001F1F);  //Ryan: ADDRMAP4         
 	reg32_write(DDRC_BASE_REG(0x214), 0x07070707);  //Ryan: ADDRMAP5         
 	//reg32_write(DDRC_BASE_REG(0x218), 0x0f070707);  //Ryan: ADDRMAP6         
-	reg32_write(DDRC_BASE_REG(0x218), 0x0f080707);           
+	reg32_write(DDRC_BASE_REG(0x218), 0x07070707);  //解决1G分成两部分的bug         
 	reg32_write(DDRC_BASE_REG(0x21C), 0x0000000F);  //Ryan: ADDRMAP7         
 	reg32_write(DDRC_BASE_REG(0x224), 0x07070707);  //Ryan: ADDRMAP9         
 	reg32_write(DDRC_BASE_REG(0x228), 0x07070707);  //Ryan: ADDRMAP10          
