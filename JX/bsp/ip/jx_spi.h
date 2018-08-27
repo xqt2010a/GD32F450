@@ -10,7 +10,7 @@ extern "C" {
 #define SPI_BASE2   0x3ff22000
 #define SPI_BASE3   0x3ff23000
     
-#define SSIM1_BASE   SPI_BASE3
+#define SSIM1_BASE   SPI_BASE0
     
 /* ------------------------  SSIM1 REG DEF ---------------------------------  */
 #define SSIM1_CTRLR0    		 (*(volatile unsigned long*)(SSIM1_BASE + 0x00))   	//Control Register 0
