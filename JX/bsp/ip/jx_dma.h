@@ -20,7 +20,8 @@
 #define DMA_CHy_SAR(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x00)) // y = 1 to 8
 #define DMA_CHy_DAR(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x08))
 #define DMA_CHy_BLK_TS(x,y)         (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x10))
-#define DMA_CHy_CTL(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x18))
+#define DMA_CHy_CTL_L(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x18))
+#define DMA_CHy_CTL_H(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x1C))
 #define DMA_CHy_CFG_L(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x20))
 #define DMA_CHy_CFG_H(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x24))
 #define DMA_CHy_LLP(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x28))
