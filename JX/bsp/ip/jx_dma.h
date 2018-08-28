@@ -20,8 +20,9 @@
 #define DMA_CHy_SAR(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x00)) // y = 1 to 8
 #define DMA_CHy_DAR(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x08))
 #define DMA_CHy_BLK_TS(x,y)         (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x10))
-#define DMA_CHy_CTL(x,y)            (*(volatile unsigned long long*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x18))
-#define DMA_CHy_CFG(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x20))
+#define DMA_CHy_CTL(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x18))
+#define DMA_CHy_CFG_L(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x20))
+#define DMA_CHy_CFG_H(x,y)          (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x24))
 #define DMA_CHy_LLP(x,y)            (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x28))
 #define DMA_CHy_STATUS(x,y)         (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x30))
 #define DMA_CHy_SWHSSRC(x,y)        (*(volatile unsigned int*)(DMA_BASE + 0x1000*(x) + 0x100*(y) + 0x38))
@@ -86,5 +87,7 @@ typedef struct{
     uint32_t    src;    //source address
     uint32_t    len;    //
 } DMA_Struct;
+
+void dma_m2m(DMA_Struct *dma_s);
 
 #endif  /* __JX_DMA_H__ */
