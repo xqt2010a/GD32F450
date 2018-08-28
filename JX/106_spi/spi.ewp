@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>uart.bin</state>
+          <state>spi.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1890,7 +1890,7 @@
   <group>
     <name>jx</name>
     <file>
-      <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_spi.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
@@ -1898,6 +1898,9 @@
   </group>
   <group>
     <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\user\gd25q64.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
     </file>

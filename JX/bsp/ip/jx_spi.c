@@ -28,14 +28,18 @@ void SPI_Read_ID(void)
 {
     unsigned int data;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x08)) = 0;
-    (*(volatile unsigned long*)(SSIM1_BASE + 0x00)) = 0x11f0100;
+    (*(volatile unsigned long*)(0x3fe09004)) = 0xff000000;  //add
+    (*(volatile unsigned long*)(SSIM1_BASE + 0x00)) = 0x011f0100;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x04)) = 8;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x14)) = 4;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x18)) = 4;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x1c)) = 4;
-    (*(volatile unsigned long*)(SSIM1_BASE + 0x2c)) = 0x1f;
+    (*(volatile unsigned long*)(SSIM1_BASE + 0x2c)) = 0x1f;    
     (*(volatile unsigned long*)(SSIM1_BASE + 0x10)) = 1;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x08)) = 1;
+    (*(volatile unsigned long*)(SSIM1_BASE + 0x18)) = 4;
+    (*(volatile unsigned long*)(SSIM1_BASE + 0x1c)) = 4;
+    (*(volatile unsigned long*)(SSIM1_BASE + 0x2c)) = 0x1f;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x14131211;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x18171615;
     (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x1c1b1a19;

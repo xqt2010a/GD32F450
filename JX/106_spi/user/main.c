@@ -1,6 +1,8 @@
-#include "jx_uart.h"
+#include "jx_spi.h"
+#include "gd25q64.h"
 #include "stdio.h"
 
+#define LENTH  270
 #define JX_W4(x)    (*(unsigned int *)(x))
 
 void udelay(unsigned int t)
@@ -27,14 +29,40 @@ void smu_init(void)
     JX_W4(0x0190d124) = 0xFFFFFFFF;
     
 	/* Delay for somewhile to wait reset de-assertion to be stable. */
-	udelay(10000);
+	//udelay(10000);
 }
 
 void main(void)
 {
-    smu_init();
+    uint32_t i, FlashID ;	
+	uint8_t wBuf[LENTH];
+	uint8_t rBuf[LENTH];
     
-    uart_init(115200);
-    printf("hello world!\r\n");
+    smu_init();
+    //SPIM1_Init();
+    SPI_Read_ID();
+    for(i=0; i<LENTH; i++){
+		wBuf[i] = 0xA5; //dummy byte
+		rBuf[i] = 0;
+	}
+    
+	FlashID = SPIM1_Flash_Read_ID();
+
+	SPIM1_Flash_Page_Read(rBuf, 0, 6);
+
+	SPIM1_Flash_Erase(FLASH_SE, 0x001030);
+	
+	SPIM1_Flash_Page_Read(rBuf, 0x001000, 256);
+	
+	for(i=0; i<1024; i++)
+	{
+	  	uint8_t j;
+		j = i % 256;
+		wBuf[i]=j;
+	}
+	SPIM1_Flash_Page_Write(wBuf, 0x001000, 256);
+	
+	SPIM1_Flash_Page_Read(rBuf, 0x001000, 256);
+    FlashID = FlashID;
     while(1);
 }
