@@ -87,7 +87,7 @@ typedef struct
 //void SPI_Init(SPI_InitTypeDef* SPI_InitStruct);
 void SPIM1_Init(void);
 /* Data transfers functions ***************************************************/
-void SPI_Read_ID(void);
+int SPI_Read_ID(void);
 void SPIM1_Write_Read(uint8_t * wBuf, uint32_t wLen, uint8_t * rBuf, uint32_t rLen);
 
 #ifdef __cplusplus

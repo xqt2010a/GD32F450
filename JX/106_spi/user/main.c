@@ -39,7 +39,7 @@ void main(void)
 	uint8_t rBuf[LENTH];
     
     smu_init();
-    //SPIM1_Init();
+    SPIM1_Init();
     SPI_Read_ID();
     for(i=0; i<LENTH; i++){
 		wBuf[i] = 0xA5; //dummy byte
