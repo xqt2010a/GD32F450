@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>uart.bin</state>
+          <state>dma.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1889,6 +1889,9 @@
   </configuration>
   <group>
     <name>jx</name>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_dma.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
     </file>
