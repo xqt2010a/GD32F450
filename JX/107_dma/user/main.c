@@ -31,8 +31,8 @@ void smu_init(void)
 	udelay(10000);
 }
 
-unsigned char Dst_buf[32]="hello world ! code by labc.";
-unsigned char Src_buf[32];
+unsigned char Src_buf[64]="hello world ! code by labc.hhhhhhsghgsgdsjagjgfjagfa";
+unsigned char Dst_buf[64];
 
 void main(void)
 {
@@ -41,7 +41,7 @@ void main(void)
     dma_s.dma = DMA0;
     dma_s.ch = CH1;
     dma_s.width = WIDTH_8;
-    dma_s.size = SIZE_8;
+    dma_s.size = SIZE_1024;
     dma_s.dst = (uint32_t)Dst_buf;
     dma_s.src = (uint32_t)Src_buf;
     dma_s.len = 2;
