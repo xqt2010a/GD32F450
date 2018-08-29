@@ -40,7 +40,7 @@ void main(void)
     DMA_Struct dma_s;
     dma_s.dma = DMA0;
     dma_s.ch = CH1;
-    dma_s.width = WIDTH_16;
+    dma_s.width = WIDTH_8;
     dma_s.size = SIZE_8;
     dma_s.dst = (uint32_t)Dst_buf;
     dma_s.src = (uint32_t)Src_buf;
