@@ -10,7 +10,7 @@ void dma_m2m(DMA_Struct *dma_s)
     DMA_CHy_SAR(dma_s->dma, dma_s->ch) = dma_s->src;
     DMA_CHy_DAR(dma_s->dma, dma_s->ch) = dma_s->dst;
     
-    DMA_CHy_BLK_TS(dma_s->dma, dma_s->ch) = dma_s->len;
+    DMA_CHy_BLK_TS(dma_s->dma, dma_s->ch) = dma_s->len;     //max = 1024*1024*4 = 4M
     
     DMA_CHy_CTL_L(dma_s->dma, dma_s->ch) = (dma_s->width << 8)|(dma_s->width << 11)|    //src and dst addr increment
                                     (dma_s->size<<14)|(dma_s->size << 18);   //set SAR/DAR

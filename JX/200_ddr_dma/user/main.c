@@ -3,6 +3,7 @@
 #include "ddr_test.h"
 #include "uart.h"
 #include "lpddr4_init_training_pass.h"
+#include "ddr_dma_test.h"
 
 
 #define JX_W4(x)    (*(unsigned int *)(x))
@@ -42,7 +43,8 @@ void main(void)
     printf("start ddr init\n");
     ddr_init();
 
-    ddr_order();
-    ddr_rand();
+    //ddr_order();
+    //ddr_rand();
+    ddr_dma_test(0x12345678);
     while(1);
 }

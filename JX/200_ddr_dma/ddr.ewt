@@ -2101,11 +2101,17 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_dma.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>
   <group>
     <name>user</name>
+    <file>
+      <name>$PROJ_DIR$\user\ddr_dma_test.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\user\ddr_test.c</name>
     </file>

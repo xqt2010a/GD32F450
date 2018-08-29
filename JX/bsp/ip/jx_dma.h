@@ -3,6 +3,8 @@
 
 #include "stdint.h"
 
+#define DMA_STRUCT_FLAG     0
+
 #define DMA_BASE        0x0190E000
 #define DMA0_BASE       (DMA_BASE)
 #define DMA1_BASE       (DMA_BASE + 0x1000)
@@ -63,7 +65,7 @@ typedef enum {
     WIDTH_32  = 0x2,
     WIDTH_64  = 0x3,
     WIDTH_128 = 0x4,
-    WIDTH_256 = 0x5,
+    WIDTH_256 = 0x5,    //max
     WIDTH_512 = 0x6
 } WIDTHn;
 
@@ -80,6 +82,7 @@ typedef enum {
     SIZE_1024    = 0x9
 } SIZEn;
 
+#if DMA_STRUCT_FLAG
 typedef struct{
     DMAn        dma;
     CHn         ch;
@@ -89,6 +92,20 @@ typedef struct{
     uint32_t    src;    //source address
     uint32_t    len;    //
 } DMA_Struct;
+
+#else
+
+typedef struct{
+    unsigned char   dma;
+    unsigned char   ch;
+    unsigned char   width;
+    unsigned char   size;
+    uint32_t        dst;    //destination address
+    uint32_t        src;    //source address
+    uint32_t        len;    //
+} DMA_Struct;
+
+#endif
 
 void dma_m2m(DMA_Struct *dma_s);
 

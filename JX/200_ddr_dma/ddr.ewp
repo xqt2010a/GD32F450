@@ -587,7 +587,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>2</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -595,7 +595,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>ddr.bin</state>
+          <state>ddr.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1891,13 +1891,22 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_dma.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>
   <group>
     <name>user</name>
     <file>
+      <name>$PROJ_DIR$\user\ddr_dma_test.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\user\ddr_test.c</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
     </file>
     <file>
       <name>$PROJ_DIR$\user\dv_ddr_code.c</name>
