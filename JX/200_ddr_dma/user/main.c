@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "ddr.h"
 #include "ddr_test.h"
-#include "uart.h"
+#include "jx_uart.h"
 #include "lpddr4_init_training_pass.h"
 #include "ddr_dma_test.h"
 
@@ -39,12 +39,14 @@ void main(void)
 {
     smu_init();
     set_ddrc_freq(800); //before other device setting
-    uart_init(UART_PARITY_NONE, UART_STOPBITS_1, UART_DATABITS_8, UART_BD_115200);
+    //uart_init(UART_PARITY_NONE, UART_STOPBITS_1, UART_DATABITS_8, UART_BD_115200);
+    uart_init(115200);
     printf("start ddr init\n");
     ddr_init();
 
     //ddr_order();
     //ddr_rand();
-    ddr_dma_test(0x12345678);
+    //ddr_dma_test(0x12345678);
+    ddr_dma_test_fixed();
     while(1);
 }

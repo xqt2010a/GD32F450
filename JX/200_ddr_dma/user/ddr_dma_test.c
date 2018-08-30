@@ -4,7 +4,8 @@
 #include "stdio.h"
 
 #define DDR_DMA_SEED    0x12345678
-#define DDR_WR_BYTE(x)   (*(volatile unsigned char*)(x))
+#define DDR_WR_BYTE(x)  (*(volatile unsigned char*)(x))
+#define DDR_WR_W4(x)    (*(volatile unsigned int*)(x))
 #define WIDTH_N(x)      (1<<(3+x))
 
 uint32_t Dst_Base[] = {0x80000000, 0x88000000, 0x90000000, 0x98000000};
@@ -59,4 +60,31 @@ void ddr_dma_test(uint32_t seed)
     printf("%d",DMA_CHy_STATUS(dma_s.dma, dma_s.ch)&0x3FFFFF);
     ddr_read(seed, dma_s.dst, bytes);
 }
-    
+
+void ddr_write_w4(uint32_t addr, uint32_t len)
+{
+    uint32_t i;
+    for(i=0; i<len; i++){
+        DDR_WR_W4(addr+i*4) = i;
+    }
+}
+
+void ddr_dma_test_fixed(void)
+{
+    unsigned int i;
+    DMA_Struct dma_s;
+    dma_s.dma = 0;
+    dma_s.ch = 1;
+    dma_s.width = 5;
+    dma_s.size = SIZE_1024;
+    dma_s.dst = 0x80000000;
+    dma_s.src = 0xa0000000;
+    dma_s.len = 0x3FFFFF;
+    ddr_write_w4(dma_s.src, 0x4000000); //256M
+    dma_m2m(&dma_s);
+    while(1){
+        printf("0x%x\r\n",DMA_CHy_STATUS(dma_s.dma, dma_s.ch)&0x3FFFFF);
+        
+        for(i=0; i<0xFFFFFF; i++);
+    }
+}

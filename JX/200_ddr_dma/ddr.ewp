@@ -1894,6 +1894,9 @@
       <name>$PROJ_DIR$\..\bsp\ip\jx_dma.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>
@@ -1922,6 +1925,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\user\uart.c</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
     </file>
   </group>
   <file>
