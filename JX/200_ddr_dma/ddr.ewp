@@ -1903,13 +1903,7 @@
   <group>
     <name>user</name>
     <file>
-      <name>$PROJ_DIR$\user\ddr_dma_test.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\user\ddr_test.c</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
     </file>
     <file>
       <name>$PROJ_DIR$\user\dv_ddr_code.c</name>
@@ -1922,12 +1916,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\user\phy_init.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\user\uart.c</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
     </file>
   </group>
   <file>

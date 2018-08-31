@@ -1,10 +1,8 @@
 #ifndef __DDR_TEST_H__
 #define __DDR_TEST_H__
 
-extern void ddr_order_discontinuous(void);
-extern void ddr_rand_discontinuous(void);
-
-extern void ddr_order(void);
-extern void ddr_rand(void);
+void ddr_cpu_test(void);
+void ddr_dma_test(void);
+void ddr_dma_OutOfOrder_test(void);
 
 #endif  /* __DDR_TEST_H__ */
