@@ -1,6 +1,8 @@
 #ifndef __JX_INT_H__
 #define __JX_INT_H__
 
+#include "stdint.h"
+
 #define CPU_BASE        0xF00000
 
 #define INT_ICPICR      (CPU_BASE+0x100)

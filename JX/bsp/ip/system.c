@@ -10,7 +10,7 @@ static void udelay(unsigned int t)
     }
 }
 
-static void smu_init(void)
+void smu_init(void)
 {
     JX_WR4(0x3FE08100) = 0xFFFFFFFF;
     JX_WR4(0x3FE08100) = 0xFFFFFFFF;
@@ -66,7 +66,7 @@ static void smu_ddr_freq(unsigned int freq_MHZ)
 
 void SystemInit (void)
 {
-    smu_init();
+    //smu_init();
     smu_ddr_freq(800);
 }
 

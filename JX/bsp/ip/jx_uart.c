@@ -10,11 +10,6 @@ void uart_init(unsigned int bd)
 	UART_DLH(UART0_BASE)  = (uint8_t)(((((UART_CLK/bd)/16)&0xFF00)>>8)&0xFF);  // 00
 	UART_LCR(UART0_BASE) &= (~0x80);  // the DLAB = 0
 	UART_LCR(UART0_BASE) |= 0x03;  // none, 0, 8 
-    asm("nop");
-    asm("nop");
-    asm("nop");
-    asm("nop");asm("nop");
-    asm("nop");asm("nop");asm("nop");
 }
 
 void uart_tx(uint16_t Data)

@@ -1,4 +1,5 @@
 #include "jx_int.h"
+#include <intrinsics.h>
 
 #define INT_WR(x)   (*(volatile unsigned int *)(x))
 #define INT_NUM     256
@@ -73,4 +74,24 @@ int IRQ_Register(unsigned int irqnum, void f(void))
     IRQ_HandleFunc[irqnum] = f;
     IRQ_SetNum(irqnum);
     return 0;
+}
+
+uint32_t IRQ_GetID(void)
+{
+    uint32_t id;
+    id = INT_WR(INT_ICCIAR);
+    id = id & 0x3FF;
+    return id;
+}
+
+void IRQ_Handler(void)
+{
+    uint32_t id;
+    id = IRQ_GetID();
+    IRQ_HandleFunc[id]();
+    INT_WR(INT_ICCEOIR) = id;   //end of interrupt register
+    /* Ensure the write takes before re-enabling interrupts. */
+	__DSB();
+	__ISB();
+    __enable_irq();
 }
