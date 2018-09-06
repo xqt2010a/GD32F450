@@ -32,6 +32,7 @@
         EXTERN  IRQ_Handler
         EXTERN  FIQ_Handler
         EXTERN  SystemInit
+        EXTERN  LowLevelInit
 
         DATA
         
@@ -123,29 +124,34 @@ __iar_program_start:
 #define SVC_MODE 0x13            ; Supervisor mode
 #define ABT_MODE 0x17            ; Abort mode
 #define UND_MODE 0x1B            ; Undefined Instruction mode
-#define SYS_MODE 0x1F            ; System mode        
- 
- 
-        MRS     r0, cpsr                ; Original PSR value
+#define SYS_MODE 0x1F            ; System mode   
 
+#define FIQ_BIT  0x40
+#define IRQ_BIT  0x80
+ 
+        /* Remap */
+        /* Set V=0 in CP15 SCTLR register - for VBAR to point to vector */
+        mrc	p15, 0, r0, c1, c0, 0   ;	@ Read CP15 SCTLR Register
+        bic	r0, r0, #0x00002000     ;	@ clear bits 13 (--V-)  
+        mcr	p15, 0, r0, c1, c0, 0   ;	@ Write CP15 SCTLR Register
+        /* Set vector address in CP15 VBAR register */
+        ldr r0, =0x80000
+        mcr	p15, 0, r0, c12, c0, 0  ;	@Set VBAR
+        
         ;; Set up the interrupt stack pointer.
-
-        BIC     r0, r0, #MODE_MSK       ; Clear the mode bits
-        ORR     r0, r0, #IRQ_MODE       ; Set IRQ mode bits
-        MSR     cpsr_c, r0              ; Change the mode
-        LDR     sp, =SFE(IRQ_STACK)     ; End of IRQ_STACK
-        BIC     sp,sp,#0x7              ; Make sure SP is 8 aligned
+        MSR     cpsr_c, #IRQ_MODE | IRQ_BIT | FIQ_BIT ;change IRQ mode and disable IRQ & FIQ
+        LDR     sp, =SFE(IRQ_STACK)         ; End of IRQ_STACK
+        BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
 
         ;; Set up the fast interrupt stack pointer.
-
-        BIC     r0, r0, #MODE_MSK       ; Clear the mode bits
-        ORR     r0, r0, #FIQ_MODE       ; Set FIR mode bits
-        MSR     cpsr_c, r0              ; Change the mode
-        LDR     sp, =SFE(FIQ_STACK)     ; End of FIQ_STACK
-        BIC     sp,sp,#0x7              ; Make sure SP is 8 aligned
-
-        ;; Set up the normal stack pointer.
-
+        MSR     cpsr_c, #FIQ_MODE | IRQ_BIT | FIQ_BIT ;change FIQ_MODE and disable IRQ & FIQ
+        LDR     sp, =SFE(FIQ_STACK)         ; End of FIQ_STACK
+        BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
+        
+		/* Back to Supervisor mode bfore calling main().  The schduduler should
+		be started from Supervisor mode. */
+        ;MSR     cpsr_c, #0x13 | 0x40              ; Change the mode
+        MRS     r0, cpsr                ; Original PSR value
         BIC     r0 ,r0, #MODE_MSK       ; Clear the mode bits
         ORR     r0 ,r0, #SYS_MODE       ; Set System mode bits
         MSR     cpsr_c, r0              ; Change the mode
@@ -163,6 +169,7 @@ __iar_program_start:
 ;;; Add more initialization here        
         LDR     R0, = SystemInit
         BLX     R0
+        
 ;;; Continue to __cmain for C-level initialization.
 
           FUNCALL __iar_program_start, __cmain

@@ -5,14 +5,13 @@
 
 void uart_irq(void)
 {
-
+    
 }
 
 void main(void)
-{ 
-    SystemInit();
+{
     IRQ_Init();
-    IRQ_Register(1, uart_irq);
+    IRQ_Register(110, uart_irq);
     uart_init(115200);
     printf("hello world!\r\n");
     while(1);

@@ -58,12 +58,15 @@ void IRQ_SetNum(unsigned int irqnum)
 
 void IRQ_Init(void)
 {
-    unsigned char i;
+    unsigned int i;
     INT_WR(INT_ICDDCR) = 0;     //clear Distributor Control Register
     INT_WR(INT_ICPICR) = 0;     //clear Processor Interface Control Register
-    for(i=0; i<8; i++){
-        INT_WR(INT_ICDISER) = 0;
-    }
+//    for(i=0; i<8; i++){
+//        INT_WR(INT_ICDISER) = 0;
+//    }
+    for(i = 0; i< 1020; i++){
+		gic_reg_op(INT_ICDISER, 0x1, 0x1, i, 0);
+	}
     INT_WR(INT_ICDDCR) = 0x3;   //enable non-secure and secure
     INT_WR(INT_ICCIPMR) = 0xff; //Priority Mask Register
     IRQ_SetEnable();

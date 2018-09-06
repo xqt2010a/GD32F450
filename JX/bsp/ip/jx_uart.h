@@ -7,11 +7,12 @@ typedef unsigned char uint8_t;
 
 #define UART_CLK  50000000//83300000//11000000  //22M
 
-//#define UART0_BASE         0x3ff24000
-#define UART0_BASE         0x3ff25000
+#define UART0_BASE         0x3ff24000
 #define UART1_BASE         0x3ff25000
 #define UART2_BASE         0x3ff26000
 #define UART3_BASE         0x3ff27000
+
+#define UART_BASE           UART1_BASE
 
 /* ------------------------  UARTn REG DEF ---------------------------------  */    // n(0,1,2)
 #define UART_RBR(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0x00))	// the receive buffer register
