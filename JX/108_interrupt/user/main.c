@@ -3,10 +3,7 @@
 #include "system.h"
 #include "stdio.h"
 
-void uart_irq(void)
-{
-    
-}
+
 
 void main(void)
 {

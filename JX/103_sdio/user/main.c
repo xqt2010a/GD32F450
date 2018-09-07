@@ -2,11 +2,11 @@
 #include "stdio.h"
 #include "mmc_boot.h"
 
+
 void main(void)
 {
     uart_init(115200);
-    printf("hello world!\r\n");
+    printf("mmc read write test!\r\n");
     mmc_test();
-    
     while(1);
 }

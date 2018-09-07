@@ -1,7 +1,5 @@
 #include "jx.h"
 
-//extern int __ICFEDIT_region_ROM_start__;
-
 static void udelay(unsigned int t)
 {
     unsigned int i,j;

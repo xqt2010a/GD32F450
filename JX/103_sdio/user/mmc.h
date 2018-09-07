@@ -8,7 +8,7 @@
 #ifndef __MMC_H__
 #define __MMC_H__
 
-//#include "data_type.h"
+#include "data_type.h"
 
 /* error code */
 #define	EPERM		1	/* Operation not permitted */

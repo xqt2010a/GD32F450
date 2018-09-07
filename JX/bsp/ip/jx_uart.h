@@ -53,7 +53,7 @@ typedef unsigned char uint8_t;
 
 void uart_init(unsigned int bd);
 void uart_tx(uint16_t Data);
-uint16_t uart_rx(void);
-
+uint8_t uart_rx(void);
+void uart_irq(void);
 
 #endif /* __JX_UART_H__ */

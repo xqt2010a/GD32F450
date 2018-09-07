@@ -6,11 +6,7 @@
 
 #include "cdl_mmc.h"
 #include "mmc.h"
-#include "data_type.h"
-//#include "uart.h"
-//#include "sys.h"
 #include "div64.h"
-
 
 //#define CONFIG_MMC_TRACE  0
 

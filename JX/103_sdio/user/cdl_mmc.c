@@ -7,9 +7,6 @@
 #include "data_type.h"
 #include "mmc.h"
 #include "boot_errno.h"
-//#include "uart.h"
-//#include "sys.h"
-
 
 //#define FORCE_USE_SRAM_DMA_BUFFER
 #ifndef FORCE_USE_SRAM_DMA_BUFFER
@@ -412,7 +409,7 @@ static int dwmci_send_cmd(struct dwmci_host* host, struct dw_mmc_cmd* cmd,
 			debug("%s: Timeout!\r\n", __func__);
 			return -ETIMEDOUT;
 		}
-	} while (status & DWMCI_CMD_START);
+	} while (status & (uint32_t)DWMCI_CMD_START);
 
 	dwmci_writel(host,
 		DWMCI_CLKENA,
@@ -429,7 +426,7 @@ static int dwmci_send_cmd(struct dwmci_host* host, struct dw_mmc_cmd* cmd,
 			debug("%s: Timeout!\r\n", __func__);
 			return -ETIMEDOUT;
 		}
-	} while (DWMCI_CMD_START & status);
+	} while ((uint32_t)DWMCI_CMD_START & status);
 
 	host->clock = freq;
 	if (div == 0) {

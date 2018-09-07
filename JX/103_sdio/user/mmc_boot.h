@@ -8,6 +8,18 @@
 
 #include "cdl_mmc.h"
 
+#define LAB_0 					(0)
+#define SECTOR_SIZE 			(512)
+#define IMG_FW_MARKER			(0x5AA55AA5) 
+#if defined(ASIC_VERSION)
+/*SRAM:128k, 64k for load the image, 64k for bootrom .data .bss and .stack*/
+#define START_SRAM_ADDR_FOR_SPL	(0x00080000)
+#define END_SRAM_ADDR_FOR_SPL	(0x00090000)
+#else
+#define START_SRAM_ADDR_FOR_SPL	(0x10000000)
+#define END_SRAM_ADDR_FOR_SPL	(0x48000000)  //0x10010000
+#endif
+
 #define SDMMC_MAX_TRAN_SPEED    25000000
 #define ARM_CLK                 (400*1000*1000)
 #define ARM_SD_CLK              (ARM_CLK/8)
@@ -15,6 +27,11 @@
 #define IMAGE_LOAD_SUCESS (0)
 #define IMAGE_LOAD_FAIL	  (1)
 
+#if defined(ASIC_VERSION)
+#define SD0_BASE		0x02408000
+#else
+#define SD0_BASE		0xC1600000
+#endif
 // define the image header struct
 typedef struct _img_header_t
 {
@@ -31,7 +48,7 @@ typedef struct _img_header_t
 	unsigned char  fw_ver_min;	
 } img_header_t;
 
-
+int mmc_init(unsigned int dma_mode, unsigned long speed, unsigned long bus_width);
 int mmc_boot(unsigned long *entry_point);
 int mmc_test(void);
 

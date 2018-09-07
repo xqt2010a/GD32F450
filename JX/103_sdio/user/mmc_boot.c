@@ -4,36 +4,15 @@
 /*                                                                                                													 */
 /*-----------------------------------------------------------------------------------------------------------*/
 #include "mmc_boot.h"
-//#include "pll.h"
 #include "mmc.h"
-//#include "sys.h"
-//#include "uart.h"
 #include "data_type.h"
 #include "stdio.h"
-
-
+#include "stdlib.h"
 
 struct dwmci_host mmc_host;
 struct dwmci_host* p_mmc_host = &mmc_host;
 struct mmc* p_mmc_dev = NULL;
 
-#define LAB_0 					(0)
-#define SECTOR_SIZE 			(512)
-#define IMG_FW_MARKER			(0x5AA55AA5) 
-#if defined(ASIC_VERSION)
-/*SRAM:128k, 64k for load the image, 64k for bootrom .data .bss and .stack*/
-#define START_SRAM_ADDR_FOR_SPL	(0x00080000)
-#define END_SRAM_ADDR_FOR_SPL	(0x00090000)
-#else
-#define START_SRAM_ADDR_FOR_SPL	(0x10000000)
-#define END_SRAM_ADDR_FOR_SPL	(0x48000000)  //0x10010000
-#endif
-
-#if defined(ASIC_VERSION)
-#define SD0_BASE		0x02408000
-#else
-#define SD0_BASE		0xC1600000
-#endif
 static unsigned char swap_dbuf[SECTOR_SIZE];
 
 static int image_header_check_parse(img_header_t *p_hdr)
@@ -61,7 +40,7 @@ static int image_header_check_parse(img_header_t *p_hdr)
 	return 0;	
 }
 
-static int mmc_init(unsigned int dma_mode, unsigned long speed, unsigned long bus_width)
+int mmc_init(unsigned int dma_mode, unsigned long speed, unsigned long bus_width)
 {
 	int ret;
 
@@ -109,7 +88,7 @@ static int mmc_init(unsigned int dma_mode, unsigned long speed, unsigned long bu
 		(p_mmc_dev->card_caps & MMC_MODE_4BIT)?"4":"-",
 		(p_mmc_dev->card_caps & MMC_MODE_8BIT)?"8":"-");
 
-	debug("total capacity: 0x%x M max lba=%d block len=%d\r\n",
+	debug("total capacity: %lld M max lba=%d block len=%d\r\n",
 		(p_mmc_dev->capacity/1024)/1024,
 		p_mmc_dev->block_dev.lba,
 		p_mmc_dev->read_bl_len);
@@ -171,25 +150,25 @@ __load_err:
 
 int mmc_test(void)
 {
-	img_header_t *p_hdr = (img_header_t *)swap_dbuf;
+	unsigned int i;
+    unsigned char buf_rx[SECTOR_SIZE];
+    unsigned char buf_tx[SECTOR_SIZE];
+    srand(atoi(__TIME__));
+    for(i=0; i<SECTOR_SIZE; i++){
+        buf_rx[i] = 0;
+        buf_tx[i] = rand();
+    }
+    
 
-	memset(p_mmc_host, 0, sizeof(struct dwmci_host));
+    memset(p_mmc_host, 0, sizeof(struct dwmci_host));
 	dw_mmc_init(p_mmc_host, SD0_BASE, ARM_SD_CLK, 4, 25000000);
-
-	if(mmc_init(0, 25000000, 4)) {
-		debug("sd card init fail\r\n");
-	}
-	/* Read the 1st sector (LBA 0, must be 512B) to image header buffer*/
-	if (mmc_bread(LAB_0, 1, (char*)swap_dbuf)!= 1) {
-		debug("read image content fail\r\n");
-	}
-
-    if (image_header_check_parse((img_header_t *)swap_dbuf) != 0) {
-    	debug("check header fail\r\n");
-	}
-
-
-
+	mmc_init(0, 25000000, 4);
+	
+	mmc_bread(0, 1, (char*)buf_rx);     /* Read the 1st sector to image header buffer*/
+    mmc_bwrite(0, 1, (char*)buf_tx);
+    mmc_bread(0, 1, (char*)buf_rx);
+    memset(buf_tx, 0, SECTOR_SIZE);
+    
 	return IMAGE_LOAD_SUCESS;
 }
 
