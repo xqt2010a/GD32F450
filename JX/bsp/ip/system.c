@@ -70,17 +70,3 @@ void SystemInit (void)
     
     smu_ddr_freq(800);
 }
-
-//void LowLevelInit(void)
-//{   
-//        //HWMEM_WORD(0xf00110UL) = 0;
-//    /* Remap */
-//	/* Set V=0 in CP15 SCTLR register - for VBAR to point to vector */
-//	 __asm("mrc	p15, 0, r0, c1, c0, 0"); //	@ Read CP15 SCTLR Register
-//         __asm("bic	r0, r0, #0x00002000"); //	@ clear bits 13 (--V-)         
-//	 __asm("mcr	p15, 0, r0, c1, c0, 0"); //	@ Write CP15 SCTLR Register
-//	/* Set vector address in CP15 VBAR register */
-//	 //__asm("ldr	r0, =0x80000"); //
-//     __asm("ldr r0, =0x80000");
-//	 __asm("mcr	p15, 0, r0, c12, c0, 0"); //	@Set VBAR
-//}

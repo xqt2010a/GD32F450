@@ -139,12 +139,12 @@ __iar_program_start:
         mcr	p15, 0, r0, c12, c0, 0  ;	@Set VBAR
         
         ;; Set up the interrupt stack pointer.
-        MSR     cpsr_c, #IRQ_MODE | IRQ_BIT | FIQ_BIT ;change IRQ mode and disable IRQ & FIQ
+        MSR     cpsr_c, #IRQ_MODE ;| IRQ_BIT | FIQ_BIT ;change IRQ mode and disable IRQ & FIQ
         LDR     sp, =SFE(IRQ_STACK)         ; End of IRQ_STACK
         BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
 
         ;; Set up the fast interrupt stack pointer.
-        MSR     cpsr_c, #FIQ_MODE | IRQ_BIT | FIQ_BIT ;change FIQ_MODE and disable IRQ & FIQ
+        MSR     cpsr_c, #FIQ_MODE ;| IRQ_BIT | FIQ_BIT ;change FIQ_MODE and disable IRQ & FIQ
         LDR     sp, =SFE(FIQ_STACK)         ; End of FIQ_STACK
         BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
         

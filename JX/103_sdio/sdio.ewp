@@ -168,7 +168,7 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state></state>
+          <state>ASIC_VERSION</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>uart.bin</state>
+          <state>sdio.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1899,11 +1899,23 @@
   <group>
     <name>user</name>
     <file>
+      <name>$PROJ_DIR$\user\cdl_mmc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\div64.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\mmc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\mmc_boot.c</name>
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\start_jx.s</name>
   </file>
 </project>
 
