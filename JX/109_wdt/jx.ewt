@@ -2104,6 +2104,9 @@
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_wdt.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>

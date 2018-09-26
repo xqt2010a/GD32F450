@@ -594,7 +594,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>uart.bin</state>
+          <state>jx.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1891,6 +1891,9 @@
     <name>jx</name>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_wdt.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
