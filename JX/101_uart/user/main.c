@@ -11,7 +11,7 @@ void udelay(unsigned int t)
     }
 }
 
-void smu_init(void)
+void smu_init_m(void)
 {
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
@@ -32,7 +32,7 @@ void smu_init(void)
 
 void main(void)
 {
-    smu_init();
+    smu_init_m();
     
     uart_init(115200);
     printf("hello world!\r\n");
