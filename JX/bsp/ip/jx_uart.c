@@ -1,17 +1,19 @@
 #include "jx_uart.h"
 #include "stdio.h"
+#include "stdint.h"
 
 static uint8_t uart_buf_rx[32]={0};
 
-void uart_init(unsigned int bd)
+void uart_init(uint32_t bd, uint32_t clk)
 {
+    
     UART_IER(UART_BASE) = 0;
     while (UART_USR(UART_BASE) & 0x1);
     UART_LCR(UART_BASE) |= 0x80;    // the DLAB = 1
-	UART_DLL(UART_BASE)  = (uint8_t)(((UART_CLK/bd)/16)&0xFF);                  // 115200=48M/16/0x1A
-	UART_DLH(UART_BASE)  = (uint8_t)(((((UART_CLK/bd)/16)&0xFF00)>>8)&0xFF);    // 00
-	UART_LCR(UART_BASE) &= (~0x80); // the DLAB = 0
-	UART_LCR(UART_BASE) |= 0x03;    // none, 0, 8 
+    UART_DLL(UART_BASE)  = (uint8_t)(((clk/bd)/16)&0xFF);                  // 115200=48M/16/0x1A
+    UART_DLH(UART_BASE)  = (uint8_t)(((((clk/bd)/16)&0xFF00)>>8)&0xFF);    // 00
+    UART_LCR(UART_BASE) &= (~0x80); // the DLAB = 0
+    UART_LCR(UART_BASE) |= 0x03;    // none, 0, 8 
     //UART_IER(UART_BASE) |= 5;       // enable the rx interrupt
 }
 

@@ -2101,6 +2101,9 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_adc.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
     </file>
     <file>

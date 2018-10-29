@@ -1,4 +1,6 @@
 #include "jx.h"
+#include "stdint.h"
+#include "system.h"
 
 static void udelay(unsigned int t)
 {
@@ -67,4 +69,15 @@ void SystemInit (void)
     //smu_init();
     
     smu_ddr_freq(800);
+}
+
+uint32_t get_sysclk(void)
+{
+    uint32_t r_value,temp;
+    sys_clk_s *value;
+    temp = JX_WR4(0x0190d000);
+    value = (sys_clk_s*)&temp;
+    r_value = (CRYSTAL_FREQ / value->div5 / value->div2 / value->div3 * value->div4);
+    r_value = r_value / 8;
+    return r_value;
 }

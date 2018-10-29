@@ -1,11 +1,12 @@
 #ifndef __JX_UART_H__
 #define __JX_UART_H__
 
-typedef unsigned int uint32_t;
-typedef unsigned short uint16_t;
-typedef unsigned char uint8_t;
+#include "stdint.h"
+//typedef unsigned int uint32_t;
+//typedef unsigned short uint16_t;
+//typedef unsigned char uint8_t;
 
-#define UART_CLK  50000000//83300000//11000000  //22M
+#define UART_CLK  83300000//50000000//83300000//11000000  //22M
 
 #define UART0_BASE         0x3ff24000
 #define UART1_BASE         0x3ff25000
@@ -51,7 +52,7 @@ typedef unsigned char uint8_t;
 #define UART_UCV(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0xF8))	// the uart component version
 #define UART_CTR(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0xFC))	// the component type register
 
-void uart_init(unsigned int bd);
+void uart_init(uint32_t bd, uint32_t clk);
 void uart_tx(uint16_t Data);
 uint8_t uart_rx(void);
 void uart_irq(void);
