@@ -1,5 +1,6 @@
 #include "jx_i2c.h"
 
+#define I2C_N   I2C1//I2C4
 uint8_t wBuf[10], rBuf[300];
 
 #define JX_W4(x)    (*(unsigned int *)(x))
@@ -12,7 +13,7 @@ void udelay(unsigned int t)
     }
 }
 
-void smu_init(void)
+void smu_init1(void)
 {
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
@@ -33,7 +34,7 @@ void smu_init(void)
 
 void main(void)
 {
-    smu_init();
+    smu_init1();
     
     JX_W4(0x3fe0a004) = 0x0;
     
@@ -43,7 +44,7 @@ void main(void)
     I2C_InitS.I2C_AddrMode = I2C_7BIT;
     I2C_InitS.I2C_OwnAddress = 0x50;//;0x1A;//0x50;0011010
     I2C_InitS.I2C_InterruptMask = 0;	//all interrupt mask
-    I2C_Init(I2C4, &I2C_InitS);
+    I2C_Init(I2C_N, &I2C_InitS);
     
     wBuf[0]=0x30;
     wBuf[1]=0x00;
@@ -51,9 +52,9 @@ void main(void)
     wBuf[3]=0x0B5;
     wBuf[4]=0x0C6;
     wBuf[5]=0x0D7;
-    I2C_Write(I2C4, wBuf, 3);
-    I2C_Write(I2C4, wBuf, 2);
-    I2C_Read(I2C4,rBuf,4);
+    I2C_Write(I2C_N, wBuf, 3);
+    I2C_Write(I2C_N, wBuf, 2);
+    I2C_Read(I2C_N,rBuf,4);
     rBuf[5] = rBuf[5];
     while(1);
 }
