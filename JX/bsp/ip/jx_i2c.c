@@ -5,9 +5,11 @@
  *      Author: cnan
  */
 #include "jx_i2c.h"
+#include "jx.h"
 
 void I2C_Init(unsigned char ch, I2C_InitTypeDef* I2C_InitS)
 {
+        //JX_WR4(0x3fe0a004) = 0x0;
 	I2C_ENABLE(ch) = 0x00;  // I2C disenable
 	if(0 == I2C_InitS->I2C_Mode)	//Master
 	{

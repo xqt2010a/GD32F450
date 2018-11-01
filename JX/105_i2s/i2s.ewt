@@ -2101,6 +2101,15 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_i2s.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
     </file>
     <file>
@@ -2111,6 +2120,9 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\user\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\user\wm8731.c</name>
     </file>
   </group>
   <file>

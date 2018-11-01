@@ -19,14 +19,14 @@ void uart_init(uint32_t bd, uint32_t clk)
 
 void uart_tx(uint16_t Data)
 {
-	UART_THR(UART_BASE) = Data;
-	while((UART_LSR(UART_BASE)) == 0);
+    UART_THR(UART_BASE) = Data;
+    while((UART_LSR(UART_BASE)) == 0);
 }
 
 uint8_t uart_rx(void)
 {
-	while(!(UART_LSR(UART_BASE) & 0x01));
-	return UART_RBR(UART_BASE);
+    while(!(UART_LSR(UART_BASE) & 0x01));
+    return UART_RBR(UART_BASE);
 }
 
 int fputc(int ch, FILE * f)

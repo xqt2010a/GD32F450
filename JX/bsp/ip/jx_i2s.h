@@ -113,6 +113,7 @@ typedef struct
  
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+void I2S_Clock(uint32_t sample_clk, uint8_t sample_bit);
 
 /* Initialization and Configuration functions *********************************/
 void I2S_Init(I2S_InitTypeDef* I2S_InitStruct);  

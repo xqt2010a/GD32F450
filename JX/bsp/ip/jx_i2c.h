@@ -8,8 +8,7 @@
 #ifndef __I2C_H__
 #define __I2C_H__
 
-typedef unsigned char uint8_t;
-typedef unsigned int uint32_t;
+#include "stdint.h"
 
 #define I2C_DEBUG	0
 
