@@ -70,7 +70,7 @@ void wm8731_init(void)
     s_wm8731_regs.a_audio_path_ctl.bit.mutemic = 0;     //0
     s_wm8731_regs.a_audio_path_ctl.bit.insel = 0;       //1 1:microphone input 0:line input
     s_wm8731_regs.a_audio_path_ctl.bit.bypass = 0;      //0
-    s_wm8731_regs.a_audio_path_ctl.bit.dacsel = 0;      //1
+    s_wm8731_regs.a_audio_path_ctl.bit.dacsel = 1;      //1
     s_wm8731_regs.a_audio_path_ctl.bit.sidetone = 0;    //0
     s_wm8731_regs.a_audio_path_ctl.bit.sideatt = 0;     //0
     /* digital audio path control */
