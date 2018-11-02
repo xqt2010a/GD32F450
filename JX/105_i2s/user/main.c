@@ -3,8 +3,11 @@
 #include "jx_i2c.h"
 #include "system.h"
 #include "wm8731.h"
+#ifdef MUSIC_11025
 #include "music_wav.h"
-//#include "8k.h"
+#else
+#include "8k.h"
+#endif
 #include "stdio.h"
 
 #define JX_W4(x)    (*(unsigned int *)(x))
@@ -45,8 +48,11 @@ void main(void)
     I2S_InitS.I2S_ClkCyc = 0;
     
     smu_init1();
+#ifdef MUSIC_11025
     I2S_Clock(11025, 16);
-    //I2S_Clock(8000, 16);
+#else
+    I2S_Clock(8000, 16);
+#endif
     I2S_Init(&I2S_InitS);
     wm8731_init();
     wm8731_set_headphone_volume(WM8731_DIR_RIGHT, WM8731_MODE_HIGH, 0x70);
@@ -55,9 +61,11 @@ void main(void)
     printf("hello world!\r\n");
     while(1){
         printf("The headphone is read \"Enter\".\r\n");
-        
+#ifdef MUSIC_11025        
         for (i = 0; i < 4500; i++)
-        //for (i = 0; i < 16000; i++)
+#else
+        for (i = 0; i < 16000; i++)
+#endif
         {
             I2S_Write(wav_temp[i], wav_temp[i]);
         }
