@@ -66,11 +66,11 @@ void wm8731_init(void)
     s_wm8731_regs.r_headphone.bit.rzcen = 1;
     s_wm8731_regs.r_headphone.bit.rlhpboth = 1;
     /* analogue audio path control */
-    s_wm8731_regs.a_audio_path_ctl.bit.micboost = 1;    //1
+    s_wm8731_regs.a_audio_path_ctl.bit.micboost = 0;    //1
     s_wm8731_regs.a_audio_path_ctl.bit.mutemic = 0;     //0
-    s_wm8731_regs.a_audio_path_ctl.bit.insel = 1;       //1 1:microphone input 0:line input
+    s_wm8731_regs.a_audio_path_ctl.bit.insel = 0;       //1 1:microphone input 0:line input
     s_wm8731_regs.a_audio_path_ctl.bit.bypass = 0;      //0
-    s_wm8731_regs.a_audio_path_ctl.bit.dacsel = 1;      //1
+    s_wm8731_regs.a_audio_path_ctl.bit.dacsel = 0;      //1
     s_wm8731_regs.a_audio_path_ctl.bit.sidetone = 0;    //0
     s_wm8731_regs.a_audio_path_ctl.bit.sideatt = 0;     //0
     /* digital audio path control */
@@ -80,12 +80,12 @@ void wm8731_init(void)
     s_wm8731_regs.d_audio_path_ctl.bit.hpor = 0;
     /* power down control */
     s_wm8731_regs.power_down_ctl.bit.lineinpd = 1;
-    s_wm8731_regs.power_down_ctl.bit.micpd = 0;
-    s_wm8731_regs.power_down_ctl.bit.adcpd = 0;
+    s_wm8731_regs.power_down_ctl.bit.micpd = 1;
+    s_wm8731_regs.power_down_ctl.bit.adcpd = 1;
     s_wm8731_regs.power_down_ctl.bit.dacpd = 0;
     s_wm8731_regs.power_down_ctl.bit.outpd = 0;
-    s_wm8731_regs.power_down_ctl.bit.oscpd = 0;
-    s_wm8731_regs.power_down_ctl.bit.clkoutpd = 0;
+    s_wm8731_regs.power_down_ctl.bit.oscpd = 1;
+    s_wm8731_regs.power_down_ctl.bit.clkoutpd = 1;
     s_wm8731_regs.power_down_ctl.bit.poweroff = 0;
     /*digital audio interface format:i2s format,bit 16 */
     s_wm8731_regs.d_audio_interface_fmt.bit.format = WM8731_FMT_I2S;

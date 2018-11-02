@@ -4,6 +4,7 @@
 #include "system.h"
 #include "wm8731.h"
 #include "music_wav.h"
+//#include "8k.h"
 #include "stdio.h"
 
 #define JX_W4(x)    (*(unsigned int *)(x))
@@ -45,6 +46,7 @@ void main(void)
     
     smu_init1();
     I2S_Clock(11025, 16);
+    //I2S_Clock(8000, 16);
     I2S_Init(&I2S_InitS);
     wm8731_init();
     wm8731_set_headphone_volume(WM8731_DIR_RIGHT, WM8731_MODE_HIGH, 0x70);
@@ -55,6 +57,7 @@ void main(void)
         printf("The headphone is read \"Enter\".\r\n");
         
         for (i = 0; i < 4500; i++)
+        //for (i = 0; i < 16000; i++)
         {
             I2S_Write(wav_temp[i], wav_temp[i]);
         }

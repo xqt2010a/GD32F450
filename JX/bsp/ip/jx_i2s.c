@@ -1,7 +1,7 @@
 #include "jx_i2s.h"
 #include "jx.h"
 
-#define I2S_CLK_SRC     (225792000)
+#define I2S_CLK_SRC     225792000//20480000//(225792000)
 
 void I2S_Mclk(uint32_t mclk)
 {
@@ -32,7 +32,18 @@ void I2S_Clock(uint32_t sample_clk, uint8_t sample_bit)
     
     I2S_Mclk(sample_clk*256);
     I2S_Sclk(sample_clk*256, sample_clk*2*sample_bit);
-    //register_write(0x3fe0802c, 1, 30, 1);       // make pll_i2s clk mux select pll output clock
+    
+//    register_write(0x3fe0802c, 1, 30, 0);       //Switch PLL clkmux to select OSC 24MHz
+//    register_write(0x3fe0801c, 8, 0, 0xf0);     //Power down PLL
+//    register_write(0x3fe0801c, 6, 26, 3);       //1 25
+//    register_write(0x3fe0801c, 12, 14, 64);     //64 441*8
+//    register_write(0x3fe0801c, 3, 11, 5);       //5 5
+//    register_write(0x3fe0801c, 3, 8, 5);        //5 3
+//    register_write(0x3fe0801c, 8, 0, 0x00);     //Power on PLL  24M/1*64/5/5=61.44M
+//    while(1 != register_read(0x3fe08080, 1, 30));       //polling pll
+//    register_write(0x3fe0802c, 1, 30, 1);       //Switch PLL clkmux to select PLL output
+//    
+//    I2S_Sclk(sample_clk*256, sample_clk*2*sample_bit);
 }
 
 void I2S_Init(I2S_InitTypeDef* I2S_InitStruct)
