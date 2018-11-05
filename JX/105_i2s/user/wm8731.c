@@ -1,13 +1,15 @@
 #include "wm8731.h"
 #include "string.h"
 
+#define WM8731_I2Cn     I2C0
+
 static struct WM8731_REGS s_wm8731_regs;
 static uint16_t s_currect_line_in_volume = VOLUME_LINE_IN_DEFAULT;
 static uint16_t s_currect_headphone_volume = VOLUME_HEADPHONE_DEFAULT - 15;
 
 void i2c_write_wm8731(uint8_t Reg_Addr, uint8_t *buf, uint8_t len)
 {
-    I2C_Write(I2C1, buf,len);
+    I2C_Write(WM8731_I2Cn, buf,len);
 }
 
 static void wm8731_write_reg(uint8_t reg, uint16_t data)
@@ -44,7 +46,7 @@ void wm8731_init(void)
     I2C_InitS.I2C_Speed = I2C_STANDARD;
     I2C_InitS.I2C_OwnAddress = WM8731_ADDR;
     
-    I2C_Init(I2C1, &I2C_InitS);
+    I2C_Init(WM8731_I2Cn, &I2C_InitS);
 
     memset(&s_wm8731_regs, 0, sizeof(struct WM8731_REGS));
     /* wm8731 reset */

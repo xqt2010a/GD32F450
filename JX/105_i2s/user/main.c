@@ -43,16 +43,19 @@ void main(void)
 {
     uint32_t sysclk, i;
     I2S_InitTypeDef I2S_InitS;
-    
+
+    I2S_InitS.base_addr = I2S_BASE2;
     I2S_InitS.I2S_BitRlt = 2;
     I2S_InitS.I2S_ClkCyc = 0;
-    
-    smu_init1();
 #ifdef MUSIC_11025
-    I2S_Clock(11025, 16);
+    I2S_InitS.I2S_Sclk = 11025*2*16;
+    I2S_InitS.I2S_Mclk = 11025*256;
 #else
-    I2S_Clock(8000, 16);
-#endif
+    I2S_InitS.I2S_Sclk = 8000*2*16;
+    I2S_InitS.I2S_Mclk = 8000*256;
+#endif    
+    smu_init1();
+
     I2S_Init(&I2S_InitS);
     wm8731_init();
     wm8731_set_headphone_volume(WM8731_DIR_RIGHT, WM8731_MODE_HIGH, 0x70);
@@ -67,7 +70,7 @@ void main(void)
         for (i = 0; i < 16000; i++)
 #endif
         {
-            I2S_Write(wav_temp[i], wav_temp[i]);
+            I2S_Write(&I2S_InitS, wav_temp[i], wav_temp[i]);
         }
     }
 }
