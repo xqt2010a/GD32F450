@@ -1,7 +1,7 @@
 #include "jx_adc.h"
 
 
-void adc_init(uint32_t adc_n, uint8_t pin)
+void adc_init(uint32_t adc_n, uint8_t pin, uint8_t mode)
 {
     uint32_t temp;
     SCRATCH(adc_n) = 0x0a;      //采样间隔
@@ -12,7 +12,7 @@ void adc_init(uint32_t adc_n, uint8_t pin)
     CTRL2(adc_n) = 1;
     asm("nop");
     CTRL2(adc_n) = 0;           //reset
-    temp = (uint32_t)((1<<0)|(1<<1)|(0<<2)|(3<<8)|(pin<<12)|(3<<19)|(1<<31));   //11bit mode; 8次平均;
+    temp = (uint32_t)((1<<0)|(1<<1)|(0<<2)|(mode<<8)|(pin<<12)|(3<<19)|(1<<31));   //11bit mode; 8次平均;
     CTRL1(adc_n) = temp;
     temp = CTRL1(adc_n);
     temp |= (1<<10);    

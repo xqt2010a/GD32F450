@@ -16,7 +16,7 @@
 #define INTR_CTRL(ADCn_BASE)            (*(volatile unsigned long*)((ADCn_BASE) + 0x0c))
 #define INTR_CTRL_STS(ADCn_BASE)        (*(volatile unsigned long*)((ADCn_BASE) + 0x10))
 
-void adc_init(uint32_t adc_n, uint8_t pin);
+void adc_init(uint32_t adc_n, uint8_t pin, uint8_t mode);
 uint32_t adc_get(uint32_t adc_n, uint8_t pin);
 
 #endif  /* __JX_ADC_H__ */

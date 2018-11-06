@@ -39,7 +39,7 @@ void main(void)
     uint32_t voltage[24];//,i;
     
     smu_init1();
-    adc_init(ADC_BASE, 0);
+    //adc_init(ADC_BASE, 0, 3);
     sysclk = get_sysclk();
     uart_init(115200, sysclk);
     printf("hello world!\r\n");
@@ -49,7 +49,7 @@ void main(void)
 //        adc_init(ADC1_BASE, i);
 //    for(i=0; i<8; i++)
 //        adc_init(ADC2_BASE, i);
-    adc_init(ADC_BASE, 0);
+    adc_init(ADC_BASE, 0, 3);
     while(1){
         //adc_init(ADC_BASE, 0);
         
