@@ -175,4 +175,6 @@ void I2C_Write(unsigned char ch, uint8_t * wBuf, uint8_t len);
 
 void I2C_Read(unsigned char ch, uint8_t * rBuf, uint8_t len);
 
+uint16_t read_lm75a(unsigned char ch);
+
 #endif /* __I2C_H__ */

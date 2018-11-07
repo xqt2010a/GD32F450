@@ -1,6 +1,12 @@
 #include "jx_i2c.h"
+#include "jx_uart.h"
+#include "system.h"
+#include "stdio.h"
 
 #define I2C_N   I2C1//I2C4
+#define LM75A_ADDR      0x48
+#define AT24C32_ADDR    0x1A;//0x50;0011010
+
 uint8_t wBuf[10], rBuf[300];
 
 #define JX_W4(x)    (*(unsigned int *)(x))
@@ -34,7 +40,14 @@ void smu_init1(void)
 
 void main(void)
 {
+    uint32_t sysclk;
+    float value;
+    
     smu_init1();
+    
+    sysclk = get_sysclk();
+    uart_init(115200, sysclk);
+    printf("hello world!\r\n");
     
     JX_W4(0x3fe0a004) = 0x0;
     
@@ -42,19 +55,31 @@ void main(void)
     I2C_InitS.I2C_Mode = I2C_MASTER;
     I2C_InitS.I2C_Speed = I2C_FAST;
     I2C_InitS.I2C_AddrMode = I2C_7BIT;
-    I2C_InitS.I2C_OwnAddress = 0x50;//;0x1A;//0x50;0011010
+    I2C_InitS.I2C_OwnAddress = LM75A_ADDR;
     I2C_InitS.I2C_InterruptMask = 0;	//all interrupt mask
     I2C_Init(I2C_N, &I2C_InitS);
     
-    wBuf[0]=0x30;
-    wBuf[1]=0x00;
-    wBuf[2]=0x12;
-    wBuf[3]=0x0B5;
-    wBuf[4]=0x0C6;
-    wBuf[5]=0x0D7;
-    I2C_Write(I2C_N, wBuf, 3);
-    I2C_Write(I2C_N, wBuf, 2);
-    I2C_Read(I2C_N,rBuf,4);
-    rBuf[5] = rBuf[5];
-    while(1);
+    if(LM75A_ADDR == I2C_InitS.I2C_OwnAddress){
+        while(1){
+            wBuf[0]=0x00;
+            I2C_Write(I2C_N, wBuf, 1);
+            I2C_Read(I2C_N,rBuf,2);
+            value = ((rBuf[0]&0x7F)<<3)|(rBuf[1]>>5);
+            printf("%4.2f¡æ\r\n", value/8);
+            udelay(100000);
+        }
+    }
+    else{
+        wBuf[0]=0x30;
+        wBuf[1]=0x00;
+        wBuf[2]=0x12;
+        wBuf[3]=0x0B5;
+        wBuf[4]=0x0C6;
+        wBuf[5]=0x0D7;
+        I2C_Write(I2C_N, wBuf, 3);
+        I2C_Write(I2C_N, wBuf, 2);
+        I2C_Read(I2C_N,rBuf,4);
+        rBuf[5] = rBuf[5];
+        while(1);
+    }
 }

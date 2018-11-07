@@ -2104,6 +2104,9 @@
       <name>$PROJ_DIR$\..\bsp\ip\jx_i2c.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\system.c</name>
     </file>
   </group>

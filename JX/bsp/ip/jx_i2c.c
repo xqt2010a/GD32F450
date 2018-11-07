@@ -52,17 +52,34 @@ void I2C_Read(unsigned char ch, unsigned char * rBuf, unsigned char len)
 	I2C_DATA_CMD(ch) = DUMMY_WRITE|(1<<8)|(1<<9);  //read & stop
 	
 	i=0;
-	while(i<len)
+	while(i<(len))
 	{
 	  	while((I2C_STATUS(ch)&(1<<3)))
 		{
 			rBuf[i] = (unsigned char)(I2C_DATA_CMD(ch) & 0x0FF);
 			i++;
-			len -= 1;
+			//len -= 1;
 		}
 	}
 }
 
+
+uint16_t read_lm75a(unsigned char ch)
+{
+    uint16_t r_value, i, buf[4];
+    I2C_DATA_CMD(ch) = (0x00&0x0FF)|(1<<9);;    //read temp
+    I2C_DATA_CMD(ch) = DUMMY_WRITE|(1<<8);
+    I2C_DATA_CMD(ch) = DUMMY_WRITE|(1<<8)|(1<<9);  //read & stop
+    i=0;
+	while(i<2){
+	  	while((I2C_STATUS(ch)&(1<<3))){
+			buf[i] = (unsigned char)(I2C_DATA_CMD(ch) & 0x0FF);
+			i++;
+		}
+	}
+    r_value = ((buf[1]&0x7F)<<3)|(buf[2]>>5);
+    return r_value;
+}
 /*
 void main(void)
 {
