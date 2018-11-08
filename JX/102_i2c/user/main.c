@@ -3,9 +3,9 @@
 #include "system.h"
 #include "stdio.h"
 
-#define I2C_N   I2C1//I2C4
+#define I2C_N   I2C15//I2C4
 #define LM75A_ADDR      0x48
-#define AT24C32_ADDR    0x1A;//0x50;0011010
+#define AT24C32_ADDR    0xA0//0x50;0011010
 
 uint8_t wBuf[10], rBuf[300];
 
@@ -69,17 +69,20 @@ void main(void)
             udelay(100000);
         }
     }
-    else{
-        wBuf[0]=0x30;
-        wBuf[1]=0x00;
-        wBuf[2]=0x12;
-        wBuf[3]=0x0B5;
-        wBuf[4]=0x0C6;
-        wBuf[5]=0x0D7;
-        I2C_Write(I2C_N, wBuf, 3);
-        I2C_Write(I2C_N, wBuf, 2);
+    else if(AT24C32_ADDR == I2C_InitS.I2C_OwnAddress){
+        wBuf[0]=0x00;
+        wBuf[1]=0xA1;
+        wBuf[2]=0xA2;
+        wBuf[3]=0xA3;
+        wBuf[4]=0xA4;
+        wBuf[5]=0xA5;
+        I2C_Write(I2C_N, wBuf, 6);
+        I2C_Write(I2C_N, wBuf, 1);
         I2C_Read(I2C_N,rBuf,4);
         rBuf[5] = rBuf[5];
         while(1);
+    }
+    else{
+    
     }
 }

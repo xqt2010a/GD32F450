@@ -1,7 +1,7 @@
 #include "wm8731.h"
 #include "string.h"
 
-#define WM8731_I2Cn     I2C0
+#define WM8731_I2Cn     I2C2
 
 static struct WM8731_REGS s_wm8731_regs;
 static uint16_t s_currect_line_in_volume = VOLUME_LINE_IN_DEFAULT;

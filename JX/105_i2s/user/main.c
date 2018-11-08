@@ -44,7 +44,7 @@ void main(void)
     uint32_t sysclk, i;
     I2S_InitTypeDef I2S_InitS;
 
-    I2S_InitS.base_addr = I2S_BASE2;
+    I2S_InitS.base_addr = I2S_BASE1;
     I2S_InitS.I2S_BitRlt = 2;
     I2S_InitS.I2S_ClkCyc = 0;
 #ifdef MUSIC_11025
