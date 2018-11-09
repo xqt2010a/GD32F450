@@ -45,7 +45,7 @@ int SPI_Read_ID(void)
 //    (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x18171615;
 //    (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x1c1b1a19;
     
-    uint8_t rFifo[3]={0};
+    uint8_t rFifo[4]={0};
     SSIM1_DR = 0x9F;
     SSIM1_DR = 0xA5;
     SSIM1_DR = 0xA5;
@@ -54,6 +54,7 @@ int SPI_Read_ID(void)
     rFifo[0] = SSIM1_DR;
     rFifo[1] = SSIM1_DR;
     rFifo[2] = SSIM1_DR;
+    rFifo[3] = SSIM1_DR;
     return rFifo[0];
 }
 

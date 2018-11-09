@@ -13,7 +13,7 @@ void udelay(unsigned int t)
     }
 }
 
-void smu_init(void)
+void smu_init1(void)
 {
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
@@ -38,8 +38,9 @@ void main(void)
 	uint8_t wBuf[LENTH];
 	uint8_t rBuf[LENTH];
     
-    smu_init();
+    smu_init1();
     SPIM1_Init();
+    udelay(10000);
     SPI_Read_ID();
     for(i=0; i<LENTH; i++){
 		wBuf[i] = 0xA5; //dummy byte

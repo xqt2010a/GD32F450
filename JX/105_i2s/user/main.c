@@ -44,6 +44,11 @@ void main(void)
     uint32_t sysclk, i;
     I2S_InitTypeDef I2S_InitS;
 
+    /* EVB2.0
+    * I2S2 --- I2C0
+    * I2S1 --- I2C2
+    * I2S0 --- I2C1
+    */
     I2S_InitS.base_addr = I2S_BASE1;
     I2S_InitS.I2S_BitRlt = 2;
     I2S_InitS.I2S_ClkCyc = 0;
