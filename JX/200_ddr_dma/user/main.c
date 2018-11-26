@@ -2,6 +2,7 @@
 #include "ddr.h"
 #include "ddr_test.h"
 #include "jx_uart.h"
+#include "system.h"
 #include "lpddr4_init_training_pass.h"
 
 
@@ -15,7 +16,7 @@ void udelay(unsigned int t)
     }
 }
 
-void smu_init(void)
+void smu_init1(void)
 {
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
     JX_W4(0x3FE08100) = 0xFFFFFFFF;
@@ -36,10 +37,12 @@ void smu_init(void)
 
 void main(void)
 {
-    smu_init();
+    uint32_t sysclk;
+    smu_init1();
     set_ddrc_freq(800); //before other device setting
-    uart_init(115200);
-    printf("start ddr init\n");
+    sysclk = get_sysclk();
+    uart_init(115200, sysclk);
+    printf("hello world!\r\n");
     ddr_init();
     
     //ddr_cpu_test();
