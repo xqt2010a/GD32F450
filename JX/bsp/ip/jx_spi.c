@@ -27,23 +27,7 @@ void SPIM1_Write_Read_Fifo(uint8_t * wFifo, uint8_t * rFifo, uint32_t N_Byte)
 
 int SPI_Read_ID(void)
 {
-//    unsigned int data;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x08)) = 0;
-//    (*(volatile unsigned long*)(0x3fe09004)) = 0xff000000;  //add
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x00)) = 0x011f0100;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x04)) = 8;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x14)) = 4;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x18)) = 4;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x1c)) = 4;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x2c)) = 0x1f;    
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x10)) = 1;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x08)) = 1;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x18)) = 4;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x1c)) = 4;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x2c)) = 0x1f;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x14131211;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x18171615;
-//    (*(volatile unsigned long*)(SSIM1_BASE + 0x60)) = 0x1c1b1a19;
+    unsigned char i;
     
     uint8_t rFifo[4]={0};
     SSIM1_DR = 0x9F;
@@ -51,11 +35,11 @@ int SPI_Read_ID(void)
     SSIM1_DR = 0xA5;
     SSIM1_DR = 0xA5;
     while(0 == SSIM1_RXFLR);
-    rFifo[0] = SSIM1_DR;
-    rFifo[1] = SSIM1_DR;
-    rFifo[2] = SSIM1_DR;
-    rFifo[3] = SSIM1_DR;
-    return rFifo[0];
+    for(i=0; i<4; i++){
+        while(!((SSIM1_SR & 0x8)>>3));
+        rFifo[i] = SSIM1_DR;
+    }
+    return ((rFifo[1]<<16)|(rFifo[1]<<8)|(rFifo[1]));
 }
 
 void SPIM1_Write_Read(uint8_t * wBuf, uint32_t wLen, uint8_t * rBuf, uint32_t rLen)

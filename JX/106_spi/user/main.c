@@ -41,7 +41,7 @@ void main(void)
     smu_init1();
     SPIM1_Init();
     udelay(10000);
-    SPI_Read_ID();
+    FlashID = SPI_Read_ID();
     for(i=0; i<LENTH; i++){
 		wBuf[i] = 0xA5; //dummy byte
 		rBuf[i] = 0;
@@ -64,6 +64,6 @@ void main(void)
 	SPIM1_Flash_Page_Write(wBuf, 0x001000, 256);
 	
 	SPIM1_Flash_Page_Read(rBuf, 0x001000, 256);
-    FlashID = FlashID;
-    while(1);
+    FlashID = FlashID*2;
+    while(FlashID);
 }
