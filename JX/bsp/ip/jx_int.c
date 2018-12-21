@@ -1,7 +1,8 @@
+#include "jx.h"
 #include "jx_int.h"
 #include <intrinsics.h>
 
-#define INT_WR(x)   (*(volatile unsigned int *)(x))
+
 #define INT_NUM     256
 
 
@@ -25,21 +26,21 @@ static void gic_reg_op(int base, int step, int val, unsigned int irqnum, int op)
 	addr = base + (irqnum*step/32)*4;
 	offset = (irqnum*step)%32;
 
-	tmpval = INT_WR(addr);
+	tmpval = JX_WR4(addr);
 	if(op) {
 		tmpval |= (val&step_mask(step)) << offset;
 	} else {
 		tmpval &= ~(step_mask(step) << offset);
 	}
 
-	INT_WR(addr) = tmpval;
+	JX_WR4(addr) = tmpval;
 	return ;
 }
 
 void IRQ_SetEnable(void)
 {
-    INT_WR(INT_ICPICR) = 1;     //Processor Interface Control Register
-    INT_WR(INT_ICDDCR) = 0x3;   //enable non-secure and secure
+    JX_WR4(INT_ICPICR) = 1;     //Processor Interface Control Register
+    JX_WR4(INT_ICDDCR) = 0x3;   //enable non-secure and secure
 }
 
 void IRQ_SetNum(unsigned int irqnum)
@@ -59,16 +60,16 @@ void IRQ_SetNum(unsigned int irqnum)
 void IRQ_Init(void)
 {
     unsigned int i;
-    INT_WR(INT_ICDDCR) = 0;     //clear Distributor Control Register
-    INT_WR(INT_ICPICR) = 0;     //clear Processor Interface Control Register
+    JX_WR4(INT_ICDDCR) = 0;     //clear Distributor Control Register
+    JX_WR4(INT_ICPICR) = 0;     //clear Processor Interface Control Register
 //    for(i=0; i<8; i++){
-//        INT_WR(INT_ICDISER) = 0;
+//        JX_WR4(INT_ICDISER) = 0;
 //    }
     for(i = 0; i< 1020; i++){
 		gic_reg_op(INT_ICDISER, 0x1, 0x1, i, 0);
 	}
-    INT_WR(INT_ICDDCR) = 0x3;   //enable non-secure and secure
-    INT_WR(INT_ICCIPMR) = 0xff; //Priority Mask Register
+    JX_WR4(INT_ICDDCR) = 0x3;   //enable non-secure and secure
+    JX_WR4(INT_ICCIPMR) = 0xff; //Priority Mask Register
     IRQ_SetEnable();
 }
 
@@ -82,7 +83,7 @@ int IRQ_Register(unsigned int irqnum, void f(void))
 uint32_t IRQ_GetID(void)
 {
     uint32_t id;
-    id = INT_WR(INT_ICCIAR);
+    id = JX_WR4(INT_ICCIAR);
     id = id & 0x3FF;
     return id;
 }
@@ -92,7 +93,7 @@ void IRQ_Handler(void)
     uint32_t id;
     id = IRQ_GetID();
     IRQ_HandleFunc[id]();
-    INT_WR(INT_ICCEOIR) = id;   //end of interrupt register
+    JX_WR4(INT_ICCEOIR) = id;   //end of interrupt register
     /* Ensure the write takes before re-enabling interrupts. */
 	__DSB();
 	__ISB();
