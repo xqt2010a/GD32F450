@@ -14,7 +14,7 @@ void uart_init(uint32_t bd, uint32_t clk)
     UART_DLH(UART_BASE)  = (uint8_t)(((((clk/bd)/16)&0xFF00)>>8)&0xFF);    // 00
     UART_LCR(UART_BASE) &= (~0x80); // the DLAB = 0
     UART_LCR(UART_BASE) |= 0x03;    // none, 0, 8 
-    //UART_IER(UART_BASE) |= 5;       // enable the rx interrupt
+    UART_IER(UART_BASE) |= 5;       // enable the rx interrupt
 }
 
 void uart_tx(uint16_t Data)

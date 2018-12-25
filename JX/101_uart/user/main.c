@@ -1,7 +1,8 @@
+#include "jx.h"
 #include "jx_uart.h"
 #include "stdio.h"
+#include "system.h"
 
-#define JX_W4(x)    (*(unsigned int *)(x))
 
 void udelay(unsigned int t)
 {
@@ -13,18 +14,18 @@ void udelay(unsigned int t)
 
 void smu_init_m(void)
 {
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08104) = 0xFFFFFFFF;
-    JX_W4(0x0190d100) = 0xFFFFFFFF;
-    JX_W4(0x0190d104) = 0xFFFFFFFF;
-    JX_W4(0x0190d108) = 0xFFFFFFFF;
-    JX_W4(0x0190d10c) = 0xFFFFFFFF;
-    JX_W4(0x0190d110) = 0xFFFFFFFF;
-    JX_W4(0x0190d114) = 0xFFFFFFFF;
-    JX_W4(0x0190d120) = 0xFFFFFFFF;
-    JX_W4(0x0190d124) = 0xFFFFFFFF;
+    JX_WR4(0x3FE08100) = 0xFFFFFFFF;
+    JX_WR4(0x3FE08100) = 0xFFFFFFFF;
+    JX_WR4(0x3FE08100) = 0xFFFFFFFF;
+    JX_WR4(0x3FE08104) = 0xFFFFFFFF;
+    JX_WR4(0x0190d100) = 0xFFFFFFFF;
+    JX_WR4(0x0190d104) = 0xFFFFFFFF;
+    JX_WR4(0x0190d108) = 0xFFFFFFFF;
+    JX_WR4(0x0190d10c) = 0xFFFFFFFF;
+    JX_WR4(0x0190d110) = 0xFFFFFFFF;
+    JX_WR4(0x0190d114) = 0xFFFFFFFF;
+    JX_WR4(0x0190d120) = 0xFFFFFFFF;
+    JX_WR4(0x0190d124) = 0xFFFFFFFF;
     
 	/* Delay for somewhile to wait reset de-assertion to be stable. */
 	udelay(10000);
@@ -32,9 +33,10 @@ void smu_init_m(void)
 
 void main(void)
 {
+    uint32_t sysclk;
     smu_init_m();
-    
-    uart_init(115200);
-    printf("hello world!\r\n");
+    sysclk = get_sysclk();
+    uart_init(115200, sysclk);
+    printf("hello world!\r\nsysclk = %dk",sysclk/1000);
     while(1);
 }

@@ -1890,6 +1890,9 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\bsp\ip\jx.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_int.c</name>
     </file>
     <file>
@@ -1906,7 +1909,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start_jx.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\start_int.s</name>
   </file>
 </project>
 
