@@ -36,7 +36,7 @@ int fputc(int ch, FILE * f)
 }
 
 void uart_irq(void)
-{   
+{
     static uint32_t i=0;
     uart_buf_rx[i++] = uart_rx();
     uart_buf_rx[0] = uart_buf_rx[0];

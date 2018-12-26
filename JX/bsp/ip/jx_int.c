@@ -50,12 +50,14 @@ uint32_t IRQ_GetID(void)
 
 void IRQ_Handler(void)
 {
-    uint32_t id;
-    id = IRQ_GetID();
+    uint32_t id, value;
+    value = GICC_IAR;
+    id = value & 0x3FF;
     IRQ_HandleFunc[id]();
-    GICC_EOIR = GICC_EOIR & ((~0x3FF)|id);   //end of interrupt register
+    register_write((uint32_t)&GICD_ICPENDR(id/32), 1, id%32, 0x1);
+    GICC_EOIR = value;//GICC_EOIR & (~0x3FF) | id;   //end of interrupt register
     /* Ensure the write takes before re-enabling interrupts. */
-	//__DSB();
-	//__ISB();
-    //__enable_irq();
+	__DSB();
+	__ISB();
+    __enable_irq();
 }

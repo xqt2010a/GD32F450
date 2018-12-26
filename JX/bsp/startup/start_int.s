@@ -138,26 +138,30 @@ __iar_program_start:
         ldr r0, =0x80000
         mcr	p15, 0, r0, c12, c0, 0  ;	@Set VBAR
         
+        ;;ldr r4, = SFE(CSTACK)
+        ;;mov sp, r4
+        ;;blx r0
+        
         ;; Set up the interrupt stack pointer.
         MSR     cpsr_c, #IRQ_MODE ;| IRQ_BIT | FIQ_BIT ;change IRQ mode and disable IRQ & FIQ
         LDR     sp, =SFE(IRQ_STACK)         ; End of IRQ_STACK
-        BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
+        ;BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
 
         ;; Set up the fast interrupt stack pointer.
         MSR     cpsr_c, #FIQ_MODE ;| IRQ_BIT | FIQ_BIT ;change FIQ_MODE and disable IRQ & FIQ
         LDR     sp, =SFE(FIQ_STACK)         ; End of FIQ_STACK
-        BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
+        ;BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
         
 		/* Back to Supervisor mode bfore calling main().  The schduduler should
 		be started from Supervisor mode. */
-        ;MSR     cpsr_c, #0x13 | 0x40              ; Change the mode
+        ;;MSR     cpsr_c, #SVC_MODE | FIQ_BIT              ; Change the mode
         MRS     r0, cpsr                ; Original PSR value
         BIC     r0 ,r0, #MODE_MSK       ; Clear the mode bits
         ORR     r0 ,r0, #SYS_MODE       ; Set System mode bits
         MSR     cpsr_c, r0              ; Change the mode
         LDR     sp, =SFE(CSTACK)        ; End of CSTACK
         BIC     sp,sp,#0x7              ; Make sure SP is 8 aligned
-
+        
         ;; Turn on core features assumed to be enabled.
           FUNCALL __iar_program_start, __iar_init_core
         BL      __iar_init_core
@@ -167,8 +171,8 @@ __iar_program_start:
         BL      __iar_init_vfp
         
 ;;; Add more initialization here        
-        LDR     R0, = SystemInit
-        BLX     R0
+        ;;LDR     R0, = SystemInit
+        ;;BLX     R0
         
 ;;; Continue to __cmain for C-level initialization.
 

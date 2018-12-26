@@ -16,6 +16,7 @@
 #define GICD_GROUP(n)       (*(volatile unsigned int *)(GICD_BASE + 0x80 + 4*(n)))
 #define GICD_ISENABLER(n)   (*(volatile unsigned int *)(GICD_BASE + 0x100 + 4*(n)))
 #define GICD_ISPENDR(n)     (*(volatile unsigned int *)(GICD_BASE + 0x200 + 4*(n)))
+#define GICD_ICPENDR(n)     (*(volatile unsigned int *)(GICD_BASE + 0x280 + 4*(n)))
 #define GICD_IPRIORITYR(n)  (*(volatile unsigned int *)(GICD_BASE + 0x400 + 4*(n)))
 #define GICD_ITARGETSR(n)   (*(volatile unsigned int *)(GICD_BASE + 0x800 + 4*(n)))
 #define GICD_ICFGR(n)       (*(volatile unsigned int *)(GICD_BASE + 0xC00 + 4*(n)))
