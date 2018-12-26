@@ -713,7 +713,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\jx_iram.icf</state>
+          <state>$PROJ_DIR$\ARMCA5.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1909,7 +1909,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start_int.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_ARMCA5.s</name>
   </file>
 </project>
 

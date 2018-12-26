@@ -2120,7 +2120,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start_int.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_ARMCA5.s</name>
   </file>
 </project>
 

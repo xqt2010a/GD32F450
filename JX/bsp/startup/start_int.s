@@ -152,6 +152,8 @@ __iar_program_start:
         LDR     sp, =SFE(FIQ_STACK)         ; End of FIQ_STACK
         ;BIC     sp,sp,#0x7                  ; Make sure SP is 8 aligned
         
+        MSR     cpsr_c, #SVC_MODE
+        LDR     sp, =SFE(CSTACK)
 		/* Back to Supervisor mode bfore calling main().  The schduduler should
 		be started from Supervisor mode. */
         ;;MSR     cpsr_c, #SVC_MODE | FIQ_BIT              ; Change the mode

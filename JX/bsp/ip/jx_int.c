@@ -48,7 +48,9 @@ uint32_t IRQ_GetID(void)
     return GICC_IAR & 0x3FF;
 }
 
-void IRQ_Handler(void)
+
+
+void INT_Handler(void)
 {
     uint32_t id, value;
     value = GICC_IAR;
@@ -57,7 +59,8 @@ void IRQ_Handler(void)
     register_write((uint32_t)&GICD_ICPENDR(id/32), 1, id%32, 0x1);
     GICC_EOIR = value;//GICC_EOIR & (~0x3FF) | id;   //end of interrupt register
     /* Ensure the write takes before re-enabling interrupts. */
-	__DSB();
-	__ISB();
-    __enable_irq();
+	//__DSB();
+	//__ISB();
+    //__enable_irq();
+    //return;
 }

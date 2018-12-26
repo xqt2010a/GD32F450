@@ -2,7 +2,9 @@
 #include "stdio.h"
 #include "stdint.h"
 
-static uint8_t uart_buf_rx[32]={0};
+
+uint8_t uart_buf_rx[UART_RX_LEN]={0};
+int uart_rx_count = 0;
 
 void uart_init(uint32_t bd, uint32_t clk)
 {
@@ -37,7 +39,5 @@ int fputc(int ch, FILE * f)
 
 void uart_irq(void)
 {
-    static uint32_t i=0;
-    uart_buf_rx[i++] = uart_rx();
-    uart_buf_rx[0] = uart_buf_rx[0];
+    uart_buf_rx[uart_rx_count++] = uart_rx();
 }

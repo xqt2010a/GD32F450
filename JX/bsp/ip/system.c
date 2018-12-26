@@ -29,7 +29,7 @@ void smu_init(void)
 	udelay(10000);
 }
 
-static void smu_ddr_freq(unsigned int freq_MHZ)
+void smu_ddr_freq(unsigned int freq_MHZ)
 {
     JX_WR4(0x0190d02c) = 0;                  //: make all clock mux select 24M
     JX_WR4(0x0190d068) = 0x80008000;    //: Release DDR Pin strap
@@ -66,9 +66,9 @@ static void smu_ddr_freq(unsigned int freq_MHZ)
 
 void SystemInit (void)
 {
-    //smu_init();
+    smu_init();
     
-    smu_ddr_freq(800);
+    //smu_ddr_freq(800);
 }
 
 uint32_t get_sysclk(void)

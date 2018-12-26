@@ -7,6 +7,8 @@
 //typedef unsigned char uint8_t;
 
 #define UART_CLK  83300000//50000000//83300000//11000000  //22M
+#define UART_RX_LEN     64
+
 
 #define UART0_BASE         0x3ff24000
 #define UART1_BASE         0x3ff25000
@@ -51,6 +53,9 @@
 #define UART_CPR(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0xF4))	// the component parameter register
 #define UART_UCV(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0xF8))	// the uart component version
 #define UART_CTR(UARTn_BASE)   (*(volatile unsigned long*)((UARTn_BASE) + 0xFC))	// the component type register
+
+extern int uart_rx_count;
+extern uint8_t uart_buf_rx[UART_RX_LEN];
 
 void uart_init(uint32_t bd, uint32_t clk);
 void uart_tx(uint16_t Data);

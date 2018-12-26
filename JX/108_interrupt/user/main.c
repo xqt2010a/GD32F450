@@ -4,6 +4,8 @@
 #include "system.h"
 #include "stdio.h"
 
+
+
 static void udelay(unsigned int t)
 {
     unsigned int i,j;
@@ -34,14 +36,22 @@ void smu_init1(void)
 void main(void)
 {
     uint32_t sysclk;
+    int i;
     //smu_init1();
     sysclk = get_sysclk();
     uart_init(115200, sysclk);
-    printf("hello world!\r\nsysclk = %dk",sysclk/1000);
+    printf("hello world!\r\nsysclk = %dk\r\n",sysclk/1000);
     
     IRQ_Init();
     IRQ_Register(110, uart_irq);
     IRQ_SetEnable();
     
-    while(1);
+    while(1){
+        i = uart_rx_count;
+        if(i>0){
+            while(uart_rx_count--){
+                uart_tx(uart_buf_rx[i-uart_rx_count-1]);
+            }
+        }
+    }
 }
