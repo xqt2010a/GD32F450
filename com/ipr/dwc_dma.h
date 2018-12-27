@@ -1,6 +1,8 @@
 #ifndef __DWC_DMA_H__
 #define __DWC_DMA_H__
 
+#include "config.h"
+
 #define DMA_BASE(x)     (SYS_DMA_BASE+0x1000*(x))
 
 #define DMA_ID(ch)                   (*(volatile unsigned int *)(DMA_BASE(ch) + 0x000))

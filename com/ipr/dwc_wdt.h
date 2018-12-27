@@ -1,6 +1,8 @@
 #ifndef __DWC_WDT_H__
 #define __DWC_WDT_H__
 
+#include "config.h"
+
 #define WDT_BASE(x)     (SYS_WDT_BASE+0x1000*(x))
 
 #define WDT_CR(ch)              (*(volatile unsigned int *)(WDT_BASE(ch) + 0x00))

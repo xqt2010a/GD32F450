@@ -1,6 +1,8 @@
 #ifndef __DWC_INT_H__
 #define __DWC_INT_H__
 
+#include "config.h"
+
 #define INT_BASE(x)     (SYS_INT_BASE+0x1000*(x))
 
 #define IRQ_INTEN_L(ch)         (*(volatile unsigned int *)(INT_BASE(ch) + 0x00))

@@ -299,6 +299,7 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\user</state>
           <state>$PROJ_DIR$\..\bsp\ip</state>
+          <state>$PROJ_DIR$\..\..\com\ipr</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1890,6 +1891,15 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\..\com\ipr\dwc_i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\ipr\dwc_i2s.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\com\ipr\dwc_uart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx.c</name>
     </file>
     <file>
@@ -1915,7 +1925,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_jx.s</name>
   </file>
 </project>
 

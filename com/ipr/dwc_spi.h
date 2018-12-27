@@ -1,6 +1,8 @@
 #ifndef __DWC_SPI_H__
 #define __DWC_SPI_H__
 
+#include "config.h"
+
 #define SPI_BASE(x)     (SYS_SPI_BASE+0x1000*(x))
 
 #define SPI_CTRLR0(ch)        (*(volatile unsigned int *)(SPI_BASE(ch) + 0x00))   	//Control Register 0

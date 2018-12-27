@@ -10,62 +10,41 @@
 #endif
 #include "stdio.h"
 
-#define JX_W4(x)    (*(unsigned int *)(x))
+UART_InitTypeDef uart;
 
-void udelay(unsigned int t)
+void uart_struct_init(void)
 {
-    unsigned int i,j;
-    for(i=0; i<t; i++){
-        for(j=0; j<100; j++);
-    }
-}
-
-void smu_init1(void)
-{
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08104) = 0xFFFFFFFF;
-    JX_W4(0x0190d100) = 0xFFFFFFFF;
-    JX_W4(0x0190d104) = 0xFFFFFFFF;
-    JX_W4(0x0190d108) = 0xFFFFFFFF;
-    JX_W4(0x0190d10c) = 0xFFFFFFFF;
-    JX_W4(0x0190d110) = 0xFFFFFFFF;
-    JX_W4(0x0190d114) = 0xFFFFFFFF;
-    JX_W4(0x0190d120) = 0xFFFFFFFF;
-    JX_W4(0x0190d124) = 0xFFFFFFFF;
-    
-    /* Delay for somewhile to wait reset de-assertion to be stable. */
-    udelay(10000);
+    uart.ch = UART1;
+    uart.int_mask = 0;
+    uart.bandrate = 115200;
 }
 
 void main(void)
 {
-    uint32_t sysclk, i;
-    I2S_InitTypeDef I2S_InitS;
+    uint32_t i;
+    I2S_InitTypeDef i2s;
 
     /* EVB2.0
     * I2S2 --- I2C0
     * I2S1 --- I2C2
     * I2S0 --- I2C1
     */
-    I2S_InitS.base_addr = I2S_BASE1;
-    I2S_InitS.I2S_BitRlt = 2;
-    I2S_InitS.I2S_ClkCyc = 0;
+    i2s.ch = I2S1;
+    i2s.bit_rlt = 2;
+    i2s.clk_cyc = 0;
 #ifdef MUSIC_11025
-    I2S_InitS.I2S_Sclk = 11025*2*16;
-    I2S_InitS.I2S_Mclk = 11025*256;
+    i2s.sclk = 11025*2*16;
+    i2s.mclk = 11025*256;
 #else
-    I2S_InitS.I2S_Sclk = 8000*2*16;
-    I2S_InitS.I2S_Mclk = 8000*256;
+    i2s.sclk = 8000*2*16;
+    i2s.mclk = 8000*256;
 #endif    
-    smu_init1();
-
-    I2S_Init(&I2S_InitS);
+    uart_struct_init();
+    uart_init(&uart);
+    I2S_Init(&i2s);
     wm8731_init();
     wm8731_set_headphone_volume(WM8731_DIR_RIGHT, WM8731_MODE_HIGH, 0x70);
-    sysclk = get_sysclk();
-    uart_init(115200, sysclk);
+    
     printf("hello world!\r\n");
     while(1){
         printf("The headphone is read \"Enter\".\r\n");
@@ -75,7 +54,7 @@ void main(void)
         for (i = 0; i < 16000; i++)
 #endif
         {
-            I2S_Write(&I2S_InitS, wav_temp[i], wav_temp[i]);
+            dwc_i2s_write(&i2s, wav_temp[i], wav_temp[i]);
         }
     }
 }

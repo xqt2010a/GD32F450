@@ -1,15 +1,26 @@
 #include "wm8731.h"
 #include "string.h"
 
-#define WM8731_I2Cn     I2C2
-
 static struct WM8731_REGS s_wm8731_regs;
 static uint16_t s_currect_line_in_volume = VOLUME_LINE_IN_DEFAULT;
 static uint16_t s_currect_headphone_volume = VOLUME_HEADPHONE_DEFAULT - 15;
 
+I2C_InitTypeDef i2c;
+
+void i2c_struct_init(void)
+{
+    i2c.ch = I2C2;
+    i2c.mode = 0;       //0:master 1:salve
+    i2c.addr_mode = 0;  //0:7bit 1:10bit
+    i2c.int_mask = 0;   //see datasheet
+    i2c.speed = 0;      //0:stand 1:fash 2:high
+    i2c.clk = 0;
+    i2c.own_addr = WM8731_ADDR;
+}
+
 void i2c_write_wm8731(uint8_t Reg_Addr, uint8_t *buf, uint8_t len)
 {
-    I2C_Write(WM8731_I2Cn, buf,len);
+    dwc_i2c_write(&i2c, buf,len);
 }
 
 static void wm8731_write_reg(uint8_t reg, uint16_t data)
@@ -39,14 +50,9 @@ static void wm8731_write_regs(void)
 
 void wm8731_init(void)
 {
-    I2C_InitTypeDef I2C_InitS;
-
-    I2C_InitS.I2C_Mode = I2C_MASTER;  //Master
-    I2C_InitS.I2C_AddrMode = I2C_7BIT;  //7bit
-    I2C_InitS.I2C_Speed = I2C_STANDARD;
-    I2C_InitS.I2C_OwnAddress = WM8731_ADDR;
+    i2c_struct_init();
     
-    I2C_Init(WM8731_I2Cn, &I2C_InitS);
+    i2c_init(&i2c);
 
     memset(&s_wm8731_regs, 0, sizeof(struct WM8731_REGS));
     /* wm8731 reset */
