@@ -2126,7 +2126,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_jx.s</name>
   </file>
 </project>
 

@@ -33,7 +33,7 @@ typedef unsigned char u8;
 #define DMEM_OFFSET_ADDR        0x00054000
 
 #define TRAIN_1D	(1)
-#define TRAIN_2D	(2)
+//#define TRAIN_2D	(2)
 
 typedef enum  {
 	FW_1D_IMAGE=0,

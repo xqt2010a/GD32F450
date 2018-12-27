@@ -130,7 +130,7 @@ void set_ddrc_freq(u32 freq_MHZ)
 	}
 	while ((reg32_read(0x0190d080) & 0x80000000) != 0x80000000);  //Ryan: polling DDR PLL lock signal
 		// printf("..\n");
-	reg32_write(0x0190d02c, 0x1<<31);       //Ryan: make DDR clock from DDR PLL
+	reg32_write(0x0190d02c, (unsigned int)0x1<<31);       //Ryan: make DDR clock from DDR PLL
 
 	return;
 }
