@@ -1,6 +1,8 @@
 #ifndef __DWC_UART_H__
 #define __DWC_UART_H__
 
+#include "config.h"
+
 #define UART_BASE(x)     (SYS_UART_BASE+0x1000*(x))
 
 #define UART_RBR(ch)   (*(volatile unsigned int *)(UART_BASE(ch) + 0x00))	// the receive buffer register
@@ -38,5 +40,21 @@
 #define UART_CPR(ch)   (*(volatile unsigned int *)(UART_BASE(ch) + 0xF4))	// the component parameter register
 #define UART_UCV(ch)   (*(volatile unsigned int *)(UART_BASE(ch) + 0xF8))	// the uart component version
 #define UART_CTR(ch)   (*(volatile unsigned int *)(UART_BASE(ch) + 0xFC))	// the component type register
+
+/**
+  * @brief  UART Init structure definition
+  */
+  
+typedef struct
+{
+    uint8_t ch;
+    uint8_t int_mask;    /* see datasheet */
+    uint32_t clk;
+    uint32_t bandrate;
+} UART_InitTypeDef;
+
+void dwc_uart_init(UART_InitTypeDef *uart);
+void dwc_uart_tx(UART_InitTypeDef *uart, uint16_t data);
+uint8_t dwc_uart_rx(UART_InitTypeDef *uart);
 
 #endif  /* __DWC_UART_H__ */

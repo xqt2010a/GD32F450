@@ -1,6 +1,8 @@
 #ifndef __DWC_I2C_H__
 #define __DWC_I2C_H__
 
+#include "config.h"
+
 #define I2C_BASE(x)     (SYS_I2C_BASE+0x1000*(x))
 
 #define I2C_CON(ch)              (*(volatile unsigned int *)(I2C_BASE(ch) + 0x00))
@@ -72,5 +74,26 @@
 #define I2C_COMP_PARAM_1(ch)                 (*(volatile unsigned int *)(I2C_BASE(ch) + 0xf4))
 #define I2C_COMP_VERSION(ch)                 (*(volatile unsigned int *)(I2C_BASE(ch) + 0xf8))
 #define I2C_COMP_TYPE(ch)                    (*(volatile unsigned int *)(I2C_BASE(ch) + 0xfc))
+
+/**
+  * @brief  I2C Init structure definition
+  */
+  
+typedef struct
+{
+    uint8_t ch;
+    uint8_t mode:4;     //0:master 1:slave
+    uint8_t addr_mode:4;//0:7bit 1:10bit
+    uint16_t int_mask;  //see datasheet
+    
+    uint32_t clk;       //i2c module clk
+    uint32_t speed;     //stand, fast, high
+    uint32_t own_addr;  //target addr
+} I2C_InitTypeDef;
+
+void dwc_i2c_init(I2C_InitTypeDef* i2c);
+void dwc_i2c_write(I2C_InitTypeDef* i2c, unsigned char * wBuf, unsigned char len);
+void dwc_i2c_read(I2C_InitTypeDef* i2c, unsigned char * rBuf, unsigned char len);
+
 
 #endif  /* __DWC_I2C_H__ */
