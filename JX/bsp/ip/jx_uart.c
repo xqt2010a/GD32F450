@@ -1,43 +1,38 @@
 #include "jx_uart.h"
 #include "stdio.h"
-#include "stdint.h"
 
+uint8_t uart_ch = 0;
 
-uint8_t uart_buf_rx[UART_RX_LEN]={0};
-int uart_rx_count = 0;
-
-void uart_init(uint32_t bd, uint32_t clk)
+void uart_init(UART_InitTypeDef *uart)
 {
-    
-    UART_IER(UART_BASE) = 0;
-    while (UART_USR(UART_BASE) & 0x1);
-    UART_LCR(UART_BASE) |= 0x80;    // the DLAB = 1
-    UART_DLL(UART_BASE)  = (uint8_t)(((clk/bd)/16)&0xFF);                  // 115200=48M/16/0x1A
-    UART_DLH(UART_BASE)  = (uint8_t)(((((clk/bd)/16)&0xFF00)>>8)&0xFF);    // 00
-    UART_LCR(UART_BASE) &= (~0x80); // the DLAB = 0
-    UART_LCR(UART_BASE) |= 0x03;    // none, 0, 8 
-    UART_IER(UART_BASE) |= 5;       // enable the rx interrupt
+    UART_IER(uart->ch) = 0;
+    while (UART_USR(uart->ch) & 0x1);
+    UART_LCR(uart->ch) |= 0x80;    // the DLAB = 1
+    UART_DLL(uart->ch)  = (uint8_t)(((uart->clk / uart->bandrate)/16)&0xFF);  // 115200=48M/16/0x1A
+    UART_DLH(uart->ch)  = (uint8_t)(((((uart->clk / uart->bandrate)/16)&0xFF00)>>8)&0xFF);    // 00
+    UART_LCR(uart->ch) &= (~0x80); // the DLAB = 0
+    UART_LCR(uart->ch) |= 0x03;    // none, 0, 8
+    if(uart->IntEnable){
+        UART_IER(uart->ch) |= 5;       // enable the rx interrupt
+    }
+    uart_ch = uart->ch;
 }
 
-void uart_tx(uint16_t Data)
+void uart_tx(UART_InitTypeDef *uart, uint16_t data)
 {
-    UART_THR(UART_BASE) = Data;
-    while((UART_LSR(UART_BASE)) == 0);
+    UART_THR(uart->ch) = data;
+    while((UART_LSR(uart->ch)) == 0);
 }
 
-uint8_t uart_rx(void)
+uint8_t uart_rx(UART_InitTypeDef *uart)
 {
-    while(!(UART_LSR(UART_BASE) & 0x01));
-    return UART_RBR(UART_BASE);
+    while(!(UART_LSR(uart->ch) & 0x01));
+    return UART_RBR(uart->ch);
 }
 
 int fputc(int ch, FILE * f)
 {
-  	uart_tx(ch);
+    UART_THR(uart_ch) = ch;
+    while((UART_LSR(uart_ch)) == 0);
   	return ch;
-}
-
-void uart_irq(void)
-{
-    uart_buf_rx[uart_rx_count++] = uart_rx();
 }

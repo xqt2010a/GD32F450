@@ -3,6 +3,13 @@
 #include "stdio.h"
 #include "system.h"
 
+#define UART_CLK  83300000//50000000//83300000//11000000  //22M
+#define UART_RX_LEN     64
+
+UART_InitTypeDef uart;
+
+uint8_t uart_buf_rx[UART_RX_LEN]={0};
+int uart_rx_count = 0;
 
 void udelay(unsigned int t)
 {
@@ -10,6 +17,11 @@ void udelay(unsigned int t)
     for(i=0; i<t; i++){
         for(j=0; j<100; j++);
     }
+}
+
+void uart_irq(void)
+{
+    uart_buf_rx[uart_rx_count++] = uart_rx(&uart);
 }
 
 void smu_init_m(void)
@@ -33,10 +45,15 @@ void smu_init_m(void)
 
 void main(void)
 {
-    uint32_t sysclk;
+    UART_InitTypeDef uart;
+    
     smu_init_m();
-    sysclk = get_sysclk();
-    uart_init(115200, sysclk);
-    printf("hello world!\r\nsysclk = %dk",sysclk/1000);
+    
+    uart.ch = UART1;
+    uart.bandrate = 115200;
+    uart.IntEnable = 0;
+    uart.clk = get_sysclk();
+    uart_init(&uart);
+    printf("hello world!\r\nsysclk = %dk\r\n",uart.clk/1000);
     while(1);
 }

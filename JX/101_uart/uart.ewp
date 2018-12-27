@@ -299,6 +299,7 @@
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\user</state>
           <state>$PROJ_DIR$\..\bsp\ip</state>
+          <state>$PROJ_DIR$\..\..\com\ipr</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1903,7 +1904,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_jx.s</name>
   </file>
 </project>
 
