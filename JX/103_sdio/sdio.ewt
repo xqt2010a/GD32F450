@@ -2101,6 +2101,9 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\..\com\ipr\dwc_uart.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_uart.c</name>
     </file>
     <file>
@@ -2126,7 +2129,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start_jx.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_jx.s</name>
   </file>
 </project>
 
