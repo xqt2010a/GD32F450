@@ -1,9 +1,7 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-#include "stdint.h"
-
-#define CRYSTAL_FREQ    24000000
+#include "config.h"
 
 typedef struct{
     uint32_t div1:8;

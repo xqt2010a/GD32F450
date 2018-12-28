@@ -1,31 +1,31 @@
 #ifndef __JX_WDT_H__
 #define __JX_WDT_H__
 
-#include "jx.h"
+#include "dwc_wdt.h"
 
-#define WDT_BASE    0x01908000
+typedef enum{
+    WDT0  = 0
+}WDT_n;
 
-#define WDT_CR              JX_WR4(WDT_BASE + 0x00)
-#define WDT_TORR            JX_WR4(WDT_BASE + 0x04)
-#define WDT_CCVR            JX_WR4(WDT_BASE + 0x08)
-#define WDT_CRR             JX_WR4(WDT_BASE + 0x0C)
-#define WDT_STAT            JX_WR4(WDT_BASE + 0x10)
-#define WDT_EOI             JX_WR4(WDT_BASE + 0x14)
-#define WDT_PROT_LEVEL      JX_WR4(WDT_BASE + 0x1C)
-#define WDT_COMP_PARAM5     JX_WR4(WDT_BASE + 0xE4)
-#define WDT_COMP_PARAM4     JX_WR4(WDT_BASE + 0xE8)
-#define WDT_COMP_PARAM3     JX_WR4(WDT_BASE + 0xEC)
-#define WDT_COMP_PARAM2     JX_WR4(WDT_BASE + 0xF0)
-#define WDT_COMP_PARAM1     JX_WR4(WDT_BASE + 0xF4)
-#define WDT_COMP_VERSION    JX_WR4(WDT_BASE + 0xF8)
-#define WDT_COMP_TYPE       JX_WR4(WDT_BASE + 0xFC)
+typedef enum{
+    CLK_64K  = 0x0,
+    CLK_128K = 0x1,
+    CLK_256K = 0x2,
+    CLK_512L = 0x3,
+    CLK_1M   = 0x4,
+    CLK_2M   = 0x5,
+    CLK_4M   = 0x6,
+    CLK_8M   = 0x7,
+    CLK_16M  = 0x8,
+    CLK_32M  = 0x9,
+    CLK_64M  = 0xa,
+    CLK_128M = 0xb,
+    CLK_256M = 0xc,
+    CLK_512M = 0xd,
+    CLK_1G   = 0xe,
+    CLK_2G   = 0xf
+}TimeOut_Clk;
 
-void IWDG_SetReload(uint32_t CounterValue);
-void IWDG_Enable(uint8_t mode);
-void IWDG_ReloadCounter(void);
-uint32_t IWDG_GetCurrentValue(void);
-uint32_t IWDG_GetITStatus(void);
-void IWDG_ClearITPendingBit(void);
-void IWDG_Disable(void);
+void wdt_init(WDT_InitTypeDef * wdt);
 
 #endif  /* __JX_WDT_H__ */

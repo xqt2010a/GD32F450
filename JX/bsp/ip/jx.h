@@ -19,6 +19,7 @@
 #define SYS_GIC_BASE        SYS_CPU_BASE    //SYS_MCU_BASE
 
 #define INT_NUM             229
+#define CRYSTAL_FREQ        24000000
 
 #define JX_WR4(x)    (*(volatile unsigned int *)(x))
 

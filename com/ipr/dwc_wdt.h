@@ -20,4 +20,24 @@
 #define WDT_COMP_VERSION(ch)    (*(volatile unsigned int *)(WDT_BASE(ch) + 0xF8))
 #define WDT_COMP_TYPE(ch)       (*(volatile unsigned int *)(WDT_BASE(ch) + 0xFC))
 
+/** 
+  * @brief  WDT Init structure definition  
+  */
+
+typedef struct
+{
+    uint8_t ch;
+    uint8_t mode;           //0:system reset 1:interrupt
+    uint8_t enable;         //0:disable 1:enable
+    uint32_t reload_value;
+}WDT_InitTypeDef;
+
+void dwc_wdt_set(WDT_InitTypeDef * wdt);
+void dwc_wdt_mode(WDT_InitTypeDef * wdt);
+void dwc_wdt_reload(WDT_InitTypeDef * wdt);
+uint32_t dwc_wdt_get_value(WDT_InitTypeDef * wdt);
+uint32_t dwc_wdt_it_status(WDT_InitTypeDef * wdt);
+void dwc_wdt_clr_it(WDT_InitTypeDef * wdt);
+void dwc_wdt_enable(WDT_InitTypeDef * wdt);
+
 #endif  /* __DWC_WDT_H__ */
