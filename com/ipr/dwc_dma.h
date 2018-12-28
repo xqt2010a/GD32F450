@@ -56,5 +56,6 @@ typedef struct
 } DMA_InitTypeDef;
 
 void dwc_dma_init(DMA_InitTypeDef *dma);
+void dwc_dma_enable(DMA_InitTypeDef *dma);
 
 #endif  /* __DWC_DMA_H__ */
