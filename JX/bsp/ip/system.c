@@ -68,7 +68,7 @@ void SystemInit (void)
 {
     smu_init();
     
-    //smu_ddr_freq(800);
+    smu_ddr_freq(800);
 }
 
 uint32_t get_sysclk(void)
@@ -78,6 +78,12 @@ uint32_t get_sysclk(void)
     temp = JX_WR4(0x0190d000);
     value = (sys_clk_s*)&temp;
     r_value = (CRYSTAL_FREQ / value->div5 / value->div2 / value->div3 * value->div4);
-    r_value = r_value / 8;
+
+    if(JX_WR4(0x0190d02c)>>31){     //24M oscillator
+        r_value = r_value;
+    }
+    else{
+        r_value = r_value / 2;
+    }
     return r_value;
 }

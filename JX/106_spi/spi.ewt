@@ -2101,6 +2101,9 @@
   <group>
     <name>jx</name>
     <file>
+      <name>$PROJ_DIR$\..\..\com\ipr\dwc_spi.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\bsp\ip\jx_spi.c</name>
     </file>
     <file>
@@ -2117,7 +2120,7 @@
     </file>
   </group>
   <file>
-    <name>$PROJ_DIR$\..\bsp\startup\start.s</name>
+    <name>$PROJ_DIR$\..\bsp\startup\startup_jx.s</name>
   </file>
 </project>
 

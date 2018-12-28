@@ -2,16 +2,10 @@
 
 #define DUMMY_BYTE  0xA5
 
-void SPIM1_Init(void)
+void SPI_Init(SPI_InitTypeDef * spi)
 {
     (*(volatile unsigned long*)(0x3fe09004)) = 0xff000000;  //add
-  	//SPIM1 时钟 80M
-    SSIM1_SSIENR = 0;  //禁用 SSI 寄存器
-    SSIM1_CTRLR0 = 0x07 |(1<<6)|(1<<7);  //发送和接收，模式0，Motorola SPI，8位串行数据传输
-    SSIM1_BAUDR = 0xF0;  //Fsclk_out / SCKDV = Fssi_clk  0x500,0x30//40M 0x04 
-	//RXFTLR = 0x20;
-	SSIM1_SER = 0x01;  //从器件使能寄存器 
-	SSIM1_SSIENR = 1;  //使能 SSI 寄存器  
+  	dwc_spi_init(spi);
 }
 
 void SPIM1_Write_Read_Fifo(uint8_t * wFifo, uint8_t * rFifo, uint32_t N_Byte)

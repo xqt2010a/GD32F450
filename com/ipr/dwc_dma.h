@@ -39,4 +39,22 @@
 #define DMA_CHy_INTSIGNAL_EN(ch,n)   (*(volatile unsigned int *)(DMA_BASE(ch) + 0x100*(n) + 0x90))
 #define DMA_CHy_INTCLR(ch,n)         (*(volatile unsigned int *)(DMA_BASE(ch) + 0x100*(n) + 0x98))
 
+/**
+  * @brief  DMA Init structure definition
+  */
+  
+typedef struct
+{
+    uint8_t     ch;
+    uint8_t     n;
+    uint8_t     type;   //0:mm 1:mp 2:pm 3:pp 4:pm 5:pp 6:mp 7:pp
+    uint8_t     width;
+    uint8_t     size;
+    uint32_t    dst;    //destination address
+    uint32_t    src;    //source address
+    uint32_t    len;    //
+} DMA_InitTypeDef;
+
+void dwc_dma_init(DMA_InitTypeDef *dma);
+
 #endif  /* __DWC_DMA_H__ */

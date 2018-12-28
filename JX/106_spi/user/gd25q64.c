@@ -1,5 +1,7 @@
 #include "gd25q64.h"
 
+SPI_InitTypeDef spi;
+
 void SPIM1_Flash_Write_Enable(void)  //Ð´Ê¹ÄÜ
 {
   	uint8_t cmd, r_temp;

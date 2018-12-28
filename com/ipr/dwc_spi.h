@@ -32,4 +32,19 @@
 #define SPI_DR(ch)            (*(volatile unsigned int *)(SPI_BASE(ch) + 0x60))   	//Data Register
 #define SPI_RX_SAMPLE_DLY(ch) (*(volatile unsigned int *)(SPI_BASE(ch) + 0xf0))   	//RXD Sample Delay Register
 
+/** 
+  * @brief  SPI Init structure definition  
+  */
+
+typedef struct
+{
+    uint8_t ch;
+    uint8_t mode;       //0:master 1:salve
+    uint32_t clk_in;
+    uint32_t clk_out;
+}SPI_InitTypeDef;
+
+void dwc_spi_init(SPI_InitTypeDef * spi);
+
+
 #endif  /* __DWC_SPI_H__ */
