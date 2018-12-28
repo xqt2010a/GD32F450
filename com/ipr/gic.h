@@ -1,6 +1,8 @@
 #ifndef __GIC_H__
 #define __GIC_H__
 
+#include "config.h"
+
 #define GICC_BASE       (SYS_GIC_BASE + 0x100)
 #define GICD_BASE       (SYS_GIC_BASE + 0x1000)
 
@@ -18,5 +20,11 @@
 #define GICD_IPRIORITYR(n)  (*(volatile unsigned int *)(GICD_BASE + 0x400 + 4*(n)))
 #define GICD_ITARGETSR(n)   (*(volatile unsigned int *)(GICD_BASE + 0x800 + 4*(n)))
 #define GICD_ICFGR(n)       (*(volatile unsigned int *)(GICD_BASE + 0xC00 + 4*(n)))
+
+void gic_enable(void);
+void gic_set_num(unsigned int irqnum);
+void gic_init(void);
+uint32_t gic_id(void);
+void gic_clear_id(uint32_t id);
 
 #endif  /* __GIC_H__ */
