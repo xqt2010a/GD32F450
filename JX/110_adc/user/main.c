@@ -3,8 +3,24 @@
 #include "jx_adc.h"
 #include "stdio.h"
 
-#define ADC_BASE           ADC0_BASE
-#define JX_W4(x)    (*(unsigned int *)(x))
+UART_InitTypeDef uart;
+ADC_InitTypeDef adc;
+
+void adc_struct_init(void)
+{
+    adc.ch = ADC0;
+    adc.pin = 0;
+    adc.mode = MODE_11BIT;
+    adc.int_mask = 0;   //0:disable int 1:enable int
+    adc.sample_cnt = 0xa;
+}
+
+void uart_struct_init(void)
+{
+    uart.ch = UART1;
+    uart.bandrate = 115200;
+    uart.int_mask = 0;
+}
 
 void udelay(unsigned int t)
 {
@@ -14,56 +30,19 @@ void udelay(unsigned int t)
     }
 }
 
-void smu_init1(void)
-{
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08100) = 0xFFFFFFFF;
-    JX_W4(0x3FE08104) = 0xFFFFFFFF;
-    JX_W4(0x0190d100) = 0xFFFFFFFF;
-    JX_W4(0x0190d104) = 0xFFFFFFFF;
-    JX_W4(0x0190d108) = 0xFFFFFFFF;
-    JX_W4(0x0190d10c) = 0xFFFFFFFF;
-    JX_W4(0x0190d110) = 0xFFFFFFFF;
-    JX_W4(0x0190d114) = 0xFFFFFFFF;
-    JX_W4(0x0190d120) = 0xFFFFFFFF;
-    JX_W4(0x0190d124) = 0xFFFFFFFF;
-    
-    /* Delay for somewhile to wait reset de-assertion to be stable. */
-    udelay(10000);
-}
-
 void main(void)
 {
-    uint32_t sysclk;
     uint32_t voltage[24];//,i;
     
-    smu_init1();
-    //adc_init(ADC_BASE, 0, 3);
-    sysclk = get_sysclk();
-    uart_init(115200, sysclk);
-    printf("hello world!\r\n");
-//    for(i=0; i<8; i++)
-//        adc_init(ADC0_BASE, i);
-//    for(i=0; i<8; i++)
-//        adc_init(ADC1_BASE, i);
-//    for(i=0; i<8; i++)
-//        adc_init(ADC2_BASE, i);
-    adc_init(ADC_BASE, 0, 3);
+    adc_struct_init();
+    uart_struct_init();
+    uart_init(&uart);
+    dwc_adc_init(&adc);
+    
+    printf("hello world!\r\nsysclk = %dk\r\n",uart.clk/1000);
     while(1){
-        //adc_init(ADC_BASE, 0);
-        
-//        for(i=0; i<8; i++)
-//            voltage[i] = adc_get(ADC0_BASE, 0);
-//        for(i=8; i<16; i++)
-//            voltage[i] = adc_get(ADC1_BASE, 0);
-//        for(i=16; i<24; i++)
-//            voltage[i] = adc_get(ADC2_BASE, 0);
-//        for(i=0; i<24; i++)
-//            printf(" %3x",voltage[i]);
-        voltage[0] = adc_get(ADC0_BASE, 0);
-        printf("reg:%3x %3x",CTRL1(ADC0_BASE), voltage[0]);
-        printf("\r\n");
+        voltage[0] = dwc_adc_get(&adc);
+        printf("value: %3x\r\n", voltage[0]);
         udelay(100000);
     }
 }
